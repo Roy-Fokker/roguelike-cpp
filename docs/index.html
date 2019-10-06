@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2019-10-06 Sun 18:01 -->
+<!-- 2019-10-06 Sun 18:39 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Rogue-Like Game in C++17</title>
@@ -87,32 +87,43 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orgb03264a">1. Environment Setup</a></li>
-<li><a href="#orgd1d0349">2. Project Setup</a></li>
-<li><a href="#orgbb51c9e">3. Drawing Player and Moving around</a></li>
-<li><a href="#org76316ee">4. Entity System</a></li>
-<li><a href="#org795d224">5. Generating a Dungeon</a></li>
-<li><a href="#org2040270">6. Field of View</a></li>
-<li><a href="#org826df34">7. Placing Enemies</a></li>
-<li><a href="#orga775d1b">8. Combat Loop</a></li>
-<li><a href="#org692d17b">9. User Interface</a></li>
-<li><a href="#org0e7014a">10. Items and Inventory</a></li>
-<li><a href="#org37183f2">11. Equiping Items</a></li>
-<li><a href="#orgbe3f549">12. Weapons and Targetting</a></li>
-<li><a href="#org8533b16">13. Saving and Loading Game State</a></li>
-<li><a href="#org19b1277">14. Dungeon Delving</a></li>
-<li><a href="#org5a5c001">15. Difficulty Curve</a></li>
+<li><a href="#orgd1e40c2">1. Setup</a></li>
+<li><a href="#orgb666c50">2. Drawing Player and Moving around</a></li>
+<li><a href="#org6b62a27">3. Entity System</a></li>
+<li><a href="#org1220c32">4. Generating a Dungeon</a></li>
+<li><a href="#orge70f153">5. Field of View</a></li>
+<li><a href="#orga2c2730">6. Placing Enemies</a></li>
+<li><a href="#org7470330">7. Combat Loop</a></li>
+<li><a href="#org15f413d">8. User Interface</a></li>
+<li><a href="#orgecbdb0c">9. Items and Inventory</a></li>
+<li><a href="#org3096f66">10. Equiping Items</a></li>
+<li><a href="#orgb73de70">11. Weapons and Targetting</a></li>
+<li><a href="#org70303da">12. Saving and Loading Game State</a></li>
+<li><a href="#orgb5339ee">13. Dungeon Delving</a></li>
+<li><a href="#org8b9ba59">14. Difficulty Curve</a></li>
 </ul>
 </div>
 </nav>
+<p>
+This file documents my attempts at going through a process of making a Rogue-Like game.<br>
+The associated source code lives in <a href="https://github.com/Roy-Fokker/roguelike">GitHub Repo</a>.<br>
+</p>
 
-<div id="outline-container-orgb03264a" class="outline-2">
-<h2 id="orgb03264a"><span class="section-number-2">1</span> Environment Setup</h2>
+<p>
+It's written in sort of literal programming format. Documentation is written in Emacs Org-Mode and exported to html which used by github to display this page. As emacs is not being used for any code related purposes, rest of this document ignores this aspect.<br>
+</p>
+
+<div id="outline-container-orgd1e40c2" class="outline-2">
+<h2 id="orgd1e40c2"><span class="section-number-2">1</span> Setup</h2>
 <div class="outline-text-2" id="text-1">
 </div>
-<div id="outline-container-orgd8da0ae" class="outline-3">
-<h3 id="orgd8da0ae"><span class="section-number-3">1.1</span> Tools of the trade:</h3>
+<div id="outline-container-orgfdcb1ef" class="outline-3">
+<h3 id="orgfdcb1ef"><span class="section-number-3">1.1</span> Environment Setup</h3>
 <div class="outline-text-3" id="text-1-1">
+</div>
+<div id="outline-container-orgf90bdda" class="outline-4">
+<h4 id="orgf90bdda"><span class="section-number-4">1.1.1</span> Tools of the trade:</h4>
+<div class="outline-text-4" id="text-1-1-1">
 <p>
 Below is listing of tools I am using<br>
 </p>
@@ -167,9 +178,10 @@ Below is listing of tools I am using<br>
 </table>
 </div>
 </div>
-<div id="outline-container-org29db4af" class="outline-3">
-<h3 id="org29db4af"><span class="section-number-3">1.2</span> Editor Configuration</h3>
-<div class="outline-text-3" id="text-1-2">
+
+<div id="outline-container-org10da952" class="outline-4">
+<h4 id="org10da952"><span class="section-number-4">1.1.2</span> Editor Configuration</h4>
+<div class="outline-text-4" id="text-1-1-2">
 <p>
 Following extensions are installed in VSCode<br>
 </p>
@@ -185,9 +197,10 @@ This will installed 2 other extensions<br>
 </ul>
 </div>
 </div>
-<div id="outline-container-org1da06e4" class="outline-3">
-<h3 id="org1da06e4"><span class="section-number-3">1.3</span> vcpkg configuration</h3>
-<div class="outline-text-3" id="text-1-3">
+
+<div id="outline-container-org37bc1a0" class="outline-4">
+<h4 id="org37bc1a0"><span class="section-number-4">1.1.3</span> vcpkg configuration</h4>
+<div class="outline-text-4" id="text-1-1-3">
 <ul class="org-ul">
 <li>Add Environment Variable called VCPKG_ROOT and point it to location of your vcpkg installation directory.<br>
 For me this is 'D:\Projects\CPP\.packages\vcpkg'.<br></li>
@@ -198,13 +211,13 @@ Again for me this is 'x64-Windows'.<br></li>
 </div>
 </div>
 
-<div id="outline-container-orgd1d0349" class="outline-2">
-<h2 id="orgd1d0349"><span class="section-number-2">2</span> Project Setup</h2>
-<div class="outline-text-2" id="text-2">
+<div id="outline-container-org7044789" class="outline-3">
+<h3 id="org7044789"><span class="section-number-3">1.2</span> Project Setup</h3>
+<div class="outline-text-3" id="text-1-2">
 </div>
-<div id="outline-container-orgd250c63" class="outline-3">
-<h3 id="orgd250c63"><span class="section-number-3">2.1</span> Folder Structure</h3>
-<div class="outline-text-3" id="text-2-1">
+<div id="outline-container-org450d574" class="outline-4">
+<h4 id="org450d574"><span class="section-number-4">1.2.1</span> Folder Structure</h4>
+<div class="outline-text-4" id="text-1-2-1">
 <pre class="example">
 \          # Root folder
 \build\    # where cmake will put all build generated files
@@ -214,9 +227,9 @@ Again for me this is 'x64-Windows'.<br></li>
 </pre>
 </div>
 </div>
-<div id="outline-container-orgf0ecd71" class="outline-3">
-<h3 id="orgf0ecd71"><span class="section-number-3">2.2</span> .gitignore file</h3>
-<div class="outline-text-3" id="text-2-2">
+<div id="outline-container-org45fdd98" class="outline-4">
+<h4 id="org45fdd98"><span class="section-number-4">1.2.2</span> <code>\.gitignore</code> file</h4>
+<div class="outline-text-4" id="text-1-2-2">
 <p>
 We'll be ignore following files and folders. No point in adding these to our git repo.<br>
 </p>
@@ -235,9 +248,9 @@ We'll be ignore following files and folders. No point in adding these to our git
 </div>
 </div>
 </div>
-<div id="outline-container-org0e73969" class="outline-3">
-<h3 id="org0e73969"><span class="section-number-3">2.3</span> CMake configuration</h3>
-<div class="outline-text-3" id="text-2-3">
+<div id="outline-container-orgf54098d" class="outline-4">
+<h4 id="orgf54098d"><span class="section-number-4">1.2.3</span> CMake configuration</h4>
+<div class="outline-text-4" id="text-1-2-3">
 <p>
 After you create the CMakeList.txt file below, VSCode should recognize this folder as being CMake project.<br>
 It will ask you to choose the toolchain with which to envoke the build process.<br>
@@ -245,7 +258,7 @@ It will ask you to choose the toolchain with which to envoke the build process.<
 
 <ul class="org-ul">
 <li><p>
-\CMakeLists.txt<br>
+<code>\CMakeLists.txt</code><br>
 This in the root of our project. We define basic things about how cmake should do things.<br>
 Lines 3 to 6 tell cmake to use vcpkg toolchain file.<br>
 </p>
@@ -268,7 +281,7 @@ Lines 3 to 6 tell cmake to use vcpkg toolchain file.<br>
 </pre>
 </div></li>
 <li><p>
-\src\CMakeLists.txt<br>
+<code>\src\CMakeLists.txt</code><br>
 This is in our src directory, here we tell cmake that we want output executable to be named rogue.exe.<br>
 We also tell it we want to use C++17 standard. This doesn't actually work with MSVC.<br>
 So&#x2026; we have to explictly tell cmake to pass some parameters to MSVC compiler<br>
@@ -293,84 +306,104 @@ So&#x2026; we have to explictly tell cmake to pass some parameters to MSVC compi
 </ul>
 </div>
 </div>
-<div id="outline-container-org55fd880" class="outline-3">
-<h3 id="org55fd880"><span class="section-number-3">2.4</span> Hello World test file</h3>
-<div class="outline-text-3" id="text-2-4">
-<ul class="org-ul">
-<li>\src\main.cpp<br></li>
-</ul>
+<div id="outline-container-orgf6ab2d7" class="outline-4">
+<h4 id="orgf6ab2d7"><span class="section-number-4">1.2.4</span> Hello World test file</h4>
+<div class="outline-text-4" id="text-1-2-4">
+<p>
+Time to test if the Setup is done properly.<br>
+Let's create <code>\src\main.cpp</code> file<br>
+</p>
 <div class="org-src-container">
 <pre class="src src-cpp"><span class="linenr"> 1: </span><span style="color: #ffb86c;">#include</span> <span style="color: #f8f8f2;">&lt;</span><span style="color: #f1fa8c;">iostream</span><span style="color: #f8f8f2;">&gt;</span>
 <span class="linenr"> 2: </span><span style="color: #ffb86c;">#include</span> <span style="color: #f8f8f2;">&lt;</span><span style="color: #f1fa8c;">fmt/core.h</span><span style="color: #f8f8f2;">&gt;</span>
 <span class="linenr"> 3: </span><span style="color: #ffb86c;">#include</span> <span style="color: #f8f8f2;">&lt;</span><span style="color: #f1fa8c;">chrono</span><span style="color: #f8f8f2;">&gt;</span>
 <span class="linenr"> 4: </span><span style="color: #ffb86c;">#include</span> <span style="color: #f8f8f2;">&lt;</span><span style="color: #f1fa8c;">string</span><span style="color: #f8f8f2;">&gt;</span>
 <span class="linenr"> 5: </span>
-<span class="linenr"> 6: </span><span style="color: #bd93f9;">int</span> <span style="color: #50fa7b; font-weight: bold;">main</span><span style="color: #f8f8f2;">(</span><span style="color: #bd93f9;">int</span>, <span style="color: #bd93f9;">char</span>**<span style="color: #f8f8f2;">)</span> <span style="color: #f8f8f2;">{</span>
-<span class="linenr"> 7: </span>    <span style="color: #ff79c6; font-weight: bold;">auto</span> <span style="color: #f8f8f2;">tp</span> = <span style="color: #8be9fd;">std</span>::<span style="color: #8be9fd;">chrono</span>::<span style="color: #8be9fd;">system_clock</span>::now<span style="color: #8be9fd;">()</span>;
-<span class="linenr"> 8: </span>    <span style="color: #ff79c6; font-weight: bold;">auto</span> <span style="color: #f8f8f2;">now_c</span> = <span style="color: #8be9fd;">std</span>::<span style="color: #8be9fd;">chrono</span>::<span style="color: #8be9fd;">system_clock</span>::to_time_t<span style="color: #8be9fd;">(</span>tp<span style="color: #8be9fd;">)</span>;
-<span class="linenr"> 9: </span>    <span style="color: #8be9fd;">fmt</span>::print<span style="color: #8be9fd;">(</span><span style="color: #f1fa8c;">"Hello, World! {}"</span>, now_c<span style="color: #8be9fd;">)</span>;
-<span class="linenr">10: </span><span style="color: #f8f8f2;">}</span>
+<span class="linenr"> 6: </span><span style="color: #bd93f9;">int</span> <span style="color: #50fa7b; font-weight: bold;">main</span><span style="color: #f8f8f2;">()</span>
+<span class="linenr"> 7: </span><span style="color: #f8f8f2;">{</span>
+<span class="linenr"> 8: </span>    <span style="color: #ff79c6; font-weight: bold;">auto</span> <span style="color: #f8f8f2;">tp</span> = <span style="color: #8be9fd;">std</span>::<span style="color: #8be9fd;">chrono</span>::<span style="color: #8be9fd;">system_clock</span>::now<span style="color: #8be9fd;">()</span>;
+<span class="linenr"> 9: </span>    <span style="color: #ff79c6; font-weight: bold;">auto</span> <span style="color: #f8f8f2;">now_c</span> = <span style="color: #8be9fd;">std</span>::<span style="color: #8be9fd;">chrono</span>::<span style="color: #8be9fd;">system_clock</span>::to_time_t<span style="color: #8be9fd;">(</span>tp<span style="color: #8be9fd;">)</span>;
+<span class="linenr">10: </span>    <span style="color: #8be9fd;">fmt</span>::print<span style="color: #8be9fd;">(</span><span style="color: #f1fa8c;">"Hello, World! {}"</span>, now_c<span style="color: #8be9fd;">)</span>;
+<span class="linenr">11: </span><span style="color: #f8f8f2;">}</span>
 </pre>
 </div>
+
+<p>
+If you tried to build the project now you'll find that cmake can't find <code>fmt</code> library.<br>
+So we need to get vcpkg to download this libary.<br>
+</p>
+<div class="org-src-container">
+<pre class="src src-bat"><span class="linenr">1: </span>vcpkg install fmt
+</pre>
+</div>
+<p>
+After vcpkg completes downloading and building <code>fmt</code> we can get vscode to run the build command.<br>
+</p>
+
+<p>
+If all of the above is done properly the file below should compile and generate an executable.<br>
+It can be executed by calling <code>\build\src\rogue.exe</code> from the project root folder.<br>
+</p>
+</div>
 </div>
 </div>
 </div>
 
-<div id="outline-container-orgbb51c9e" class="outline-2">
-<h2 id="orgbb51c9e"><span class="section-number-2">3</span> Drawing Player and Moving around</h2>
+<div id="outline-container-orgb666c50" class="outline-2">
+<h2 id="orgb666c50"><span class="section-number-2">2</span> Drawing Player and Moving around</h2>
 </div>
 
-<div id="outline-container-org76316ee" class="outline-2">
-<h2 id="org76316ee"><span class="section-number-2">4</span> Entity System</h2>
+<div id="outline-container-org6b62a27" class="outline-2">
+<h2 id="org6b62a27"><span class="section-number-2">3</span> Entity System</h2>
 </div>
 
-<div id="outline-container-org795d224" class="outline-2">
-<h2 id="org795d224"><span class="section-number-2">5</span> Generating a Dungeon</h2>
+<div id="outline-container-org1220c32" class="outline-2">
+<h2 id="org1220c32"><span class="section-number-2">4</span> Generating a Dungeon</h2>
 </div>
 
-<div id="outline-container-org2040270" class="outline-2">
-<h2 id="org2040270"><span class="section-number-2">6</span> Field of View</h2>
+<div id="outline-container-orge70f153" class="outline-2">
+<h2 id="orge70f153"><span class="section-number-2">5</span> Field of View</h2>
 </div>
 
-<div id="outline-container-org826df34" class="outline-2">
-<h2 id="org826df34"><span class="section-number-2">7</span> Placing Enemies</h2>
+<div id="outline-container-orga2c2730" class="outline-2">
+<h2 id="orga2c2730"><span class="section-number-2">6</span> Placing Enemies</h2>
 </div>
 
-<div id="outline-container-orga775d1b" class="outline-2">
-<h2 id="orga775d1b"><span class="section-number-2">8</span> Combat Loop</h2>
+<div id="outline-container-org7470330" class="outline-2">
+<h2 id="org7470330"><span class="section-number-2">7</span> Combat Loop</h2>
 </div>
 
-<div id="outline-container-org692d17b" class="outline-2">
-<h2 id="org692d17b"><span class="section-number-2">9</span> User Interface</h2>
+<div id="outline-container-org15f413d" class="outline-2">
+<h2 id="org15f413d"><span class="section-number-2">8</span> User Interface</h2>
 </div>
 
-<div id="outline-container-org0e7014a" class="outline-2">
-<h2 id="org0e7014a"><span class="section-number-2">10</span> Items and Inventory</h2>
+<div id="outline-container-orgecbdb0c" class="outline-2">
+<h2 id="orgecbdb0c"><span class="section-number-2">9</span> Items and Inventory</h2>
 </div>
 
-<div id="outline-container-org37183f2" class="outline-2">
-<h2 id="org37183f2"><span class="section-number-2">11</span> Equiping Items</h2>
+<div id="outline-container-org3096f66" class="outline-2">
+<h2 id="org3096f66"><span class="section-number-2">10</span> Equiping Items</h2>
 </div>
 
-<div id="outline-container-orgbe3f549" class="outline-2">
-<h2 id="orgbe3f549"><span class="section-number-2">12</span> Weapons and Targetting</h2>
+<div id="outline-container-orgb73de70" class="outline-2">
+<h2 id="orgb73de70"><span class="section-number-2">11</span> Weapons and Targetting</h2>
 </div>
 
-<div id="outline-container-org8533b16" class="outline-2">
-<h2 id="org8533b16"><span class="section-number-2">13</span> Saving and Loading Game State</h2>
+<div id="outline-container-org70303da" class="outline-2">
+<h2 id="org70303da"><span class="section-number-2">12</span> Saving and Loading Game State</h2>
 </div>
 
-<div id="outline-container-org19b1277" class="outline-2">
-<h2 id="org19b1277"><span class="section-number-2">14</span> Dungeon Delving</h2>
+<div id="outline-container-orgb5339ee" class="outline-2">
+<h2 id="orgb5339ee"><span class="section-number-2">13</span> Dungeon Delving</h2>
 </div>
 
-<div id="outline-container-org5a5c001" class="outline-2">
-<h2 id="org5a5c001"><span class="section-number-2">15</span> Difficulty Curve</h2>
+<div id="outline-container-org8b9ba59" class="outline-2">
+<h2 id="org8b9ba59"><span class="section-number-2">14</span> Difficulty Curve</h2>
 </div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Neel Raiyani</p>
-<p class="date">Created: 2019-10-06 Sun 18:01</p>
+<p class="date">Created: 2019-10-06 Sun 18:39</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

@@ -3,116 +3,136 @@
 #+EMAIL: nraiyani at gmail dot com
 #+LANGUAGE: en
 #+SETUPFILE: notes-style.org
-#+OPTIONS: H:4, toc:1, \n:t
+#+OPTIONS: H:3, toc:1, \n:t
 #+EXPORT_FILE_NAME: docs\index.html
 
-* Environment Setup
-** Tools of the trade:
-   Below is listing of tools I am using
-   |---------------------+------------------------------+---------|
-   | Tool                | Name                         | Version |
-   |---------------------+------------------------------+---------|
-   | Editor              | [[https://code.visualstudio.com/][VSCode]]                       |  1.38.1 |
-   | C++ Toolchain       | [[https://visualstudio.microsoft.com/vs/][Visual Studio 2019 Community]] |  16.3.2 |
-   | C++ Build Generator | [[https://cmake.org/][CMake]]                        |  3.15.1 |
-   | C++ Package Manager | [[https://github.com/Microsoft/vcpkg][vcpkg]]                        | 2019.09 |
-   | Version Control     | [[https://git-scm.com/][git]]                          |  2.23.0 |
-   |---------------------+------------------------------+---------|
-** Editor Configuration
-   Following extensions are installed in VSCode
-   - [[https://marketplace.visualstudio.com/items?itemName=CoenraadS.bracket-pair-colorizer-2][Bracket Pair Colorizer 2]]
-   - [[https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools][C/C++]]
-   - [[https://marketplace.visualstudio.com/items?itemName=maddouri.cmake-tools-helper][CMake Tools Helper]]
-	 This will installed 2 other extensions
-	 - [[https://marketplace.visualstudio.com/items?itemName=vector-of-bool.cmake-tools][CMake Tools]]
-	 - [[https://marketplace.visualstudio.com/items?itemName=twxs.cmake][CMake for Visual Studio Code]]
-** vcpkg configuration
-   - Add Environment Variable called VCPKG_ROOT and point it to location of your vcpkg installation directory.
-	 For me this is 'D:\Projects\CPP\.packages\vcpkg'.
-   - Add Environment Variable called VCPKG_DEFAULT_TRIPLET and set it equal to x64-<system name>.
-	 Again for me this is 'x64-Windows'.
+This file documents my attempts at going through a process of making a Rogue-Like game.
+The associated source code lives in [[https://github.com/Roy-Fokker/roguelike][GitHub Repo]].
 
-* Project Setup
-** Folder Structure
-   #+begin_example markdown
-	 \          # Root folder
-	 \build\    # where cmake will put all build generated files
-	 \docs\     # documentation folder, where this index.html file is located
-	 \src\      # where all the source files will go
-	 \external\ # any 3rd party libraries we can't get via vcpkg will go here
-   #+end_example
-** .gitignore file
-   We'll be ignore following files and folders. No point in adding these to our git repo.
-   #+begin_src markdown -n
-	 # cmake build directory
-	 build/
+It's written in sort of literal programming format. Documentation is written in Emacs Org-Mode and exported to html which used by github to display this page. As emacs is not being used for any code related purposes, rest of this document ignores this aspect.
 
-	 # vscode and visual studio specific
-	 .vscode/
-	 .vs/
+* Setup
+** Environment Setup
+*** Tools of the trade:
+	Below is listing of tools I am using
+	|---------------------+------------------------------+---------|
+	| Tool                | Name                         | Version |
+	|---------------------+------------------------------+---------|
+	| Editor              | [[https://code.visualstudio.com/][VSCode]]                       |  1.38.1 |
+	| C++ Toolchain       | [[https://visualstudio.microsoft.com/vs/][Visual Studio 2019 Community]] |  16.3.2 |
+	| C++ Build Generator | [[https://cmake.org/][CMake]]                        |  3.15.1 |
+	| C++ Package Manager | [[https://github.com/Microsoft/vcpkg][vcpkg]]                        | 2019.09 |
+	| Version Control     | [[https://git-scm.com/][git]]                          |  2.23.0 |
+	|---------------------+------------------------------+---------|
 
-	 # org-mode temp files
-	 ./*.html
-	 backups/
-   #+end_src
-** CMake configuration
-   After you create the CMakeList.txt file below, VSCode should recognize this folder as being CMake project.
-   It will ask you to choose the toolchain with which to envoke the build process.
+*** Editor Configuration
+ 	Following extensions are installed in VSCode
+	- [[https://marketplace.visualstudio.com/items?itemName=CoenraadS.bracket-pair-colorizer-2][Bracket Pair Colorizer 2]]
+	- [[https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools][C/C++]]
+	- [[https://marketplace.visualstudio.com/items?itemName=maddouri.cmake-tools-helper][CMake Tools Helper]]
+	  This will installed 2 other extensions
+	  - [[https://marketplace.visualstudio.com/items?itemName=vector-of-bool.cmake-tools][CMake Tools]]
+	  - [[https://marketplace.visualstudio.com/items?itemName=twxs.cmake][CMake for Visual Studio Code]]
+
+*** vcpkg configuration
+	- Add Environment Variable called VCPKG_ROOT and point it to location of your vcpkg installation directory.
+	  For me this is 'D:\Projects\CPP\.packages\vcpkg'.
+	- Add Environment Variable called VCPKG_DEFAULT_TRIPLET and set it equal to x64-<system name>.
+	  Again for me this is 'x64-Windows'.
+
+** Project Setup
+*** Folder Structure
+	#+begin_example markdown
+	  \          # Root folder
+	  \build\    # where cmake will put all build generated files
+	  \docs\     # documentation folder, where this index.html file is located
+	  \src\      # where all the source files will go
+	  \external\ # any 3rd party libraries we can't get via vcpkg will go here
+	#+end_example
+*** ~\.gitignore~ file
+	We'll be ignore following files and folders. No point in adding these to our git repo.
+    #+begin_src markdown -n
+	  # cmake build directory
+	  build/
+
+	  # vscode and visual studio specific
+	  .vscode/
+	  .vs/
+
+	  # org-mode temp files
+	  ./*.html
+	  backups/
+    #+end_src
+*** CMake configuration
+	After you create the CMakeList.txt file below, VSCode should recognize this folder as being CMake project.
+	It will ask you to choose the toolchain with which to envoke the build process.
    
-   - \CMakeLists.txt
-	 This in the root of our project. We define basic things about how cmake should do things.
-	 Lines 3 to 6 tell cmake to use vcpkg toolchain file.
-	 #+begin_src cmake -n
-	   cmake_minimum_required(VERSION 3.15.0)
+	- ~\CMakeLists.txt~
+	  This in the root of our project. We define basic things about how cmake should do things.
+	  Lines 3 to 6 tell cmake to use vcpkg toolchain file.
+	  #+begin_src cmake -n
+		cmake_minimum_required(VERSION 3.15.0)
 
-	   if(DEFINED ENV{VCPKG_ROOT} AND NOT DEFINED CMAKE_TOOLCHAIN_FILE)
-		 set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
-			 CACHE STRING "")
-	   endif()
+		if(DEFINED ENV{VCPKG_ROOT} AND NOT DEFINED CMAKE_TOOLCHAIN_FILE)
+		  set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
+			  CACHE STRING "")
+		endif()
 
-	   project(rogue
-			   LANGUAGES CXX 
-			   VERSION 0.1.0)
+		project(rogue
+				LANGUAGES CXX 
+				VERSION 0.1.0)
 
-	   set(CMAKE_CXX_STANDARD_REQUIRED ON)
+		set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-	   add_subdirectory(src)
+		add_subdirectory(src)
 
-	 #+end_src
-   - \src\CMakeLists.txt
-	 This is in our src directory, here we tell cmake that we want output executable to be named rogue.exe.
-	 We also tell it we want to use C++17 standard. This doesn't actually work with MSVC.
-	 So... we have to explictly tell cmake to pass some parameters to MSVC compiler
-	 #+begin_src cmake -n
-	   add_executable(rogue main.cpp)
+	  #+end_src
+	- ~\src\CMakeLists.txt~
+	  This is in our src directory, here we tell cmake that we want output executable to be named rogue.exe.
+	  We also tell it we want to use C++17 standard. This doesn't actually work with MSVC.
+	  So... we have to explictly tell cmake to pass some parameters to MSVC compiler
+	  #+begin_src cmake -n
+		add_executable(rogue main.cpp)
 
-	   target_compile_features(rogue PRIVATE cxx_std_17)
+		target_compile_features(rogue PRIVATE cxx_std_17)
 
-	   target_compile_options(rogue
-							  PRIVATE 
-							  $<$<CXX_COMPILER_ID:MSVC>:/W3 /permissive- /Zc:__cplusplus /std:c++17>)
+		target_compile_options(rogue
+							   PRIVATE 
+							   $<$<CXX_COMPILER_ID:MSVC>:/W3 /permissive- /Zc:__cplusplus /std:c++17>)
 
-	   target_compile_definitions(rogue
-								  PRIVATE
-								  $<$<CONFIG:Debug>:DEBUG _DEBUG>)
+		target_compile_definitions(rogue
+								   PRIVATE
+								   $<$<CONFIG:Debug>:DEBUG _DEBUG>)
 
-	   find_package(fmt REQUIRED)
-	   target_link_libraries(rogue PRIVATE fmt::fmt)
-	 #+end_src
-** Hello World test file
-   - \src\main.cpp
-   #+begin_src cpp -n
-	 #include <iostream>
-	 #include <fmt/core.h>
-	 #include <chrono>
-	 #include <string>
+		find_package(fmt REQUIRED)
+		target_link_libraries(rogue PRIVATE fmt::fmt)
+	  #+end_src
+*** Hello World test file
+	Time to test if the Setup is done properly.
+	Let's create ~\src\main.cpp~ file 
+    #+begin_src cpp -n
+	  #include <iostream>
+	  #include <fmt/core.h>
+	  #include <chrono>
+	  #include <string>
 
-	 int main(int, char**) {
-		 auto tp = std::chrono::system_clock::now();
-		 auto now_c = std::chrono::system_clock::to_time_t(tp);
-		 fmt::print("Hello, World! {}", now_c);
-	 }
-   #+end_src
+	  int main()
+	  {
+		  auto tp = std::chrono::system_clock::now();
+		  auto now_c = std::chrono::system_clock::to_time_t(tp);
+		  fmt::print("Hello, World! {}", now_c);
+	  }
+	#+end_src
+
+	If you tried to build the project now you'll find that cmake can't find ~fmt~ library.
+	So we need to get vcpkg to download this libary.
+	#+begin_src bat -n
+	  vcpkg install fmt
+	#+end_src
+	After vcpkg completes downloading and building ~fmt~ we can get vscode to run the build command.
+
+	If all of the above is done properly the file below should compile and generate an executable.
+	It can be executed by calling ~\build\src\rogue.exe~ from the project root folder.
 
 * Drawing Player and Moving around
   
