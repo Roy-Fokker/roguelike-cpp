@@ -1,4 +1,47 @@
 #+TITLE: Rogue-Like Game in C++17
 #+AUTHOR: Neel Raiyani
 #+EMAIL: nraiyani at gmail dot com
-#+OPTIONS: H:4, toc:2
+#+LANGUAGE: en
+#+SETUPFILE: notes-style.org
+#+OPTIONS: H:4, toc:1
+
+* Environment Setup
+** Tools of the trade:
+   - Good Editor: VSCode, Emacs, VIM, etc,.
+     I will be using VSCode.
+   - C++ compiler: MSVC, CLANG, GCC, etc,. 
+     Use latest versions of your compiler tools.
+     I will be using MSVC 2019. You can download VS_Community from VisualStudio.com.
+     If you use clang or gcc, please look at how to get them configured for your system.
+   - CMake: Use latest version. 
+     I am using 3.15 which is latest at the time of this writing.
+     
+
+* Project Setup
+
+* Drawing Player and Moving around
+
+* Entity System
+
+* Generating a Dungeon
+
+* Field of View
+
+* Placing Enemies
+
+* Combat Loop
+
+* User Interface
+
+* Items and Inventory
+
+* Equiping Items
+
+* Weapons and Targetting
+
+* Saving and Loading Game State
+
+* Dungeon Delving
+
+* Difficulty Curve
+
