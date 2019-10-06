@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2019-10-06 Sun 16:37 -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rogue-Like Game in C++17</title>
+<meta name="generator" content="Org mode">
+<meta name="author" content="Neel Raiyani">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="http://taopeng.me/org-notes-style/css/notes.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2019 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        displayAlign: "center",
+        displayIndent: "0em",
+
+        "HTML-CSS": { scale: 100,
+                        linebreaks: { automatic: "false" },
+                        webFont: "TeX"
+                       },
+        SVG: {scale: 100,
+              linebreaks: { automatic: "false" },
+              font: "TeX"},
+        NativeMML: {scale: 100},
+        TeX: { equationNumbers: {autoNumber: "AMS"},
+               MultLineWidth: "85%",
+               TagSide: "right",
+               TagIndent: ".8em"
+             }
+});
+</script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+</head>
+<body>
+<div id="content">
+<header>
+<h1 class="title">Rogue-Like Game in C++17</h1>
+</header><nav id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgdd9a84a">1. Environment Setup</a></li>
+<li><a href="#orgc99c690">2. Project Setup</a></li>
+<li><a href="#org8be3af4">3. Drawing Player and Moving around</a></li>
+<li><a href="#org7356858">4. Entity System</a></li>
+<li><a href="#orgf10f7c9">5. Generating a Dungeon</a></li>
+<li><a href="#org3fe4ca6">6. Field of View</a></li>
+<li><a href="#orgbe4ec86">7. Placing Enemies</a></li>
+<li><a href="#orgda1eb1f">8. Combat Loop</a></li>
+<li><a href="#orgb16bd71">9. User Interface</a></li>
+<li><a href="#org7ae495d">10. Items and Inventory</a></li>
+<li><a href="#orga3bfaa5">11. Equiping Items</a></li>
+<li><a href="#org95ce11f">12. Weapons and Targetting</a></li>
+<li><a href="#org23599ac">13. Saving and Loading Game State</a></li>
+<li><a href="#orgefbfda5">14. Dungeon Delving</a></li>
+<li><a href="#org47ff842">15. Difficulty Curve</a></li>
+</ul>
+</div>
+</nav>
+
+<div id="outline-container-orgdd9a84a" class="outline-2">
+<h2 id="orgdd9a84a"><span class="section-number-2">1</span> Environment Setup</h2>
+<div class="outline-text-2" id="text-1">
+</div>
+<div id="outline-container-org7dd6fc7" class="outline-3">
+<h3 id="org7dd6fc7"><span class="section-number-3">1.1</span> Tools of the trade:</h3>
+<div class="outline-text-3" id="text-1-1">
+<ul class="org-ul">
+<li>Good Editor: VSCode, Emacs, VIM, etc,.<br>
+I will be using VSCode.<br></li>
+<li>C++ compiler: MSVC, CLANG, GCC, etc,.<br>
+Use latest versions of your compiler tools.<br>
+I will be using MSVC 2019. You can download VS_Community from VisualStudio.com.<br>
+If you use clang or gcc, please look at how to get them configured for your system.<br></li>
+<li>CMake: Use latest version.<br>
+I am using 3.15 which is latest at the time of this writing.<br></li>
+<li>C++ Package Manager: I will be using vcpkg<br></li>
+<li>Version Control: git for windows 2.23.0-1<br></li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgc99c690" class="outline-2">
+<h2 id="orgc99c690"><span class="section-number-2">2</span> Project Setup</h2>
+<div class="outline-text-2" id="text-2">
+</div>
+<div id="outline-container-orga8671be" class="outline-3">
+<h3 id="orga8671be"><span class="section-number-3">2.1</span> Folder Structure</h3>
+<div class="outline-text-3" id="text-2-1">
+<blockquote>
+<p>
+\build\<br>
+\docs\<br>
+\src\<br>
+\src\CMakeLists.txt<br>
+\src\*.cpp|*.h<br>
+\CMakeLists.txt<br>
+\.gitignore<br>
+</p>
+</blockquote>
+</div>
+</div>
+
+<div id="outline-container-orgf2dd1e7" class="outline-3">
+<h3 id="orgf2dd1e7"><span class="section-number-3">2.2</span> .gitignore file</h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+We'll be ignore following files and folders<br>
+</p>
+<div class="org-src-container">
+<pre class="src src-markdown"><span style="color: #b3b3b3;"># </span><span style="color: #50fa7b; font-weight: bold;">cmake build directory</span>
+build/
+
+<span style="color: #b3b3b3;"># </span><span style="color: #50fa7b; font-weight: bold;">vscode and visual studio specific</span>
+.vscode/
+.vs/
+
+<span style="color: #b3b3b3;"># </span><span style="color: #50fa7b; font-weight: bold;">org-mode html output</span>
+*.html
+backups/
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orge22e3aa" class="outline-3">
+<h3 id="orge22e3aa"><span class="section-number-3">2.3</span> CMake configuration</h3>
+<div class="outline-text-3" id="text-2-3">
+<ul class="org-ul">
+<li><p>
+\CMakeLists.txt<br>
+</p>
+<div class="org-src-container">
+<pre class="src src-cmake"><span style="color: #50fa7b; font-weight: bold;">cmake_minimum_required</span><span style="color: #f8f8f2;">(</span>VERSION 3.15.0<span style="color: #f8f8f2;">)</span>
+
+<span style="color: #ff79c6; font-weight: bold;">if</span><span style="color: #f8f8f2;">(</span>DEFINED ENV<span style="color: #8be9fd;">{</span>VCPKG_ROOT<span style="color: #8be9fd;">}</span> AND NOT DEFINED CMAKE_TOOLCHAIN_FILE<span style="color: #f8f8f2;">)</span>
+  <span style="color: #50fa7b; font-weight: bold;">set</span><span style="color: #f8f8f2;">(</span>CMAKE_TOOLCHAIN_FILE <span style="color: #f1fa8c;">"$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"</span>
+      CACHE STRING <span style="color: #f1fa8c;">""</span><span style="color: #f8f8f2;">)</span>
+<span style="color: #ff79c6; font-weight: bold;">endif</span><span style="color: #f8f8f2;">()</span>
+
+<span style="color: #50fa7b; font-weight: bold;">project</span><span style="color: #f8f8f2;">(</span>rogue
+        LANGUAGES CXX 
+        VERSION 0.1.0<span style="color: #f8f8f2;">)</span>
+
+<span style="color: #50fa7b; font-weight: bold;">set</span><span style="color: #f8f8f2;">(</span>CMAKE_CXX_STANDARD_REQUIRED ON<span style="color: #f8f8f2;">)</span>
+
+<span style="color: #50fa7b; font-weight: bold;">add_subdirectory</span><span style="color: #f8f8f2;">(</span>src<span style="color: #f8f8f2;">)</span>
+
+</pre>
+</div></li>
+<li><p>
+\src\CMakeLists.txt<br>
+</p>
+<div class="org-src-container">
+<pre class="src src-cmake"><span style="color: #50fa7b; font-weight: bold;">add_executable</span><span style="color: #f8f8f2;">(</span>rogue main.cpp<span style="color: #f8f8f2;">)</span>
+
+<span style="color: #50fa7b; font-weight: bold;">target_compile_features</span><span style="color: #f8f8f2;">(</span>rogue PRIVATE cxx_std_17<span style="color: #f8f8f2;">)</span>
+
+<span style="color: #50fa7b; font-weight: bold;">target_compile_options</span><span style="color: #f8f8f2;">(</span>rogue
+                       PRIVATE 
+                       $&lt;$&lt;CXX_COMPILER_ID:MSVC&gt;:/W3 /permissive- /Zc:__cplusplus&gt;<span style="color: #f8f8f2;">)</span>
+
+<span style="color: #50fa7b; font-weight: bold;">target_compile_definitions</span><span style="color: #f8f8f2;">(</span>rogue
+                           PRIVATE
+                           $&lt;$&lt;CONFIG:Debug&gt;:DEBUG _DEBUG&gt;<span style="color: #f8f8f2;">)</span>
+
+<span style="color: #50fa7b; font-weight: bold;">find_package</span><span style="color: #f8f8f2;">(</span>fmt REQUIRED<span style="color: #f8f8f2;">)</span>
+<span style="color: #50fa7b; font-weight: bold;">target_link_libraries</span><span style="color: #f8f8f2;">(</span>rogue PRIVATE fmt::fmt<span style="color: #f8f8f2;">)</span>
+</pre>
+</div></li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org8be3af4" class="outline-2">
+<h2 id="org8be3af4"><span class="section-number-2">3</span> Drawing Player and Moving around</h2>
+</div>
+
+<div id="outline-container-org7356858" class="outline-2">
+<h2 id="org7356858"><span class="section-number-2">4</span> Entity System</h2>
+</div>
+
+<div id="outline-container-orgf10f7c9" class="outline-2">
+<h2 id="orgf10f7c9"><span class="section-number-2">5</span> Generating a Dungeon</h2>
+</div>
+
+<div id="outline-container-org3fe4ca6" class="outline-2">
+<h2 id="org3fe4ca6"><span class="section-number-2">6</span> Field of View</h2>
+</div>
+
+<div id="outline-container-orgbe4ec86" class="outline-2">
+<h2 id="orgbe4ec86"><span class="section-number-2">7</span> Placing Enemies</h2>
+</div>
+
+<div id="outline-container-orgda1eb1f" class="outline-2">
+<h2 id="orgda1eb1f"><span class="section-number-2">8</span> Combat Loop</h2>
+</div>
+
+<div id="outline-container-orgb16bd71" class="outline-2">
+<h2 id="orgb16bd71"><span class="section-number-2">9</span> User Interface</h2>
+</div>
+
+<div id="outline-container-org7ae495d" class="outline-2">
+<h2 id="org7ae495d"><span class="section-number-2">10</span> Items and Inventory</h2>
+</div>
+
+<div id="outline-container-orga3bfaa5" class="outline-2">
+<h2 id="orga3bfaa5"><span class="section-number-2">11</span> Equiping Items</h2>
+</div>
+
+<div id="outline-container-org95ce11f" class="outline-2">
+<h2 id="org95ce11f"><span class="section-number-2">12</span> Weapons and Targetting</h2>
+</div>
+
+<div id="outline-container-org23599ac" class="outline-2">
+<h2 id="org23599ac"><span class="section-number-2">13</span> Saving and Loading Game State</h2>
+</div>
+
+<div id="outline-container-orgefbfda5" class="outline-2">
+<h2 id="orgefbfda5"><span class="section-number-2">14</span> Dungeon Delving</h2>
+</div>
+
+<div id="outline-container-org47ff842" class="outline-2">
+<h2 id="org47ff842"><span class="section-number-2">15</span> Difficulty Curve</h2>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Neel Raiyani</p>
+<p class="date">Created: 2019-10-06 Sun 16:37</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

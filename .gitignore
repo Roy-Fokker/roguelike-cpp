@@ -6,5 +6,5 @@ build/
 .vs/
 
 # org-mode html output
-*.html
+./*.html
 backups/
