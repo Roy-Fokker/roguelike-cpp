@@ -3,7 +3,8 @@
 #+EMAIL: nraiyani at gmail dot com
 #+LANGUAGE: en
 #+SETUPFILE: notes-style.org
-#+OPTIONS: H:4, toc:1
+#+OPTIONS: H:4, toc:1, \n:t
+#+EXPORT_FILE_NAME: docs\index.html
 
 * Environment Setup
 ** Tools of the trade:
@@ -15,9 +16,72 @@
      If you use clang or gcc, please look at how to get them configured for your system.
    - CMake: Use latest version. 
      I am using 3.15 which is latest at the time of this writing.
-     
+   - C++ Package Manager: I will be using vcpkg
+   - Version Control: git for windows 2.23.0-1
 
 * Project Setup
+** Folder Structure
+   #+begin_quote
+   \build\
+   \docs\
+   \src\
+   \src\CMakeLists.txt
+   \src\*.cpp|*.h
+   \CMakeLists.txt
+   \.gitignore
+   #+end_quote
+
+** .gitignore file
+   We'll be ignore following files and folders
+   #+begin_src markdown
+	 # cmake build directory
+	 build/
+
+	 # vscode and visual studio specific
+	 .vscode/
+	 .vs/
+
+	 # org-mode html output
+	 ,*.html
+	 backups/
+   #+end_src
+
+** CMake configuration
+   - \CMakeLists.txt
+	 #+begin_src cmake
+	   cmake_minimum_required(VERSION 3.15.0)
+
+	   if(DEFINED ENV{VCPKG_ROOT} AND NOT DEFINED CMAKE_TOOLCHAIN_FILE)
+		 set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
+			 CACHE STRING "")
+	   endif()
+
+	   project(rogue
+			   LANGUAGES CXX 
+			   VERSION 0.1.0)
+
+	   set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+	   add_subdirectory(src)
+
+	 #+end_src
+   - \src\CMakeLists.txt
+	 #+begin_src cmake
+	   add_executable(rogue main.cpp)
+
+	   target_compile_features(rogue PRIVATE cxx_std_17)
+
+	   target_compile_options(rogue
+							  PRIVATE 
+							  $<$<CXX_COMPILER_ID:MSVC>:/W3 /permissive- /Zc:__cplusplus>)
+
+	   target_compile_definitions(rogue
+								  PRIVATE
+								  $<$<CONFIG:Debug>:DEBUG _DEBUG>)
+
+	   find_package(fmt REQUIRED)
+	   target_link_libraries(rogue PRIVATE fmt::fmt)
+	 #+end_src
 
 * Drawing Player and Moving around
 

@@ -1,2 +1,10 @@
-backups/
+# cmake build directory
+build/
+
+# vscode and visual studio specific
+.vscode/
+.vs/
+
+# org-mode html output
 *.html
+backups/
