@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2019-10-06 Sun 16:49 -->
+<!-- 2019-10-06 Sun 18:01 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Rogue-Like Game in C++17</title>
@@ -87,196 +87,290 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org086631d">1. Environment Setup</a></li>
-<li><a href="#org0bbedd2">2. Project Setup</a></li>
-<li><a href="#org0291817">3. Drawing Player and Moving around</a></li>
-<li><a href="#org6a797fb">4. Entity System</a></li>
-<li><a href="#orgb036c55">5. Generating a Dungeon</a></li>
-<li><a href="#orgaa55971">6. Field of View</a></li>
-<li><a href="#orgcf40d2f">7. Placing Enemies</a></li>
-<li><a href="#orgb0879bd">8. Combat Loop</a></li>
-<li><a href="#org79bc2f5">9. User Interface</a></li>
-<li><a href="#org2ebfaa0">10. Items and Inventory</a></li>
-<li><a href="#org75bd28b">11. Equiping Items</a></li>
-<li><a href="#org84aeb25">12. Weapons and Targetting</a></li>
-<li><a href="#org239b75d">13. Saving and Loading Game State</a></li>
-<li><a href="#org932013e">14. Dungeon Delving</a></li>
-<li><a href="#org5e79684">15. Difficulty Curve</a></li>
+<li><a href="#orgb03264a">1. Environment Setup</a></li>
+<li><a href="#orgd1d0349">2. Project Setup</a></li>
+<li><a href="#orgbb51c9e">3. Drawing Player and Moving around</a></li>
+<li><a href="#org76316ee">4. Entity System</a></li>
+<li><a href="#org795d224">5. Generating a Dungeon</a></li>
+<li><a href="#org2040270">6. Field of View</a></li>
+<li><a href="#org826df34">7. Placing Enemies</a></li>
+<li><a href="#orga775d1b">8. Combat Loop</a></li>
+<li><a href="#org692d17b">9. User Interface</a></li>
+<li><a href="#org0e7014a">10. Items and Inventory</a></li>
+<li><a href="#org37183f2">11. Equiping Items</a></li>
+<li><a href="#orgbe3f549">12. Weapons and Targetting</a></li>
+<li><a href="#org8533b16">13. Saving and Loading Game State</a></li>
+<li><a href="#org19b1277">14. Dungeon Delving</a></li>
+<li><a href="#org5a5c001">15. Difficulty Curve</a></li>
 </ul>
 </div>
 </nav>
 
-<div id="outline-container-org086631d" class="outline-2">
-<h2 id="org086631d"><span class="section-number-2">1</span> Environment Setup</h2>
+<div id="outline-container-orgb03264a" class="outline-2">
+<h2 id="orgb03264a"><span class="section-number-2">1</span> Environment Setup</h2>
 <div class="outline-text-2" id="text-1">
 </div>
-<div id="outline-container-orga70186b" class="outline-3">
-<h3 id="orga70186b"><span class="section-number-3">1.1</span> Tools of the trade:</h3>
+<div id="outline-container-orgd8da0ae" class="outline-3">
+<h3 id="orgd8da0ae"><span class="section-number-3">1.1</span> Tools of the trade:</h3>
 <div class="outline-text-3" id="text-1-1">
+<p>
+Below is listing of tools I am using<br>
+</p>
+<table>
+
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-right">
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Tool</th>
+<th scope="col" class="org-left">Name</th>
+<th scope="col" class="org-right">Version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">Editor</td>
+<td class="org-left"><a href="https://code.visualstudio.com/">VSCode</a></td>
+<td class="org-right">1.38.1</td>
+</tr>
+
+<tr>
+<td class="org-left">C++ Toolchain</td>
+<td class="org-left"><a href="https://visualstudio.microsoft.com/vs/">Visual Studio 2019 Community</a></td>
+<td class="org-right">16.3.2</td>
+</tr>
+
+<tr>
+<td class="org-left">C++ Build Generator</td>
+<td class="org-left"><a href="https://cmake.org/">CMake</a></td>
+<td class="org-right">3.15.1</td>
+</tr>
+
+<tr>
+<td class="org-left">C++ Package Manager</td>
+<td class="org-left"><a href="https://github.com/Microsoft/vcpkg">vcpkg</a></td>
+<td class="org-right">2019.09</td>
+</tr>
+
+<tr>
+<td class="org-left">Version Control</td>
+<td class="org-left"><a href="https://git-scm.com/">git</a></td>
+<td class="org-right">2.23.0</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="outline-container-org29db4af" class="outline-3">
+<h3 id="org29db4af"><span class="section-number-3">1.2</span> Editor Configuration</h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+Following extensions are installed in VSCode<br>
+</p>
 <ul class="org-ul">
-<li>Good Editor: VSCode, Emacs, VIM, etc,.<br>
-I will be using VSCode.<br></li>
-<li>C++ compiler: MSVC, CLANG, GCC, etc,.<br>
-Use latest versions of your compiler tools.<br>
-I will be using MSVC 2019. You can download VS_Community from VisualStudio.com.<br>
-If you use clang or gcc, please look at how to get them configured for your system.<br></li>
-<li>CMake: Use latest version.<br>
-I am using 3.15 which is latest at the time of this writing.<br></li>
-<li>C++ Package Manager: I will be using vcpkg<br></li>
-<li>Version Control: git for windows 2.23.0-1<br></li>
+<li><a href="https://marketplace.visualstudio.com/items?itemName=CoenraadS.bracket-pair-colorizer-2">Bracket Pair Colorizer 2</a><br></li>
+<li><a href="https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools">C/C++</a><br></li>
+<li><a href="https://marketplace.visualstudio.com/items?itemName=maddouri.cmake-tools-helper">CMake Tools Helper</a><br>
+This will installed 2 other extensions<br>
+<ul class="org-ul">
+<li><a href="https://marketplace.visualstudio.com/items?itemName=vector-of-bool.cmake-tools">CMake Tools</a><br></li>
+<li><a href="https://marketplace.visualstudio.com/items?itemName=twxs.cmake">CMake for Visual Studio Code</a><br></li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org1da06e4" class="outline-3">
+<h3 id="org1da06e4"><span class="section-number-3">1.3</span> vcpkg configuration</h3>
+<div class="outline-text-3" id="text-1-3">
+<ul class="org-ul">
+<li>Add Environment Variable called VCPKG_ROOT and point it to location of your vcpkg installation directory.<br>
+For me this is 'D:\Projects\CPP\.packages\vcpkg'.<br></li>
+<li>Add Environment Variable called VCPKG_DEFAULT_TRIPLET and set it equal to x64-&lt;system name&gt;.<br>
+Again for me this is 'x64-Windows'.<br></li>
 </ul>
 </div>
 </div>
 </div>
 
-<div id="outline-container-org0bbedd2" class="outline-2">
-<h2 id="org0bbedd2"><span class="section-number-2">2</span> Project Setup</h2>
+<div id="outline-container-orgd1d0349" class="outline-2">
+<h2 id="orgd1d0349"><span class="section-number-2">2</span> Project Setup</h2>
 <div class="outline-text-2" id="text-2">
 </div>
-<div id="outline-container-org48784fa" class="outline-3">
-<h3 id="org48784fa"><span class="section-number-3">2.1</span> Folder Structure</h3>
+<div id="outline-container-orgd250c63" class="outline-3">
+<h3 id="orgd250c63"><span class="section-number-3">2.1</span> Folder Structure</h3>
 <div class="outline-text-3" id="text-2-1">
-<blockquote>
-<p>
-\build\<br>
-\docs\<br>
-\src\<br>
-\src\CMakeLists.txt<br>
-\src\*.cpp|*.h<br>
-\CMakeLists.txt<br>
-\.gitignore<br>
-</p>
-</blockquote>
+<pre class="example">
+\          # Root folder
+\build\    # where cmake will put all build generated files
+\docs\     # documentation folder, where this index.html file is located
+\src\      # where all the source files will go
+\external\ # any 3rd party libraries we can't get via vcpkg will go here
+</pre>
 </div>
 </div>
-
-<div id="outline-container-orgc5d43e6" class="outline-3">
-<h3 id="orgc5d43e6"><span class="section-number-3">2.2</span> .gitignore file</h3>
+<div id="outline-container-orgf0ecd71" class="outline-3">
+<h3 id="orgf0ecd71"><span class="section-number-3">2.2</span> .gitignore file</h3>
 <div class="outline-text-3" id="text-2-2">
 <p>
-We'll be ignore following files and folders<br>
+We'll be ignore following files and folders. No point in adding these to our git repo.<br>
 </p>
 <div class="org-src-container">
-<pre class="src src-markdown"><span style="color: #b3b3b3;"># </span><span style="color: #50fa7b; font-weight: bold;">cmake build directory</span>
-build/
-
-<span style="color: #b3b3b3;"># </span><span style="color: #50fa7b; font-weight: bold;">vscode and visual studio specific</span>
-.vscode/
-.vs/
-
-<span style="color: #b3b3b3;"># </span><span style="color: #50fa7b; font-weight: bold;">org-mode html output</span>
-*.html
-backups/
+<pre class="src src-markdown"><span class="linenr"> 1: </span><span style="color: #b3b3b3;"># </span><span style="color: #50fa7b; font-weight: bold;">cmake build directory</span>
+<span class="linenr"> 2: </span>build/
+<span class="linenr"> 3: </span>
+<span class="linenr"> 4: </span><span style="color: #b3b3b3;"># </span><span style="color: #50fa7b; font-weight: bold;">vscode and visual studio specific</span>
+<span class="linenr"> 5: </span>.vscode/
+<span class="linenr"> 6: </span>.vs/
+<span class="linenr"> 7: </span>
+<span class="linenr"> 8: </span><span style="color: #b3b3b3;"># </span><span style="color: #50fa7b; font-weight: bold;">org-mode temp files</span>
+<span class="linenr"> 9: </span>./*.html
+<span class="linenr">10: </span>backups/
 </pre>
 </div>
 </div>
 </div>
-
-<div id="outline-container-orgff69974" class="outline-3">
-<h3 id="orgff69974"><span class="section-number-3">2.3</span> CMake configuration</h3>
+<div id="outline-container-org0e73969" class="outline-3">
+<h3 id="org0e73969"><span class="section-number-3">2.3</span> CMake configuration</h3>
 <div class="outline-text-3" id="text-2-3">
+<p>
+After you create the CMakeList.txt file below, VSCode should recognize this folder as being CMake project.<br>
+It will ask you to choose the toolchain with which to envoke the build process.<br>
+</p>
+
 <ul class="org-ul">
 <li><p>
 \CMakeLists.txt<br>
+This in the root of our project. We define basic things about how cmake should do things.<br>
+Lines 3 to 6 tell cmake to use vcpkg toolchain file.<br>
 </p>
 <div class="org-src-container">
-<pre class="src src-cmake"><span style="color: #50fa7b; font-weight: bold;">cmake_minimum_required</span><span style="color: #f8f8f2;">(</span>VERSION 3.15.0<span style="color: #f8f8f2;">)</span>
-
-<span style="color: #ff79c6; font-weight: bold;">if</span><span style="color: #f8f8f2;">(</span>DEFINED ENV<span style="color: #8be9fd;">{</span>VCPKG_ROOT<span style="color: #8be9fd;">}</span> AND NOT DEFINED CMAKE_TOOLCHAIN_FILE<span style="color: #f8f8f2;">)</span>
-  <span style="color: #50fa7b; font-weight: bold;">set</span><span style="color: #f8f8f2;">(</span>CMAKE_TOOLCHAIN_FILE <span style="color: #f1fa8c;">"$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"</span>
-      CACHE STRING <span style="color: #f1fa8c;">""</span><span style="color: #f8f8f2;">)</span>
-<span style="color: #ff79c6; font-weight: bold;">endif</span><span style="color: #f8f8f2;">()</span>
-
-<span style="color: #50fa7b; font-weight: bold;">project</span><span style="color: #f8f8f2;">(</span>rogue
-        LANGUAGES CXX 
-        VERSION 0.1.0<span style="color: #f8f8f2;">)</span>
-
-<span style="color: #50fa7b; font-weight: bold;">set</span><span style="color: #f8f8f2;">(</span>CMAKE_CXX_STANDARD_REQUIRED ON<span style="color: #f8f8f2;">)</span>
-
-<span style="color: #50fa7b; font-weight: bold;">add_subdirectory</span><span style="color: #f8f8f2;">(</span>src<span style="color: #f8f8f2;">)</span>
-
+<pre class="src src-cmake"><span class="linenr"> 1: </span><span style="color: #50fa7b; font-weight: bold;">cmake_minimum_required</span><span style="color: #f8f8f2;">(</span>VERSION 3.15.0<span style="color: #f8f8f2;">)</span>
+<span class="linenr"> 2: </span>
+<span class="linenr"> 3: </span><span style="color: #ff79c6; font-weight: bold;">if</span><span style="color: #f8f8f2;">(</span>DEFINED ENV<span style="color: #8be9fd;">{</span>VCPKG_ROOT<span style="color: #8be9fd;">}</span> AND NOT DEFINED CMAKE_TOOLCHAIN_FILE<span style="color: #f8f8f2;">)</span>
+<span class="linenr"> 4: </span>  <span style="color: #50fa7b; font-weight: bold;">set</span><span style="color: #f8f8f2;">(</span>CMAKE_TOOLCHAIN_FILE <span style="color: #f1fa8c;">"$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"</span>
+<span class="linenr"> 5: </span>      CACHE STRING <span style="color: #f1fa8c;">""</span><span style="color: #f8f8f2;">)</span>
+<span class="linenr"> 6: </span><span style="color: #ff79c6; font-weight: bold;">endif</span><span style="color: #f8f8f2;">()</span>
+<span class="linenr"> 7: </span>
+<span class="linenr"> 8: </span><span style="color: #50fa7b; font-weight: bold;">project</span><span style="color: #f8f8f2;">(</span>rogue
+<span class="linenr"> 9: </span>        LANGUAGES CXX 
+<span class="linenr">10: </span>        VERSION 0.1.0<span style="color: #f8f8f2;">)</span>
+<span class="linenr">11: </span>
+<span class="linenr">12: </span><span style="color: #50fa7b; font-weight: bold;">set</span><span style="color: #f8f8f2;">(</span>CMAKE_CXX_STANDARD_REQUIRED ON<span style="color: #f8f8f2;">)</span>
+<span class="linenr">13: </span>
+<span class="linenr">14: </span><span style="color: #50fa7b; font-weight: bold;">add_subdirectory</span><span style="color: #f8f8f2;">(</span>src<span style="color: #f8f8f2;">)</span>
+<span class="linenr">15: </span>
 </pre>
 </div></li>
 <li><p>
 \src\CMakeLists.txt<br>
+This is in our src directory, here we tell cmake that we want output executable to be named rogue.exe.<br>
+We also tell it we want to use C++17 standard. This doesn't actually work with MSVC.<br>
+So&#x2026; we have to explictly tell cmake to pass some parameters to MSVC compiler<br>
 </p>
 <div class="org-src-container">
-<pre class="src src-cmake"><span style="color: #50fa7b; font-weight: bold;">add_executable</span><span style="color: #f8f8f2;">(</span>rogue main.cpp<span style="color: #f8f8f2;">)</span>
-
-<span style="color: #50fa7b; font-weight: bold;">target_compile_features</span><span style="color: #f8f8f2;">(</span>rogue PRIVATE cxx_std_17<span style="color: #f8f8f2;">)</span>
-
-<span style="color: #50fa7b; font-weight: bold;">target_compile_options</span><span style="color: #f8f8f2;">(</span>rogue
-                       PRIVATE 
-                       $&lt;$&lt;CXX_COMPILER_ID:MSVC&gt;:/W3 /permissive- /Zc:__cplusplus&gt;<span style="color: #f8f8f2;">)</span>
-
-<span style="color: #50fa7b; font-weight: bold;">target_compile_definitions</span><span style="color: #f8f8f2;">(</span>rogue
-                           PRIVATE
-                           $&lt;$&lt;CONFIG:Debug&gt;:DEBUG _DEBUG&gt;<span style="color: #f8f8f2;">)</span>
-
-<span style="color: #50fa7b; font-weight: bold;">find_package</span><span style="color: #f8f8f2;">(</span>fmt REQUIRED<span style="color: #f8f8f2;">)</span>
-<span style="color: #50fa7b; font-weight: bold;">target_link_libraries</span><span style="color: #f8f8f2;">(</span>rogue PRIVATE fmt::fmt<span style="color: #f8f8f2;">)</span>
+<pre class="src src-cmake"><span class="linenr"> 1: </span><span style="color: #50fa7b; font-weight: bold;">add_executable</span><span style="color: #f8f8f2;">(</span>rogue main.cpp<span style="color: #f8f8f2;">)</span>
+<span class="linenr"> 2: </span>
+<span class="linenr"> 3: </span><span style="color: #50fa7b; font-weight: bold;">target_compile_features</span><span style="color: #f8f8f2;">(</span>rogue PRIVATE cxx_std_17<span style="color: #f8f8f2;">)</span>
+<span class="linenr"> 4: </span>
+<span class="linenr"> 5: </span><span style="color: #50fa7b; font-weight: bold;">target_compile_options</span><span style="color: #f8f8f2;">(</span>rogue
+<span class="linenr"> 6: </span>                       PRIVATE 
+<span class="linenr"> 7: </span>                       $&lt;$&lt;CXX_COMPILER_ID:MSVC&gt;:/W3 /permissive- /Zc:__cplusplus /std:c++17&gt;<span style="color: #f8f8f2;">)</span>
+<span class="linenr"> 8: </span>
+<span class="linenr"> 9: </span><span style="color: #50fa7b; font-weight: bold;">target_compile_definitions</span><span style="color: #f8f8f2;">(</span>rogue
+<span class="linenr">10: </span>                           PRIVATE
+<span class="linenr">11: </span>                           $&lt;$&lt;CONFIG:Debug&gt;:DEBUG _DEBUG&gt;<span style="color: #f8f8f2;">)</span>
+<span class="linenr">12: </span>
+<span class="linenr">13: </span><span style="color: #50fa7b; font-weight: bold;">find_package</span><span style="color: #f8f8f2;">(</span>fmt REQUIRED<span style="color: #f8f8f2;">)</span>
+<span class="linenr">14: </span><span style="color: #50fa7b; font-weight: bold;">target_link_libraries</span><span style="color: #f8f8f2;">(</span>rogue PRIVATE fmt::fmt<span style="color: #f8f8f2;">)</span>
 </pre>
 </div></li>
 </ul>
 </div>
 </div>
+<div id="outline-container-org55fd880" class="outline-3">
+<h3 id="org55fd880"><span class="section-number-3">2.4</span> Hello World test file</h3>
+<div class="outline-text-3" id="text-2-4">
+<ul class="org-ul">
+<li>\src\main.cpp<br></li>
+</ul>
+<div class="org-src-container">
+<pre class="src src-cpp"><span class="linenr"> 1: </span><span style="color: #ffb86c;">#include</span> <span style="color: #f8f8f2;">&lt;</span><span style="color: #f1fa8c;">iostream</span><span style="color: #f8f8f2;">&gt;</span>
+<span class="linenr"> 2: </span><span style="color: #ffb86c;">#include</span> <span style="color: #f8f8f2;">&lt;</span><span style="color: #f1fa8c;">fmt/core.h</span><span style="color: #f8f8f2;">&gt;</span>
+<span class="linenr"> 3: </span><span style="color: #ffb86c;">#include</span> <span style="color: #f8f8f2;">&lt;</span><span style="color: #f1fa8c;">chrono</span><span style="color: #f8f8f2;">&gt;</span>
+<span class="linenr"> 4: </span><span style="color: #ffb86c;">#include</span> <span style="color: #f8f8f2;">&lt;</span><span style="color: #f1fa8c;">string</span><span style="color: #f8f8f2;">&gt;</span>
+<span class="linenr"> 5: </span>
+<span class="linenr"> 6: </span><span style="color: #bd93f9;">int</span> <span style="color: #50fa7b; font-weight: bold;">main</span><span style="color: #f8f8f2;">(</span><span style="color: #bd93f9;">int</span>, <span style="color: #bd93f9;">char</span>**<span style="color: #f8f8f2;">)</span> <span style="color: #f8f8f2;">{</span>
+<span class="linenr"> 7: </span>    <span style="color: #ff79c6; font-weight: bold;">auto</span> <span style="color: #f8f8f2;">tp</span> = <span style="color: #8be9fd;">std</span>::<span style="color: #8be9fd;">chrono</span>::<span style="color: #8be9fd;">system_clock</span>::now<span style="color: #8be9fd;">()</span>;
+<span class="linenr"> 8: </span>    <span style="color: #ff79c6; font-weight: bold;">auto</span> <span style="color: #f8f8f2;">now_c</span> = <span style="color: #8be9fd;">std</span>::<span style="color: #8be9fd;">chrono</span>::<span style="color: #8be9fd;">system_clock</span>::to_time_t<span style="color: #8be9fd;">(</span>tp<span style="color: #8be9fd;">)</span>;
+<span class="linenr"> 9: </span>    <span style="color: #8be9fd;">fmt</span>::print<span style="color: #8be9fd;">(</span><span style="color: #f1fa8c;">"Hello, World! {}"</span>, now_c<span style="color: #8be9fd;">)</span>;
+<span class="linenr">10: </span><span style="color: #f8f8f2;">}</span>
+</pre>
+</div>
+</div>
+</div>
 </div>
 
-<div id="outline-container-org0291817" class="outline-2">
-<h2 id="org0291817"><span class="section-number-2">3</span> Drawing Player and Moving around</h2>
+<div id="outline-container-orgbb51c9e" class="outline-2">
+<h2 id="orgbb51c9e"><span class="section-number-2">3</span> Drawing Player and Moving around</h2>
 </div>
 
-<div id="outline-container-org6a797fb" class="outline-2">
-<h2 id="org6a797fb"><span class="section-number-2">4</span> Entity System</h2>
+<div id="outline-container-org76316ee" class="outline-2">
+<h2 id="org76316ee"><span class="section-number-2">4</span> Entity System</h2>
 </div>
 
-<div id="outline-container-orgb036c55" class="outline-2">
-<h2 id="orgb036c55"><span class="section-number-2">5</span> Generating a Dungeon</h2>
+<div id="outline-container-org795d224" class="outline-2">
+<h2 id="org795d224"><span class="section-number-2">5</span> Generating a Dungeon</h2>
 </div>
 
-<div id="outline-container-orgaa55971" class="outline-2">
-<h2 id="orgaa55971"><span class="section-number-2">6</span> Field of View</h2>
+<div id="outline-container-org2040270" class="outline-2">
+<h2 id="org2040270"><span class="section-number-2">6</span> Field of View</h2>
 </div>
 
-<div id="outline-container-orgcf40d2f" class="outline-2">
-<h2 id="orgcf40d2f"><span class="section-number-2">7</span> Placing Enemies</h2>
+<div id="outline-container-org826df34" class="outline-2">
+<h2 id="org826df34"><span class="section-number-2">7</span> Placing Enemies</h2>
 </div>
 
-<div id="outline-container-orgb0879bd" class="outline-2">
-<h2 id="orgb0879bd"><span class="section-number-2">8</span> Combat Loop</h2>
+<div id="outline-container-orga775d1b" class="outline-2">
+<h2 id="orga775d1b"><span class="section-number-2">8</span> Combat Loop</h2>
 </div>
 
-<div id="outline-container-org79bc2f5" class="outline-2">
-<h2 id="org79bc2f5"><span class="section-number-2">9</span> User Interface</h2>
+<div id="outline-container-org692d17b" class="outline-2">
+<h2 id="org692d17b"><span class="section-number-2">9</span> User Interface</h2>
 </div>
 
-<div id="outline-container-org2ebfaa0" class="outline-2">
-<h2 id="org2ebfaa0"><span class="section-number-2">10</span> Items and Inventory</h2>
+<div id="outline-container-org0e7014a" class="outline-2">
+<h2 id="org0e7014a"><span class="section-number-2">10</span> Items and Inventory</h2>
 </div>
 
-<div id="outline-container-org75bd28b" class="outline-2">
-<h2 id="org75bd28b"><span class="section-number-2">11</span> Equiping Items</h2>
+<div id="outline-container-org37183f2" class="outline-2">
+<h2 id="org37183f2"><span class="section-number-2">11</span> Equiping Items</h2>
 </div>
 
-<div id="outline-container-org84aeb25" class="outline-2">
-<h2 id="org84aeb25"><span class="section-number-2">12</span> Weapons and Targetting</h2>
+<div id="outline-container-orgbe3f549" class="outline-2">
+<h2 id="orgbe3f549"><span class="section-number-2">12</span> Weapons and Targetting</h2>
 </div>
 
-<div id="outline-container-org239b75d" class="outline-2">
-<h2 id="org239b75d"><span class="section-number-2">13</span> Saving and Loading Game State</h2>
+<div id="outline-container-org8533b16" class="outline-2">
+<h2 id="org8533b16"><span class="section-number-2">13</span> Saving and Loading Game State</h2>
 </div>
 
-<div id="outline-container-org932013e" class="outline-2">
-<h2 id="org932013e"><span class="section-number-2">14</span> Dungeon Delving</h2>
+<div id="outline-container-org19b1277" class="outline-2">
+<h2 id="org19b1277"><span class="section-number-2">14</span> Dungeon Delving</h2>
 </div>
 
-<div id="outline-container-org5e79684" class="outline-2">
-<h2 id="org5e79684"><span class="section-number-2">15</span> Difficulty Curve</h2>
+<div id="outline-container-org5a5c001" class="outline-2">
+<h2 id="org5a5c001"><span class="section-number-2">15</span> Difficulty Curve</h2>
 </div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Neel Raiyani</p>
-<p class="date">Created: 2019-10-06 Sun 16:49</p>
+<p class="date">Created: 2019-10-06 Sun 18:01</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

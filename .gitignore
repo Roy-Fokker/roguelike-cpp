@@ -5,6 +5,6 @@ build/
 .vscode/
 .vs/
 
-# org-mode html output
+# org-mode temp files
 ./*.html
 backups/

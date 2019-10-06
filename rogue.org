@@ -8,32 +8,42 @@
 
 * Environment Setup
 ** Tools of the trade:
-   - Good Editor: VSCode, Emacs, VIM, etc,.
-     I will be using VSCode.
-   - C++ compiler: MSVC, CLANG, GCC, etc,. 
-     Use latest versions of your compiler tools.
-     I will be using MSVC 2019. You can download VS_Community from VisualStudio.com.
-     If you use clang or gcc, please look at how to get them configured for your system.
-   - CMake: Use latest version. 
-     I am using 3.15 which is latest at the time of this writing.
-   - C++ Package Manager: I will be using vcpkg
-   - Version Control: git for windows 2.23.0-1
+   Below is listing of tools I am using
+   |---------------------+------------------------------+---------|
+   | Tool                | Name                         | Version |
+   |---------------------+------------------------------+---------|
+   | Editor              | [[https://code.visualstudio.com/][VSCode]]                       |  1.38.1 |
+   | C++ Toolchain       | [[https://visualstudio.microsoft.com/vs/][Visual Studio 2019 Community]] |  16.3.2 |
+   | C++ Build Generator | [[https://cmake.org/][CMake]]                        |  3.15.1 |
+   | C++ Package Manager | [[https://github.com/Microsoft/vcpkg][vcpkg]]                        | 2019.09 |
+   | Version Control     | [[https://git-scm.com/][git]]                          |  2.23.0 |
+   |---------------------+------------------------------+---------|
+** Editor Configuration
+   Following extensions are installed in VSCode
+   - [[https://marketplace.visualstudio.com/items?itemName=CoenraadS.bracket-pair-colorizer-2][Bracket Pair Colorizer 2]]
+   - [[https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools][C/C++]]
+   - [[https://marketplace.visualstudio.com/items?itemName=maddouri.cmake-tools-helper][CMake Tools Helper]]
+	 This will installed 2 other extensions
+	 - [[https://marketplace.visualstudio.com/items?itemName=vector-of-bool.cmake-tools][CMake Tools]]
+	 - [[https://marketplace.visualstudio.com/items?itemName=twxs.cmake][CMake for Visual Studio Code]]
+** vcpkg configuration
+   - Add Environment Variable called VCPKG_ROOT and point it to location of your vcpkg installation directory.
+	 For me this is 'D:\Projects\CPP\.packages\vcpkg'.
+   - Add Environment Variable called VCPKG_DEFAULT_TRIPLET and set it equal to x64-<system name>.
+	 Again for me this is 'x64-Windows'.
 
 * Project Setup
 ** Folder Structure
-   #+begin_quote
-   \build\
-   \docs\
-   \src\
-   \src\CMakeLists.txt
-   \src\*.cpp|*.h
-   \CMakeLists.txt
-   \.gitignore
-   #+end_quote
-
+   #+begin_example markdown
+	 \          # Root folder
+	 \build\    # where cmake will put all build generated files
+	 \docs\     # documentation folder, where this index.html file is located
+	 \src\      # where all the source files will go
+	 \external\ # any 3rd party libraries we can't get via vcpkg will go here
+   #+end_example
 ** .gitignore file
-   We'll be ignore following files and folders
-   #+begin_src markdown
+   We'll be ignore following files and folders. No point in adding these to our git repo.
+   #+begin_src markdown -n
 	 # cmake build directory
 	 build/
 
@@ -41,14 +51,18 @@
 	 .vscode/
 	 .vs/
 
-	 # org-mode html output
-	 ,*.html
+	 # org-mode temp files
+	 ./*.html
 	 backups/
    #+end_src
-
 ** CMake configuration
+   After you create the CMakeList.txt file below, VSCode should recognize this folder as being CMake project.
+   It will ask you to choose the toolchain with which to envoke the build process.
+   
    - \CMakeLists.txt
-	 #+begin_src cmake
+	 This in the root of our project. We define basic things about how cmake should do things.
+	 Lines 3 to 6 tell cmake to use vcpkg toolchain file.
+	 #+begin_src cmake -n
 	   cmake_minimum_required(VERSION 3.15.0)
 
 	   if(DEFINED ENV{VCPKG_ROOT} AND NOT DEFINED CMAKE_TOOLCHAIN_FILE)
@@ -66,14 +80,17 @@
 
 	 #+end_src
    - \src\CMakeLists.txt
-	 #+begin_src cmake
+	 This is in our src directory, here we tell cmake that we want output executable to be named rogue.exe.
+	 We also tell it we want to use C++17 standard. This doesn't actually work with MSVC.
+	 So... we have to explictly tell cmake to pass some parameters to MSVC compiler
+	 #+begin_src cmake -n
 	   add_executable(rogue main.cpp)
 
 	   target_compile_features(rogue PRIVATE cxx_std_17)
 
 	   target_compile_options(rogue
 							  PRIVATE 
-							  $<$<CXX_COMPILER_ID:MSVC>:/W3 /permissive- /Zc:__cplusplus>)
+							  $<$<CXX_COMPILER_ID:MSVC>:/W3 /permissive- /Zc:__cplusplus /std:c++17>)
 
 	   target_compile_definitions(rogue
 								  PRIVATE
@@ -82,9 +99,23 @@
 	   find_package(fmt REQUIRED)
 	   target_link_libraries(rogue PRIVATE fmt::fmt)
 	 #+end_src
+** Hello World test file
+   - \src\main.cpp
+   #+begin_src cpp -n
+	 #include <iostream>
+	 #include <fmt/core.h>
+	 #include <chrono>
+	 #include <string>
+
+	 int main(int, char**) {
+		 auto tp = std::chrono::system_clock::now();
+		 auto now_c = std::chrono::system_clock::to_time_t(tp);
+		 fmt::print("Hello, World! {}", now_c);
+	 }
+   #+end_src
 
 * Drawing Player and Moving around
-
+  
 * Entity System
 
 * Generating a Dungeon

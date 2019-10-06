@@ -4,7 +4,7 @@ target_compile_features(rogue PRIVATE cxx_std_17)
 
 target_compile_options(rogue
                        PRIVATE 
-                       $<$<CXX_COMPILER_ID:MSVC>:/W3 /permissive- /Zc:__cplusplus>)
+                       $<$<CXX_COMPILER_ID:MSVC>:/W3 /permissive- /Zc:__cplusplus /std:c++17>)
 
 target_compile_definitions(rogue
                            PRIVATE
