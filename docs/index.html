@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2019-10-06 Sun 16:37 -->
+<!-- 2019-10-06 Sun 16:49 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Rogue-Like Game in C++17</title>
@@ -9,7 +9,7 @@
 <meta name="author" content="Neel Raiyani">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link href="http://taopeng.me/org-notes-style/css/notes.css" rel="stylesheet" type="text/css" />
+<link href="note-style.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript">
 /*
 @licstart  The following is the entire license notice for the
@@ -87,31 +87,31 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orgdd9a84a">1. Environment Setup</a></li>
-<li><a href="#orgc99c690">2. Project Setup</a></li>
-<li><a href="#org8be3af4">3. Drawing Player and Moving around</a></li>
-<li><a href="#org7356858">4. Entity System</a></li>
-<li><a href="#orgf10f7c9">5. Generating a Dungeon</a></li>
-<li><a href="#org3fe4ca6">6. Field of View</a></li>
-<li><a href="#orgbe4ec86">7. Placing Enemies</a></li>
-<li><a href="#orgda1eb1f">8. Combat Loop</a></li>
-<li><a href="#orgb16bd71">9. User Interface</a></li>
-<li><a href="#org7ae495d">10. Items and Inventory</a></li>
-<li><a href="#orga3bfaa5">11. Equiping Items</a></li>
-<li><a href="#org95ce11f">12. Weapons and Targetting</a></li>
-<li><a href="#org23599ac">13. Saving and Loading Game State</a></li>
-<li><a href="#orgefbfda5">14. Dungeon Delving</a></li>
-<li><a href="#org47ff842">15. Difficulty Curve</a></li>
+<li><a href="#org086631d">1. Environment Setup</a></li>
+<li><a href="#org0bbedd2">2. Project Setup</a></li>
+<li><a href="#org0291817">3. Drawing Player and Moving around</a></li>
+<li><a href="#org6a797fb">4. Entity System</a></li>
+<li><a href="#orgb036c55">5. Generating a Dungeon</a></li>
+<li><a href="#orgaa55971">6. Field of View</a></li>
+<li><a href="#orgcf40d2f">7. Placing Enemies</a></li>
+<li><a href="#orgb0879bd">8. Combat Loop</a></li>
+<li><a href="#org79bc2f5">9. User Interface</a></li>
+<li><a href="#org2ebfaa0">10. Items and Inventory</a></li>
+<li><a href="#org75bd28b">11. Equiping Items</a></li>
+<li><a href="#org84aeb25">12. Weapons and Targetting</a></li>
+<li><a href="#org239b75d">13. Saving and Loading Game State</a></li>
+<li><a href="#org932013e">14. Dungeon Delving</a></li>
+<li><a href="#org5e79684">15. Difficulty Curve</a></li>
 </ul>
 </div>
 </nav>
 
-<div id="outline-container-orgdd9a84a" class="outline-2">
-<h2 id="orgdd9a84a"><span class="section-number-2">1</span> Environment Setup</h2>
+<div id="outline-container-org086631d" class="outline-2">
+<h2 id="org086631d"><span class="section-number-2">1</span> Environment Setup</h2>
 <div class="outline-text-2" id="text-1">
 </div>
-<div id="outline-container-org7dd6fc7" class="outline-3">
-<h3 id="org7dd6fc7"><span class="section-number-3">1.1</span> Tools of the trade:</h3>
+<div id="outline-container-orga70186b" class="outline-3">
+<h3 id="orga70186b"><span class="section-number-3">1.1</span> Tools of the trade:</h3>
 <div class="outline-text-3" id="text-1-1">
 <ul class="org-ul">
 <li>Good Editor: VSCode, Emacs, VIM, etc,.<br>
@@ -129,12 +129,12 @@ I am using 3.15 which is latest at the time of this writing.<br></li>
 </div>
 </div>
 
-<div id="outline-container-orgc99c690" class="outline-2">
-<h2 id="orgc99c690"><span class="section-number-2">2</span> Project Setup</h2>
+<div id="outline-container-org0bbedd2" class="outline-2">
+<h2 id="org0bbedd2"><span class="section-number-2">2</span> Project Setup</h2>
 <div class="outline-text-2" id="text-2">
 </div>
-<div id="outline-container-orga8671be" class="outline-3">
-<h3 id="orga8671be"><span class="section-number-3">2.1</span> Folder Structure</h3>
+<div id="outline-container-org48784fa" class="outline-3">
+<h3 id="org48784fa"><span class="section-number-3">2.1</span> Folder Structure</h3>
 <div class="outline-text-3" id="text-2-1">
 <blockquote>
 <p>
@@ -150,8 +150,8 @@ I am using 3.15 which is latest at the time of this writing.<br></li>
 </div>
 </div>
 
-<div id="outline-container-orgf2dd1e7" class="outline-3">
-<h3 id="orgf2dd1e7"><span class="section-number-3">2.2</span> .gitignore file</h3>
+<div id="outline-container-orgc5d43e6" class="outline-3">
+<h3 id="orgc5d43e6"><span class="section-number-3">2.2</span> .gitignore file</h3>
 <div class="outline-text-3" id="text-2-2">
 <p>
 We'll be ignore following files and folders<br>
@@ -172,8 +172,8 @@ backups/
 </div>
 </div>
 
-<div id="outline-container-orge22e3aa" class="outline-3">
-<h3 id="orge22e3aa"><span class="section-number-3">2.3</span> CMake configuration</h3>
+<div id="outline-container-orgff69974" class="outline-3">
+<h3 id="orgff69974"><span class="section-number-3">2.3</span> CMake configuration</h3>
 <div class="outline-text-3" id="text-2-3">
 <ul class="org-ul">
 <li><p>
@@ -222,61 +222,61 @@ backups/
 </div>
 </div>
 
-<div id="outline-container-org8be3af4" class="outline-2">
-<h2 id="org8be3af4"><span class="section-number-2">3</span> Drawing Player and Moving around</h2>
+<div id="outline-container-org0291817" class="outline-2">
+<h2 id="org0291817"><span class="section-number-2">3</span> Drawing Player and Moving around</h2>
 </div>
 
-<div id="outline-container-org7356858" class="outline-2">
-<h2 id="org7356858"><span class="section-number-2">4</span> Entity System</h2>
+<div id="outline-container-org6a797fb" class="outline-2">
+<h2 id="org6a797fb"><span class="section-number-2">4</span> Entity System</h2>
 </div>
 
-<div id="outline-container-orgf10f7c9" class="outline-2">
-<h2 id="orgf10f7c9"><span class="section-number-2">5</span> Generating a Dungeon</h2>
+<div id="outline-container-orgb036c55" class="outline-2">
+<h2 id="orgb036c55"><span class="section-number-2">5</span> Generating a Dungeon</h2>
 </div>
 
-<div id="outline-container-org3fe4ca6" class="outline-2">
-<h2 id="org3fe4ca6"><span class="section-number-2">6</span> Field of View</h2>
+<div id="outline-container-orgaa55971" class="outline-2">
+<h2 id="orgaa55971"><span class="section-number-2">6</span> Field of View</h2>
 </div>
 
-<div id="outline-container-orgbe4ec86" class="outline-2">
-<h2 id="orgbe4ec86"><span class="section-number-2">7</span> Placing Enemies</h2>
+<div id="outline-container-orgcf40d2f" class="outline-2">
+<h2 id="orgcf40d2f"><span class="section-number-2">7</span> Placing Enemies</h2>
 </div>
 
-<div id="outline-container-orgda1eb1f" class="outline-2">
-<h2 id="orgda1eb1f"><span class="section-number-2">8</span> Combat Loop</h2>
+<div id="outline-container-orgb0879bd" class="outline-2">
+<h2 id="orgb0879bd"><span class="section-number-2">8</span> Combat Loop</h2>
 </div>
 
-<div id="outline-container-orgb16bd71" class="outline-2">
-<h2 id="orgb16bd71"><span class="section-number-2">9</span> User Interface</h2>
+<div id="outline-container-org79bc2f5" class="outline-2">
+<h2 id="org79bc2f5"><span class="section-number-2">9</span> User Interface</h2>
 </div>
 
-<div id="outline-container-org7ae495d" class="outline-2">
-<h2 id="org7ae495d"><span class="section-number-2">10</span> Items and Inventory</h2>
+<div id="outline-container-org2ebfaa0" class="outline-2">
+<h2 id="org2ebfaa0"><span class="section-number-2">10</span> Items and Inventory</h2>
 </div>
 
-<div id="outline-container-orga3bfaa5" class="outline-2">
-<h2 id="orga3bfaa5"><span class="section-number-2">11</span> Equiping Items</h2>
+<div id="outline-container-org75bd28b" class="outline-2">
+<h2 id="org75bd28b"><span class="section-number-2">11</span> Equiping Items</h2>
 </div>
 
-<div id="outline-container-org95ce11f" class="outline-2">
-<h2 id="org95ce11f"><span class="section-number-2">12</span> Weapons and Targetting</h2>
+<div id="outline-container-org84aeb25" class="outline-2">
+<h2 id="org84aeb25"><span class="section-number-2">12</span> Weapons and Targetting</h2>
 </div>
 
-<div id="outline-container-org23599ac" class="outline-2">
-<h2 id="org23599ac"><span class="section-number-2">13</span> Saving and Loading Game State</h2>
+<div id="outline-container-org239b75d" class="outline-2">
+<h2 id="org239b75d"><span class="section-number-2">13</span> Saving and Loading Game State</h2>
 </div>
 
-<div id="outline-container-orgefbfda5" class="outline-2">
-<h2 id="orgefbfda5"><span class="section-number-2">14</span> Dungeon Delving</h2>
+<div id="outline-container-org932013e" class="outline-2">
+<h2 id="org932013e"><span class="section-number-2">14</span> Dungeon Delving</h2>
 </div>
 
-<div id="outline-container-org47ff842" class="outline-2">
-<h2 id="org47ff842"><span class="section-number-2">15</span> Difficulty Curve</h2>
+<div id="outline-container-org5e79684" class="outline-2">
+<h2 id="org5e79684"><span class="section-number-2">15</span> Difficulty Curve</h2>
 </div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Neel Raiyani</p>
-<p class="date">Created: 2019-10-06 Sun 16:37</p>
+<p class="date">Created: 2019-10-06 Sun 16:49</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
