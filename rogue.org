@@ -53,6 +53,7 @@ It's written in sort of literal programming format. Documentation is written in 
 	#+end_example
 *** ~\.gitignore~ file
 	We'll be ignore following files and folders. No point in adding these to our git repo.
+	#+name: .gitignore
     #+begin_src markdown -n 
 	  # cmake build directory
 	  build/
@@ -235,7 +236,6 @@ It's written in sort of literal programming format. Documentation is written in 
   - catch when '=ESC=' key is pressed to exit from game
   - load a custom font for displaying characters on screen
   All of this will be done by modifying our ~src\main.cpp~. 
-
   #+name: src\main.cpp
   #+begin_src cpp -n
     #include <libtcod.hpp>
