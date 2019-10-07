@@ -51,7 +51,7 @@ It's written in sort of literal programming format. Documentation is written in 
 	#+end_example
 *** ~\.gitignore~ file
 	We'll be ignore following files and folders. No point in adding these to our git repo.
-    #+begin_src markdown -n
+    #+begin_src markdown -n 
 	  # cmake build directory
 	  build/
 
@@ -83,6 +83,7 @@ It's written in sort of literal programming format. Documentation is written in 
 				VERSION 0.1.0)
 
 		set(CMAKE_CXX_STANDARD_REQUIRED ON)
+		set(EXECUTABLE_OUTPUT_PATH "${CMAKE_BINARY_DIR}/bin/")
 
 		add_subdirectory(src)
 
@@ -92,6 +93,8 @@ It's written in sort of literal programming format. Documentation is written in 
 	  We also tell it we want to use C++17 standard. This doesn't actually work with MSVC.
 	  So... we have to explictly tell cmake to pass some parameters to MSVC compiler
 	  #+begin_src cmake -n
+		find_package(fmt REQUIRED)
+
 		add_executable(rogue main.cpp)
 
 		target_compile_features(rogue PRIVATE cxx_std_17)
@@ -104,7 +107,6 @@ It's written in sort of literal programming format. Documentation is written in 
 								   PRIVATE
 								   $<$<CONFIG:Debug>:DEBUG _DEBUG>)
 
-		find_package(fmt REQUIRED)
 		target_link_libraries(rogue PRIVATE fmt::fmt)
 	  #+end_src
 *** Hello World test file
@@ -135,7 +137,79 @@ It's written in sort of literal programming format. Documentation is written in 
 	It can be executed by calling ~\build\src\rogue.exe~ from the project root folder.
 
 * Drawing Player and Moving around
+  The above Setup section looks like a lot of work just to get "Hello, World" printed on to console. We could have avoided all of that hassle by not using cmake. But I want to learn cmake, so...
+  From here on out, we are going to focus on our rogue game.
   
+  I am closely following the tutorials presented at [[http://www.rogueliketutorials.com/tutorials/tcod/][Roguelike Tutorials]] and the variant [[https://tomassedovic.github.io/roguelike-tutorial/index.html][Roguelike Tutorials in Rust]]. We will be using the same library that it is using. Except instead of Python, we'll be in C++.
+  However, given that we are going to use C++, there is a some setup overhead involved. Specifically, to get ~libtcod~ working and linking with our game.
+
+** LibTCOD
+   We have two options here. 
+   - Get the source code and build the library ourselves.
+   - Download pre-built package, and use those. 
+   Place to go for either option is [[https://github.com/libtcod/libtcod][libtcod github repo]]
+   
+   I am going to go with pre-built version. Author of libtcod uses VS2015, which is ABI compatible with our VS2019 setup. So everything should just work. :fingers-crossed:
+   Having downloaded [[https://github.com/libtcod/libtcod/releases/download/1.14.0/libtcod-1.14.0-x86_64-msvc.zip][libtcod 1.14 x64]]. Now we have to tell cmake where to go to find this library.
+   I've extracted the contents of the zip file into ~\external\libtcod-1.14.0-x86_64-msvc~ folder. I've also added the folder to our gitignore list. We don't need everything in the archive only some parts.
+   #+begin_src markdown -n 12
+	 # the prebuilt libtcod files
+	 external/libtcod-1.14.0-x86_64-msvc/
+   #+end_src
+   
+   Now we create a ~external\CMakeLists.txt~ file, this will tell cmake to let us consume this library from our code.
+   We also put in a custom target, so that cmake will copy the .dll files into same directory as our executable.
+   #+name: external/CMakeLists.txt
+   #+begin_src cmake -n
+	 # Add directories for libtcod
+	 set(LIBTCOD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/libtcod-1.14.0-x86_64-msvc")
+
+	 set(LIBTCOD_INCLUDE "${LIBTCOD_DIR}/include/" CACHE PATH "Path to Libtcod Include")
+	 find_library(LIBTCOD_LIB libtcod ${LIBTCOD_DIR})
+
+	 add_custom_target(libtcod_bins
+		 COMMAND ${CMAKE_COMMAND} -E copy ${LIBTCOD_DIR}/libtcod.dll ${EXECUTABLE_OUTPUT_PATH}
+		 COMMAND ${CMAKE_COMMAND} -E copy ${LIBTCOD_DIR}/sdl2.dll ${EXECUTABLE_OUTPUT_PATH}
+	 )
+   #+end_src
+   
+   Modify our root ~CMakeLists.txt~, by adding ~add_subdirectory(external)~ to line before ~src~ directory is added.
+   #+name: \CMakeLists.txt
+   #+begin_src cmake -n 15
+	 add_subdirectory(external)
+	 add_subdirectory(src)
+   #+end_src
+
+   Next, now we need to tell ~src\CMakeLists.txt~ to consume =libtcod=.
+   #+name: src\CMakeLists.txt
+   #+begin_src cmake -n 17
+	 target_include_directories(rogue PRIVATE ${LIBTCOD_INCLUDE})
+
+	 target_link_libraries(rogue PRIVATE fmt::fmt ${LIBTCOD_LIB})
+
+	 add_dependencies(rogue libtcod_bins)
+   #+end_src
+
+   Finally, we can modify our ~main.cpp~ to actually call libtcod
+   #+name: main.cpp
+   #+begin_src cpp
+	 #include <libtcod.hpp>
+
+	 int main()
+	 {
+		 TCODConsole::initRoot(80,50,"libtcod C++ tutorial",false, TCOD_RENDERER_SDL2);
+		while ( !TCODConsole::isWindowClosed() ) {
+			TCOD_key_t key;
+			TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS,&key,NULL);
+			TCODConsole::root->clear();
+			TCODConsole::root->putChar(40,25,'@');
+			TCODConsole::flush();
+		}
+		return 0;
+	 }
+   #+end_src
+   
+
 * Entity System
 
 * Generating a Dungeon

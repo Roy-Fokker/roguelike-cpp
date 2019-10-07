@@ -1,11 +1,14 @@
-#include <iostream>
-#include <fmt/core.h>
-#include <chrono>
-#include <string>
+#include <libtcod.hpp>
 
 int main()
 {
-    auto tp = std::chrono::system_clock::now();
-    auto now_c = std::chrono::system_clock::to_time_t(tp);
-    fmt::print("Hello, World! {}", now_c);
+    TCODConsole::initRoot(80,50,"libtcod C++ tutorial",false, TCOD_RENDERER_SDL2);
+   while ( !TCODConsole::isWindowClosed() ) {
+       TCOD_key_t key;
+       TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS,&key,NULL);
+       TCODConsole::root->clear();
+       TCODConsole::root->putChar(40,25,'@');
+       TCODConsole::flush();
+   }
+   return 0;
 }

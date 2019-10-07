@@ -1,5 +1,7 @@
 # cmake build directory
 build/
+CMakeCache.txt
+CMakeFiles/
 
 # vscode and visual studio specific
 .vscode/
@@ -8,3 +10,6 @@ build/
 # org-mode temp files
 ./*.html
 backups/
+
+# the prebuilt libtcod files
+external/libtcod-1.14.0-x86_64-msvc/
