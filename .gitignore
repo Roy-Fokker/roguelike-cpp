@@ -10,6 +10,7 @@ CMakeFiles/
 # org-mode temp files
 ./*.html
 backups/
+.#*.org
 
 # the prebuilt libtcod files
 external/libtcod-1.14.0-x86_64-msvc/
