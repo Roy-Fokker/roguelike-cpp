@@ -192,7 +192,7 @@ It's written in sort of literal programming format. Documentation is written in 
 
    Finally, we can modify our ~main.cpp~ to actually call libtcod
    #+name: main.cpp
-   #+begin_src cpp
+   #+begin_src cpp -n
 	 #include <libtcod.hpp>
 
 	 int main()
