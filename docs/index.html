@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2019-10-07 Mon 22:52 -->
+<!-- 2019-10-08 Tue 17:07 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Rogue-Like Game in C++17</title>
@@ -9,7 +9,7 @@
 <meta name="author" content="Neel Raiyani">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link href="solarized.min.css" rel="stylesheet" type="text/css" />
+<link href="org.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript">
 /*
 @licstart  The following is the entire license notice for the
@@ -87,51 +87,55 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orge916c62">1. Setup</a></li>
-<li><a href="#orgf8bfb02">2. Drawing Player and Moving around</a></li>
-<li><a href="#org201583b">3. Entity System</a></li>
-<li><a href="#orgdbbca66">4. Generating a Dungeon</a></li>
-<li><a href="#org31810e0">5. Field of View</a></li>
-<li><a href="#orgafc2c79">6. Placing Enemies</a></li>
-<li><a href="#orgc86b2c7">7. Combat Loop</a></li>
-<li><a href="#org908553c">8. User Interface</a></li>
-<li><a href="#orgbbac475">9. Items and Inventory</a></li>
-<li><a href="#org197a732">10. Equiping Items</a></li>
-<li><a href="#org4d6a7a0">11. Weapons and Targetting</a></li>
-<li><a href="#orgf8ad092">12. Saving and Loading Game State</a></li>
-<li><a href="#org2c7a8ce">13. Dungeon Delving</a></li>
-<li><a href="#org18a9164">14. Difficulty Curve</a></li>
+<li><a href="#orgbc42a27">1. Setup</a></li>
+<li><a href="#orgd6ce068">2. Drawing Player and Moving around</a></li>
+<li><a href="#org9b9aa23">3. Entity System</a></li>
+<li><a href="#orgb7d39dc">4. Generating a Dungeon</a></li>
+<li><a href="#org2716ab4">5. Field of View</a></li>
+<li><a href="#orgcadb8aa">6. Placing Enemies</a></li>
+<li><a href="#orgaf475ae">7. Combat Loop</a></li>
+<li><a href="#org84ea773">8. User Interface</a></li>
+<li><a href="#org80ed987">9. Items and Inventory</a></li>
+<li><a href="#org6a89f8e">10. Equiping Items</a></li>
+<li><a href="#org21f037f">11. Weapons and Targetting</a></li>
+<li><a href="#org775cddc">12. Saving and Loading Game State</a></li>
+<li><a href="#org225c20b">13. Dungeon Delving</a></li>
+<li><a href="#org7f9a835">14. Difficulty Curve</a></li>
 </ul>
 </div>
 </nav>
 <p>
-This file documents my attempts at going through a process of making a Rogue-Like game.<br>
-The associated source code lives in <a href="https://github.com/Roy-Fokker/roguelike">GitHub Repo</a>. State of Repository at end of each section is linked-to at bottom of each section.<br>
+This file documents my attempts at going through a process of making a Rogue-Like 
+game. <br>
+The associated source code lives in <a href="https://github.com/Roy-Fokker/roguelike">GitHub Repo</a>. State of Repository at end of each 
+section is linked-to at bottom of each section.
 </p>
 
 <p>
-It's written in sort of literal programming format. Documentation is written in Emacs Org-Mode and exported to html which used by github to display this page. As emacs is not being used for any code related purposes, rest of this document ignores this aspect.<br>
+It's written in sort of literal programming format. Documentation is written in Emacs 
+Org-Mode and exported to html which used by github to display this page. As emacs is 
+not being used for any code related purposes, rest of this document ignores this aspect.
 </p>
 
-<div id="outline-container-orge916c62" class="outline-2">
-<h2 id="orge916c62"><span class="section-number-2">1</span> Setup</h2>
+<div id="outline-container-orgbc42a27" class="outline-2">
+<h2 id="orgbc42a27"><span class="section-number-2">1</span> Setup</h2>
 <div class="outline-text-2" id="text-1">
 </div>
-<div id="outline-container-org17b527d" class="outline-3">
-<h3 id="org17b527d"><span class="section-number-3">1.1</span> Environment Setup</h3>
+<div id="outline-container-org727d291" class="outline-3">
+<h3 id="org727d291"><span class="section-number-3">1.1</span> Environment Setup</h3>
 <div class="outline-text-3" id="text-1-1">
 </div>
-<div id="outline-container-orga4a139b" class="outline-4">
-<h4 id="orga4a139b"><span class="section-number-4">1.1.1</span> Tools of the trade:</h4>
+<div id="outline-container-org5f3c380" class="outline-4">
+<h4 id="org5f3c380"><span class="section-number-4">1.1.1</span> Tools of the trade:</h4>
 <div class="outline-text-4" id="text-1-1-1">
 <p>
-Below is listing of tools I am using<br>
+Below is listing of tools I am using
 </p>
 <table>
 
 
 <colgroup>
-<col  class="org-left">
+<col  class="org-right">
 
 <col  class="org-left">
 
@@ -139,38 +143,38 @@ Below is listing of tools I am using<br>
 </colgroup>
 <thead>
 <tr>
-<th scope="col" class="org-left">Tool</th>
+<th scope="col" class="org-right">Tool</th>
 <th scope="col" class="org-left">Name</th>
 <th scope="col" class="org-right">Version</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td class="org-left">Editor</td>
+<td class="org-right">Editor</td>
 <td class="org-left"><a href="https://code.visualstudio.com/">VSCode</a></td>
 <td class="org-right">1.38.1</td>
 </tr>
 
 <tr>
-<td class="org-left">C++ Toolchain</td>
+<td class="org-right">C++ Toolchain</td>
 <td class="org-left"><a href="https://visualstudio.microsoft.com/vs/">Visual Studio 2019 Community</a></td>
 <td class="org-right">16.3.2</td>
 </tr>
 
 <tr>
-<td class="org-left">C++ Build Generator</td>
+<td class="org-right">C++ Build Generator</td>
 <td class="org-left"><a href="https://cmake.org/">CMake</a></td>
 <td class="org-right">3.15.1</td>
 </tr>
 
 <tr>
-<td class="org-left">C++ Package Manager</td>
+<td class="org-right">C++ Package Manager</td>
 <td class="org-left"><a href="https://github.com/Microsoft/vcpkg">vcpkg</a></td>
 <td class="org-right">2019.09</td>
 </tr>
 
 <tr>
-<td class="org-left">Version Control</td>
+<td class="org-right">Version Control</td>
 <td class="org-left"><a href="https://git-scm.com/">git</a></td>
 <td class="org-right">2.23.0</td>
 </tr>
@@ -179,50 +183,50 @@ Below is listing of tools I am using<br>
 </div>
 </div>
 
-<div id="outline-container-orge1e945b" class="outline-4">
-<h4 id="orge1e945b"><span class="section-number-4">1.1.2</span> Editor Configuration</h4>
+<div id="outline-container-org4c25b34" class="outline-4">
+<h4 id="org4c25b34"><span class="section-number-4">1.1.2</span> Editor Configuration</h4>
 <div class="outline-text-4" id="text-1-1-2">
 <p>
-Following extensions are installed in VSCode<br>
+Following extensions are installed in VSCode
 </p>
 <ul class="org-ul">
-<li><a href="https://marketplace.visualstudio.com/items?itemName=CoenraadS.bracket-pair-colorizer-2">Bracket Pair Colorizer 2</a><br></li>
-<li><a href="https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools">C/C++</a><br></li>
-<li><a href="https://marketplace.visualstudio.com/items?itemName=maddouri.cmake-tools-helper">CMake Tools Helper</a><br>
-This will installed 2 other extensions<br>
+<li><a href="https://marketplace.visualstudio.com/items?itemName=CoenraadS.bracket-pair-colorizer-2">Bracket Pair Colorizer 2</a></li>
+<li><a href="https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools">C/C++</a></li>
+<li><a href="https://marketplace.visualstudio.com/items?itemName=maddouri.cmake-tools-helper">CMake Tools Helper</a>
+This will installed 2 other extensions
 <ul class="org-ul">
-<li><a href="https://marketplace.visualstudio.com/items?itemName=vector-of-bool.cmake-tools">CMake Tools</a><br></li>
-<li><a href="https://marketplace.visualstudio.com/items?itemName=twxs.cmake">CMake for Visual Studio Code</a><br></li>
+<li><a href="https://marketplace.visualstudio.com/items?itemName=vector-of-bool.cmake-tools">CMake Tools</a></li>
+<li><a href="https://marketplace.visualstudio.com/items?itemName=twxs.cmake">CMake for Visual Studio Code</a></li>
 </ul></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org3611b22" class="outline-4">
-<h4 id="org3611b22"><span class="section-number-4">1.1.3</span> vcpkg configuration</h4>
+<div id="outline-container-org8665edc" class="outline-4">
+<h4 id="org8665edc"><span class="section-number-4">1.1.3</span> vcpkg configuration</h4>
 <div class="outline-text-4" id="text-1-1-3">
 <ul class="org-ul">
-<li>Add Environment Variable called VCPKG_ROOT and point it to location of your vcpkg installation directory.<br>
-For me this is 'D:\Projects\CPP\.packages\vcpkg'.<br></li>
-<li>Add Environment Variable called VCPKG_DEFAULT_TRIPLET and set it equal to x64-&lt;system name&gt;.<br>
-Again for me this is 'x64-Windows'.<br></li>
+<li>Add Environment Variable called VCPKG_ROOT and point it to location of your vcpkg installation directory.
+For me this is '<code>D:\Projects\CPP\.packages\vcpkg</code>'.</li>
+<li>Add Environment Variable called <code>VCPKG_DEFAULT_TRIPLET</code> and set it equal to <code>x64-&lt;system name&gt;</code>.
+Again for me this is '<code>x64-Windows</code>'.</li>
 </ul>
 </div>
 </div>
 </div>
 
-<div id="outline-container-org26b2483" class="outline-3">
-<h3 id="org26b2483"><span class="section-number-3">1.2</span> Project Setup</h3>
+<div id="outline-container-org6a97c29" class="outline-3">
+<h3 id="org6a97c29"><span class="section-number-3">1.2</span> Project Setup</h3>
 <div class="outline-text-3" id="text-1-2">
 </div>
-<div id="outline-container-orgb309684" class="outline-4">
-<h4 id="orgb309684"><span class="section-number-4">1.2.1</span> Folder Structure</h4>
+<div id="outline-container-org12d5397" class="outline-4">
+<h4 id="org12d5397"><span class="section-number-4">1.2.1</span> Folder Structure</h4>
 <div class="outline-text-4" id="text-1-2-1">
 <p>
-This is how i've structured the project folders. The name of the Root Folder doesn't matter, in my case it's called <code>roguelike</code>.<br>
+This is how i've structured the project folders. The name of the Root Folder doesn't matter, in my case it's called <code>roguelike</code>.
 </p>
-<pre class="example">
-\          # Root folder
+<div class="org-src-container">
+<pre class="src src-markdown">\          # Root folder
 \build\    # where cmake will put all build generated files
 \docs\     # documentation folder, where this index.html file is located
 \src\      # where all the source files will go
@@ -230,14 +234,15 @@ This is how i've structured the project folders. The name of the Root Folder doe
 </pre>
 </div>
 </div>
-<div id="outline-container-orgd95b22f" class="outline-4">
-<h4 id="orgd95b22f"><span class="section-number-4">1.2.2</span> <code>\.gitignore</code> file</h4>
+</div>
+<div id="outline-container-org2771c69" class="outline-4">
+<h4 id="org2771c69"><span class="section-number-4">1.2.2</span> <code>\.gitignore</code> file</h4>
 <div class="outline-text-4" id="text-1-2-2">
 <p>
-We'll be ignore following files and folders. No point in adding these to our git repo.<br>
+We'll be ignore following files and folders. No point in adding these to our git repo.
 </p>
 <div class="org-src-container">
-<pre class="src src-markdown" id="orgac6cfa1"><span class="linenr"> 1: </span><span style="color: #b3b3b3;"># </span><span style="color: #50fa7b; font-weight: bold;">cmake build directory</span>
+<pre class="src src-markdown" id="orgc287c23"><span class="linenr"> 1: </span><span style="color: #b3b3b3;"># </span><span style="color: #50fa7b; font-weight: bold;">cmake build directory</span>
 <span class="linenr"> 2: </span>build/
 <span class="linenr"> 3: </span>CMakeCache.txt
 <span class="linenr"> 4: </span>CMakeFiles/
@@ -254,24 +259,23 @@ We'll be ignore following files and folders. No point in adding these to our git
 </div>
 </div>
 </div>
-<div id="outline-container-org2538625" class="outline-4">
-<h4 id="org2538625"><span class="section-number-4">1.2.3</span> CMake configuration</h4>
+<div id="outline-container-org10429dc" class="outline-4">
+<h4 id="org10429dc"><span class="section-number-4">1.2.3</span> CMake configuration</h4>
 <div class="outline-text-4" id="text-1-2-3">
 <p>
-After you create the CMakeList.txt file below, VSCode should recognize this folder as being CMake project.<br>
-It will ask you to choose the toolchain with which to envoke the build process.<br>
-CppTools extension in VSCode comes with Ninja as it's build engine, which CMake Tools extension automatically uses.<br>
-If you try to run this project from command line, you'll need to add additional parameters telling CMake to generate a VS Solution, instead of Ninja. Or you can install Ninja system-wide. Exercise for the reader.<br>
+After you create the CMakeList.txt file below, VSCode should recognize this folder as being CMake project.
+It will ask you to choose the toolchain with which to envoke the build process.
+CppTools extension in VSCode comes with Ninja as it's build engine, which CMake Tools extension automatically uses.
+If you try to run this project from command line, you'll need to add additional parameters telling CMake to generate a VS Solution, instead of Ninja. Or you can install Ninja system-wide. Exercise for the reader.
 </p>
 
 <ul class="org-ul">
-<li><p>
-<code>\CMakeLists.txt</code><br>
-This in the root of our project. We define basic things about how cmake should do things.<br>
-Lines 3 to 6 tell cmake to use vcpkg toolchain file.<br>
-</p>
+<li><code>\CMakeLists.txt</code>
+This in the root of our project. We define basic things about how cmake should do things.
+Lines 3 to 6 tell cmake to use vcpkg toolchain file.</li>
+</ul>
 <div class="org-src-container">
-<pre class="src src-cmake" id="org6d18697"><span class="linenr"> 1: </span><span style="color: #50fa7b; font-weight: bold;">cmake_minimum_required</span><span style="color: #f8f8f2;">(</span>VERSION 3.15.0<span style="color: #f8f8f2;">)</span>
+<pre class="src src-cmake" id="org825d2c1"><span class="linenr"> 1: </span><span style="color: #50fa7b; font-weight: bold;">cmake_minimum_required</span><span style="color: #f8f8f2;">(</span>VERSION 3.15.0<span style="color: #f8f8f2;">)</span>
 <span class="linenr"> 2: </span>
 <span class="linenr"> 3: </span><span style="color: #ff79c6; font-weight: bold;">if</span><span style="color: #f8f8f2;">(</span>DEFINED ENV<span style="color: #8be9fd;">{</span>VCPKG_ROOT<span style="color: #8be9fd;">}</span> AND NOT DEFINED CMAKE_TOOLCHAIN_FILE<span style="color: #f8f8f2;">)</span>
 <span class="linenr"> 4: </span>  <span style="color: #50fa7b; font-weight: bold;">set</span><span style="color: #f8f8f2;">(</span>CMAKE_TOOLCHAIN_FILE <span style="color: #f1fa8c;">"$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"</span>
@@ -286,17 +290,16 @@ Lines 3 to 6 tell cmake to use vcpkg toolchain file.<br>
 <span class="linenr">13: </span><span style="color: #50fa7b; font-weight: bold;">set</span><span style="color: #f8f8f2;">(</span>EXECUTABLE_OUTPUT_PATH <span style="color: #f1fa8c;">"${</span><span style="color: #f8f8f2;">CMAKE_BINARY_DIR</span><span style="color: #f1fa8c;">}/bin/"</span><span style="color: #f8f8f2;">)</span>
 <span class="linenr">14: </span>
 <span class="linenr">15: </span><span style="color: #50fa7b; font-weight: bold;">add_subdirectory</span><span style="color: #f8f8f2;">(</span>src<span style="color: #f8f8f2;">)</span>
-<span class="linenr">16: </span>
 </pre>
-</div></li>
-<li><p>
-<code>\src\CMakeLists.txt</code><br>
-This is in our src directory, here we tell cmake that we want output executable to be named rogue.exe.<br>
-We also tell it we want to use C++17 standard. This doesn't actually work with MSVC.<br>
-So&#x2026; we have to explictly tell cmake to pass some parameters to MSVC compiler<br>
-</p>
+</div>
+<ul class="org-ul">
+<li><code>\src\CMakeLists.txt</code>
+This is in our src directory, here we tell cmake that we want output executable to be named rogue.exe.
+We also tell it we want to use C++17 standard. This doesn't actually work with MSVC.
+So&#x2026; we have to explictly tell cmake to pass some parameters to MSVC compiler</li>
+</ul>
 <div class="org-src-container">
-<pre class="src src-cmake" id="orgcb06e94"><span class="linenr"> 1: </span><span style="color: #50fa7b; font-weight: bold;">find_package</span><span style="color: #f8f8f2;">(</span>fmt REQUIRED<span style="color: #f8f8f2;">)</span>
+<pre class="src src-cmake" id="org4de4e92"><span class="linenr"> 1: </span><span style="color: #50fa7b; font-weight: bold;">find_package</span><span style="color: #f8f8f2;">(</span>fmt REQUIRED<span style="color: #f8f8f2;">)</span>
 <span class="linenr"> 2: </span>
 <span class="linenr"> 3: </span><span style="color: #50fa7b; font-weight: bold;">add_executable</span><span style="color: #f8f8f2;">(</span>rogue main.cpp<span style="color: #f8f8f2;">)</span>
 <span class="linenr"> 4: </span>
@@ -312,29 +315,29 @@ So&#x2026; we have to explictly tell cmake to pass some parameters to MSVC compi
 <span class="linenr">14: </span>
 <span class="linenr">15: </span><span style="color: #50fa7b; font-weight: bold;">target_link_libraries</span><span style="color: #f8f8f2;">(</span>rogue PRIVATE fmt::fmt<span style="color: #f8f8f2;">)</span>
 </pre>
-</div></li>
-</ul>
 </div>
 </div>
-<div id="outline-container-orgfa3ff19" class="outline-4">
-<h4 id="orgfa3ff19"><span class="section-number-4">1.2.4</span> CMake Hello World test file</h4>
+</div>
+<div id="outline-container-org0f547fc" class="outline-4">
+<h4 id="org0f547fc"><span class="section-number-4">1.2.4</span> CMake Hello World test file</h4>
 <div class="outline-text-4" id="text-1-2-4">
 <p>
-Time to test if the Setup is done properly.<br>
+Time to test if the Setup is done properly.
 </p>
 
 <p>
-First, let's install <code>fmtlib</code> from vcpkg. <code>fmtlib</code> is a string formatting library, much easier to use than standard <code>std::cout</code>.<br>
-We will get vcpkg to download and build it.<br>
+First, let's install <code>fmtlib</code> from vcpkg. <code>fmtlib</code> is a string formatting library, much easier to use than standard <code>std::cout</code>.
+We will get vcpkg to download and build it.
 </p>
 <div class="org-src-container">
-<pre class="src src-bat"><span class="linenr">1: </span>vcpkg install fmt
+<pre class="src src-sh"><span class="linenr">1: </span>vcpkg install fmt
 </pre>
 </div>
 
 <p>
-Next, let's create a simple <code>\src\main.cpp</code> file, to test build configuration.<br>
-We will use <code>std::chrono</code> to get current timepoint, and print that with <code>fmt::print</code>.<br>
+Next, let's create a simple <code>\src\main.cpp</code> file, to test build configuration.
+We will use <code>std::chrono</code> to get current timepoint, and print that with <code>fmt::print</code>.
+#+name src\main.cpp
 </p>
 <div class="org-src-container">
 <pre class="src src-cpp"><span class="linenr"> 1: </span><span style="color: #ffb86c;">#include</span> <span style="color: #f8f8f2;">&lt;</span><span style="color: #f1fa8c;">iostream</span><span style="color: #f8f8f2;">&gt;</span>
@@ -344,87 +347,87 @@ We will use <code>std::chrono</code> to get current timepoint, and print that wi
 <span class="linenr"> 5: </span>
 <span class="linenr"> 6: </span><span style="color: #bd93f9;">int</span> <span style="color: #50fa7b; font-weight: bold;">main</span><span style="color: #f8f8f2;">()</span>
 <span class="linenr"> 7: </span><span style="color: #f8f8f2;">{</span>
-<span class="linenr"> 8: </span>    <span style="color: #ff79c6; font-weight: bold;">auto</span> <span style="color: #f8f8f2;">tp</span> = <span style="color: #8be9fd;">std</span>::<span style="color: #8be9fd;">chrono</span>::<span style="color: #8be9fd;">system_clock</span>::now<span style="color: #8be9fd;">()</span>;
-<span class="linenr"> 9: </span>    <span style="color: #ff79c6; font-weight: bold;">auto</span> <span style="color: #f8f8f2;">now_c</span> = <span style="color: #8be9fd;">std</span>::<span style="color: #8be9fd;">chrono</span>::<span style="color: #8be9fd;">system_clock</span>::to_time_t<span style="color: #8be9fd;">(</span>tp<span style="color: #8be9fd;">)</span>;
-<span class="linenr">10: </span>    <span style="color: #8be9fd;">fmt</span>::print<span style="color: #8be9fd;">(</span><span style="color: #f1fa8c;">"Hello, World! {}"</span>, now_c<span style="color: #8be9fd;">)</span>;
+<span class="linenr"> 8: </span>  <span style="color: #ff79c6; font-weight: bold;">auto</span> <span style="color: #f8f8f2;">tp</span> = <span style="color: #8be9fd;">std</span>::<span style="color: #8be9fd;">chrono</span>::<span style="color: #8be9fd;">system_clock</span>::now<span style="color: #8be9fd;">()</span>;
+<span class="linenr"> 9: </span>  <span style="color: #ff79c6; font-weight: bold;">auto</span> <span style="color: #f8f8f2;">now_c</span> = <span style="color: #8be9fd;">std</span>::<span style="color: #8be9fd;">chrono</span>::<span style="color: #8be9fd;">system_clock</span>::to_time_t<span style="color: #8be9fd;">(</span>tp<span style="color: #8be9fd;">)</span>;
+<span class="linenr">10: </span>  <span style="color: #8be9fd;">fmt</span>::print<span style="color: #8be9fd;">(</span><span style="color: #f1fa8c;">"Hello, World! {}"</span>, now_c<span style="color: #8be9fd;">)</span>;
 <span class="linenr">11: </span><span style="color: #f8f8f2;">}</span>
 </pre>
 </div>
 
 <p>
-If all of the above is done properly the file below should compile and generate an executable.<br>
-In VSCode you can start the build process, by click on <code>Build</code> in the <code>status bar</code> or pressing <code>F7</code> key.<br>
-It can be executed by calling <code>\build\src\rogue.exe</code> from the project root folder.<br>
+If all of the above is done properly the file below should compile and generate an executable.
+In VSCode you can start the build process, by click on <code>Build</code> in the <code>status bar</code> or pressing <code>F7</code> key.
+It can be executed by calling <code>\build\src\rogue.exe</code> from the project root folder.
 </p>
 </div>
 </div>
 
-<div id="outline-container-org5b2c43b" class="outline-4">
-<h4 id="org5b2c43b"><span class="section-number-4">1.2.5</span> libTCOD Configuration</h4>
+<div id="outline-container-orgd26f3f8" class="outline-4">
+<h4 id="orgd26f3f8"><span class="section-number-4">1.2.5</span> libTCOD Configuration</h4>
 <div class="outline-text-4" id="text-1-2-5">
 <p>
-The above Setup section looks like a lot of work just to get "Hello, World" printed on to console. We could have avoided all of that hassle by not using cmake. But I want to learn cmake, so&#x2026;<br>
+The above Setup section looks like a lot of work just to get "Hello, World" printed on to console. We could have avoided all of that hassle by not using cmake. But I want to learn cmake, so&#x2026;
 </p>
 
 <p>
-I going to try to closely follow the tutorials presented at <a href="http://www.rogueliketutorials.com/tutorials/tcod/">Roguelike Tutorials</a> and the variant <a href="https://tomassedovic.github.io/roguelike-tutorial/index.html">Roguelike Tutorials in Rust</a>. We will be using the same library that it is using. Except instead of Python, we'll be in C++.<br>
-However, given that we are going to use C++, there is a some setup overhead involved. Specifically, to get <code>libtcod</code> working and linking with our game.<br>
+I going to try to closely follow the tutorials presented at <a href="http://www.rogueliketutorials.com/tutorials/tcod/">Roguelike Tutorials</a> and the variant <a href="https://tomassedovic.github.io/roguelike-tutorial/index.html">Roguelike Tutorials in Rust</a>. We will be using the same library that it is using. Except instead of Python, we'll be in C++.
+However, given that we are going to use C++, there is a some setup overhead involved. Specifically, to get <code>libtcod</code> working and linking with our game.
 </p>
 
 <p>
-We have two options here.<br>
+We have two options here. 
 </p>
 <ul class="org-ul">
-<li>Get the source code and build the library ourselves.<br></li>
-<li>Download pre-built package, and use those.<br></li>
+<li>Get the source code and build the library ourselves.</li>
+<li>Download pre-built package, and use those.</li>
 </ul>
 <p>
-Place to go for either option is <a href="https://github.com/libtcod/libtcod">libtcod github repo</a><br>
+Place to go for either option is <a href="https://github.com/libtcod/libtcod">libtcod github repo</a>
 </p>
 
 <p>
-I am going to go with pre-built version. Author of libtcod uses VS2015, which is ABI compatible with our VS2019 setup. So everything should just work. :fingers-crossed:<br>
-Having downloaded <a href="https://github.com/libtcod/libtcod/releases/download/1.14.0/libtcod-1.14.0-x86_64-msvc.zip">libtcod 1.14 x64</a>. Now we have to tell cmake where to go to find this library.<br>
-I've extracted the contents of the zip file into <code>\external\libtcod-1.14.0-x86_64-msvc</code> folder. I've also added the folder to our gitignore list. We don't need everything in the archive only some parts.<br>
+I am going to go with pre-built version. Author of libtcod uses VS2015, which is ABI compatible with our VS2019 setup. So everything should just work. :fingers-crossed:
+Having downloaded <a href="https://github.com/libtcod/libtcod/releases/download/1.14.0/libtcod-1.14.0-x86_64-msvc.zip">libtcod 1.14 x64</a>. Now we have to tell cmake where to go to find this library.
+I've extracted the contents of the zip file into <code>\external\libtcod-1.14.0-x86_64-msvc</code> folder. I've also added the folder to our gitignore list. We don't need everything in the archive only some parts.
 </p>
 <div class="org-src-container">
-<pre class="src src-markdown" id="org692b79b"><span class="linenr">15: </span><span style="color: #b3b3b3;"># </span><span style="color: #50fa7b; font-weight: bold;">the prebuilt libtcod files</span>
+<pre class="src src-markdown" id="org94c43c8"><span class="linenr">15: </span><span style="color: #b3b3b3;"># </span><span style="color: #50fa7b; font-weight: bold;">the prebuilt libtcod files</span>
 <span class="linenr">16: </span>external/libtcod-1.14.0-x86_64-msvc/
 </pre>
 </div>
 
 <p>
-Now we create a <code>external\CMakeLists.txt</code> file, this will tell cmake to let us consume this library from our code.<br>
-We also put in a custom target, so that cmake will copy the .dll files into same directory as our executable. This way when we run our game, we don't get missing dll errors.<br>
+Now we create a <code>external\CMakeLists.txt</code> file, this will tell cmake to let us consume this library from our code.
+We also put in a custom target, so that cmake will copy the .dll files into same directory as our executable. This way when we run our game, we don't get missing dll errors.
 </p>
 <div class="org-src-container">
-<pre class="src src-cmake" id="orgcc220d2"><span class="linenr"> 1: </span><span style="color: #6272a4;"># Add directories for libtcod</span>
+<pre class="src src-cmake" id="org4f83392"><span class="linenr"> 1: </span><span style="color: #6272a4;"># Add directories for libtcod</span>
 <span class="linenr"> 2: </span><span style="color: #50fa7b; font-weight: bold;">set</span><span style="color: #f8f8f2;">(</span>LIBTCOD_DIR <span style="color: #f1fa8c;">"${</span><span style="color: #f8f8f2;">CMAKE_CURRENT_SOURCE_DIR</span><span style="color: #f1fa8c;">}/libtcod-1.14.0-x86_64-msvc"</span><span style="color: #f8f8f2;">)</span>
 <span class="linenr"> 3: </span>
 <span class="linenr"> 4: </span><span style="color: #50fa7b; font-weight: bold;">set</span><span style="color: #f8f8f2;">(</span>LIBTCOD_INCLUDE <span style="color: #f1fa8c;">"${</span><span style="color: #f8f8f2;">LIBTCOD_DIR</span><span style="color: #f1fa8c;">}/include/"</span> CACHE PATH <span style="color: #f1fa8c;">"Path to Libtcod Include"</span><span style="color: #f8f8f2;">)</span>
 <span class="linenr"> 5: </span><span style="color: #50fa7b; font-weight: bold;">find_library</span><span style="color: #f8f8f2;">(</span>LIBTCOD_LIB libtcod $<span style="color: #8be9fd;">{</span><span style="color: #f8f8f2;">LIBTCOD_DIR</span><span style="color: #8be9fd;">}</span><span style="color: #f8f8f2;">)</span>
 <span class="linenr"> 6: </span>
 <span class="linenr"> 7: </span><span style="color: #50fa7b; font-weight: bold;">add_custom_target</span><span style="color: #f8f8f2;">(</span>libtcod_bins
-<span class="linenr"> 8: </span>    COMMAND $<span style="color: #8be9fd;">{</span><span style="color: #f8f8f2;">CMAKE_COMMAND</span><span style="color: #8be9fd;">}</span> -E copy $<span style="color: #8be9fd;">{</span><span style="color: #f8f8f2;">LIBTCOD_DIR</span><span style="color: #8be9fd;">}</span>/libtcod.dll $<span style="color: #8be9fd;">{</span><span style="color: #f8f8f2;">EXECUTABLE_OUTPUT_PATH</span><span style="color: #8be9fd;">}</span>
-<span class="linenr"> 9: </span>    COMMAND $<span style="color: #8be9fd;">{</span><span style="color: #f8f8f2;">CMAKE_COMMAND</span><span style="color: #8be9fd;">}</span> -E copy $<span style="color: #8be9fd;">{</span><span style="color: #f8f8f2;">LIBTCOD_DIR</span><span style="color: #8be9fd;">}</span>/sdl2.dll $<span style="color: #8be9fd;">{</span><span style="color: #f8f8f2;">EXECUTABLE_OUTPUT_PATH</span><span style="color: #8be9fd;">}</span>
+<span class="linenr"> 8: </span>  COMMAND $<span style="color: #8be9fd;">{</span><span style="color: #f8f8f2;">CMAKE_COMMAND</span><span style="color: #8be9fd;">}</span> -E copy $<span style="color: #8be9fd;">{</span><span style="color: #f8f8f2;">LIBTCOD_DIR</span><span style="color: #8be9fd;">}</span>/libtcod.dll $<span style="color: #8be9fd;">{</span><span style="color: #f8f8f2;">EXECUTABLE_OUTPUT_PATH</span><span style="color: #8be9fd;">}</span>
+<span class="linenr"> 9: </span>  COMMAND $<span style="color: #8be9fd;">{</span><span style="color: #f8f8f2;">CMAKE_COMMAND</span><span style="color: #8be9fd;">}</span> -E copy $<span style="color: #8be9fd;">{</span><span style="color: #f8f8f2;">LIBTCOD_DIR</span><span style="color: #8be9fd;">}</span>/sdl2.dll $<span style="color: #8be9fd;">{</span><span style="color: #f8f8f2;">EXECUTABLE_OUTPUT_PATH</span><span style="color: #8be9fd;">}</span>
 <span class="linenr">10: </span><span style="color: #f8f8f2;">)</span>
 </pre>
 </div>
 
 <p>
-Next, we modify our root <code>CMakeLists.txt</code>, by adding <code>add_subdirectory(external)</code> to line before <code>src</code> directory is added.<br>
+Next, we modify our root <code>CMakeLists.txt</code>, by adding <code>add_subdirectory(external)</code> to line before <code>src</code> directory is added.
 </p>
 <div class="org-src-container">
-<pre class="src src-cmake" id="org29532e2"><span class="linenr">15: </span><span style="color: #50fa7b; font-weight: bold;">add_subdirectory</span><span style="color: #f8f8f2;">(</span>external<span style="color: #f8f8f2;">)</span>
+<pre class="src src-cmake" id="orga3d92d8"><span class="linenr">15: </span><span style="color: #50fa7b; font-weight: bold;">add_subdirectory</span><span style="color: #f8f8f2;">(</span>external<span style="color: #f8f8f2;">)</span>
 <span class="linenr">16: </span><span style="color: #50fa7b; font-weight: bold;">add_subdirectory</span><span style="color: #f8f8f2;">(</span>src<span style="color: #f8f8f2;">)</span>
 </pre>
 </div>
 
 <p>
-Lastly, we need to tell <code>src\CMakeLists.txt</code> to consume <code>libtcod</code>.<br>
+Lastly, we need to tell <code>src\CMakeLists.txt</code> to consume <code>libtcod</code>.
 </p>
 <div class="org-src-container">
-<pre class="src src-cmake" id="orgc8b2791"><span class="linenr">17: </span><span style="color: #50fa7b; font-weight: bold;">target_include_directories</span><span style="color: #f8f8f2;">(</span>rogue PRIVATE $<span style="color: #8be9fd;">{</span><span style="color: #f8f8f2;">LIBTCOD_INCLUDE</span><span style="color: #8be9fd;">}</span><span style="color: #f8f8f2;">)</span>
+<pre class="src src-cmake" id="orgd9e56a6"><span class="linenr">17: </span><span style="color: #50fa7b; font-weight: bold;">target_include_directories</span><span style="color: #f8f8f2;">(</span>rogue PRIVATE $<span style="color: #8be9fd;">{</span><span style="color: #f8f8f2;">LIBTCOD_INCLUDE</span><span style="color: #8be9fd;">}</span><span style="color: #f8f8f2;">)</span>
 <span class="linenr">18: </span>
 <span class="linenr">19: </span><span style="color: #50fa7b; font-weight: bold;">target_link_libraries</span><span style="color: #f8f8f2;">(</span>rogue PRIVATE fmt::fmt $<span style="color: #8be9fd;">{</span><span style="color: #f8f8f2;">LIBTCOD_LIB</span><span style="color: #8be9fd;">}</span><span style="color: #f8f8f2;">)</span>
 <span class="linenr">20: </span>
@@ -434,77 +437,75 @@ Lastly, we need to tell <code>src\CMakeLists.txt</code> to consume <code>libtcod
 </div>
 </div>
 
-<div id="outline-container-orgf7b4b19" class="outline-4">
-<h4 id="orgf7b4b19"><span class="section-number-4">1.2.6</span> libTCOD Test file/executable</h4>
+<div id="outline-container-org89eb3a7" class="outline-4">
+<h4 id="org89eb3a7"><span class="section-number-4">1.2.6</span> libTCOD Test file/executable</h4>
 <div class="outline-text-4" id="text-1-2-6">
 <p>
-Phew, so much CMAKE, we can finally see if all this setup is working.<br>
-Let's modify our <code>main.cpp</code> to actually call libtcod<br>
+Phew, so much CMAKE, we can finally see if all this setup is working.
+Let's modify our <code>main.cpp</code> to actually call libtcod
 </p>
 <div class="org-src-container">
-<pre class="src src-cpp" id="org55fa7f9"><span class="linenr"> 1: </span><span style="color: #ffb86c;">#include</span> <span style="color: #f8f8f2;">&lt;</span><span style="color: #f1fa8c;">libtcod.hpp</span><span style="color: #f8f8f2;">&gt;</span>
+<pre class="src src-cpp" id="orgc783acc"><span class="linenr"> 1: </span><span style="color: #ffb86c;">#include</span> <span style="color: #f8f8f2;">&lt;</span><span style="color: #f1fa8c;">libtcod.hpp</span><span style="color: #f8f8f2;">&gt;</span>
 <span class="linenr"> 2: </span>
 <span class="linenr"> 3: </span><span style="color: #bd93f9;">int</span> <span style="color: #50fa7b; font-weight: bold;">main</span><span style="color: #f8f8f2;">()</span>
 <span class="linenr"> 4: </span><span style="color: #f8f8f2;">{</span>
-<span class="linenr"> 5: </span>    <span style="color: #8be9fd;">TCODConsole</span>::initRoot<span style="color: #8be9fd;">(</span>80,50,<span style="color: #f1fa8c;">"libtcod C++ tutorial"</span>,<span style="color: #8be9fd;">false</span>, TCOD_RENDERER_SDL2<span style="color: #8be9fd;">)</span>;
-<span class="linenr"> 6: </span>    <span style="color: #ff79c6; font-weight: bold;">while</span> <span style="color: #8be9fd;">(</span> <span style="color: #8be9fd;">!</span><span style="color: #8be9fd;">TCODConsole</span>::isWindowClosed<span style="color: #bd93f9;">()</span> <span style="color: #8be9fd;">)</span> <span style="color: #8be9fd;">{</span>
-<span class="linenr"> 7: </span>       <span style="color: #bd93f9;">TCOD_key_t</span> <span style="color: #f8f8f2;">key</span>;
-<span class="linenr"> 8: </span>       <span style="color: #8be9fd;">TCODSystem</span>::checkForEvent<span style="color: #bd93f9;">(</span>TCOD_EVENT_KEY_PRESS,&amp;key,<span style="color: #8be9fd;">NULL</span><span style="color: #bd93f9;">)</span>;
-<span class="linenr"> 9: </span>       <span style="color: #8be9fd;">TCODConsole</span>::root-&gt;clear<span style="color: #bd93f9;">()</span>;
-<span class="linenr">10: </span>       <span style="color: #8be9fd;">TCODConsole</span>::root-&gt;putChar<span style="color: #bd93f9;">(</span>40,25,<span style="color: #f1fa8c;">'@'</span><span style="color: #bd93f9;">)</span>;
-<span class="linenr">11: </span>       <span style="color: #8be9fd;">TCODConsole</span>::flush<span style="color: #bd93f9;">()</span>;
-<span class="linenr">12: </span>    <span style="color: #8be9fd;">}</span>
-<span class="linenr">13: </span>    <span style="color: #ff79c6; font-weight: bold;">return</span> 0;
+<span class="linenr"> 5: </span>  <span style="color: #8be9fd;">TCODConsole</span>::initRoot<span style="color: #8be9fd;">(</span>80,50,<span style="color: #f1fa8c;">"libtcod C++ tutorial"</span>,<span style="color: #8be9fd;">false</span>, TCOD_RENDERER_SDL2<span style="color: #8be9fd;">)</span>;
+<span class="linenr"> 6: </span>  <span style="color: #ff79c6; font-weight: bold;">while</span> <span style="color: #8be9fd;">(</span> <span style="color: #8be9fd;">!</span><span style="color: #8be9fd;">TCODConsole</span>::isWindowClosed<span style="color: #bd93f9;">()</span> <span style="color: #8be9fd;">)</span> <span style="color: #8be9fd;">{</span>
+<span class="linenr"> 7: </span>    <span style="color: #bd93f9;">TCOD_key_t</span> <span style="color: #f8f8f2;">key</span>;
+<span class="linenr"> 8: </span>    <span style="color: #8be9fd;">TCODSystem</span>::checkForEvent<span style="color: #bd93f9;">(</span>TCOD_EVENT_KEY_PRESS,&amp;key,<span style="color: #8be9fd;">NULL</span><span style="color: #bd93f9;">)</span>;
+<span class="linenr"> 9: </span>    <span style="color: #8be9fd;">TCODConsole</span>::root-&gt;clear<span style="color: #bd93f9;">()</span>;
+<span class="linenr">10: </span>    <span style="color: #8be9fd;">TCODConsole</span>::root-&gt;putChar<span style="color: #bd93f9;">(</span>40,25,<span style="color: #f1fa8c;">'@'</span><span style="color: #bd93f9;">)</span>;
+<span class="linenr">11: </span>    <span style="color: #8be9fd;">TCODConsole</span>::flush<span style="color: #bd93f9;">()</span>;
+<span class="linenr">12: </span>  <span style="color: #8be9fd;">}</span>
+<span class="linenr">13: </span>  <span style="color: #ff79c6; font-weight: bold;">return</span> 0;
 <span class="linenr">14: </span><span style="color: #f8f8f2;">}</span>
 </pre>
 </div>
 <p>
-Here we are starting a TCODConsole, telling it explicitly to use SDL2. By default, the console will try to use SDL1, we don't want that.<br>
+Here we are starting a TCODConsole, telling it explicitly to use SDL2. By default, the console will try to use SDL1, we don't want that.
 </p>
 
 <p>
-Hit build in VSCode, and it should generate <code>rogue.exe</code> in <code>\build\bin</code> directory, as well, copy the necessary libtcod dlls there.<br>
-Running the executable, should open a window, with <code>@</code> in the middle of the window. Program does nothing else, for now&#x2026;<br>
+Hit build in VSCode, and it should generate <code>rogue.exe</code> in <code>\build\bin</code> directory, as well, copy the necessary libtcod dlls there.
+Running the executable, should open a window, with <code>@</code> in the middle of the window. Program does nothing else, for now&#x2026;
 </p>
 
 <p>
-<a href="https://github.com/Roy-Fokker/roguelike/tree/f9022f035ffb9e36ed6bdbbfad7e1303180249e4">Git Repo on 2019/10/06</a><br>
+<a href="https://github.com/Roy-Fokker/roguelike/tree/f9022f035ffb9e36ed6bdbbfad7e1303180249e4">Git Repo on 2019/10/06</a>
 </p>
 </div>
 </div>
 </div>
 </div>
-<div id="outline-container-orgf8bfb02" class="outline-2">
-<h2 id="orgf8bfb02"><span class="section-number-2">2</span> Drawing Player and Moving around</h2>
+<div id="outline-container-orgd6ce068" class="outline-2">
+<h2 id="orgd6ce068"><span class="section-number-2">2</span> Drawing Player and Moving around</h2>
 <div class="outline-text-2" id="text-2">
 <p>
-<b>NOTE</b>: A word about the code and explainations, I won't be explaining every feature of C++ being used. Perhaps, you are new to C++, but not new to programming, code should make sense to you. For any keywords, or classes from Standard Library that are new for you, I suggest looking it up in <a href="https://www.cppreference.com">Cpp Reference</a>. In general, I write C++ heavily influenced by <a href="http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines">C++ Core Guidelines</a>, code is formatted in <a href="https://en.wikipedia.org/wiki/Indentation_style#Allman_style">Allman style</a>. You might prefer some other styles/means, feel free to write in a way that is comfortable to you.<br>
+<b>NOTE</b>: A word about the code and explainations, I won't be explaining every feature of C++ being used. Perhaps, you are new to C++, but not new to programming, code should make sense to you. For any keywords, or classes from Standard Library that are new for you, I suggest looking it up in <a href="https://www.cppreference.com">Cpp Reference</a>. In general, I write C++ heavily influenced by <a href="http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines">C++ Core Guidelines</a>, code is formatted in <a href="https://en.wikipedia.org/wiki/Indentation_style#Allman_style">Allman style</a>. You might prefer some other styles/means, feel free to write in a way that is comfortable to you.
 </p>
 
 <p>
-From here on out, we are going to focus on our rogue game. Rest of this document follows similar structure as Python RogueLike Tutorials.<br>
-There will be some differences, as C++ and Python are different languages, and operate with different mindsets.<br>
+From here on out, we are going to focus on our rogue game. Rest of this document follows similar structure as Python RogueLike Tutorials.
+There will be some differences, as C++ and Python are different languages, and operate with different mindsets.
 </p>
 
 <p>
-Looking at the <a href="http://www.rogueliketutorials.com/tutorials/tcod/">Roguelike Tutorials</a> - Part 1, we've already written some of the Console Startup code in our <code>main.cpp</code>.<br>
-For this section, our goals are:<br>
+Looking at the <a href="http://www.rogueliketutorials.com/tutorials/tcod/">Roguelike Tutorials</a> - Part 1, we've already written some of the Console Startup code in our <code>main.cpp</code>.
+For this section, our goals are:
 </p>
 <ul class="org-ul">
-<li>handle input, so '<code>@</code>' moves around<br></li>
-<li>catch when '<code>ESC</code>' key is pressed to exit from game<br></li>
-<li>catch when '<code>Alt+Enter</code>' key combination is pressed to toggle fullscreen mode<br></li>
-<li>load a custom font for displaying characters on screen<br></li>
+<li>handle input, so '<code>@</code>' moves around</li>
+<li>catch when '<code>ESC</code>' key is pressed to exit from game</li>
+<li>catch when '<code>Alt+Enter</code>' key combination is pressed to toggle fullscreen mode</li>
+<li>load a custom font for displaying characters on screen
+All of this will be done by modifying our <code>src\main.cpp</code>.</li>
 </ul>
-<p>
-All of this will be done by modifying our <code>src\main.cpp</code>.<br>
-</p>
 </div>
-<div id="outline-container-org4e61aea" class="outline-3">
-<h3 id="org4e61aea"><span class="section-number-3">2.1</span> <code>src\main.cpp</code></h3>
+<div id="outline-container-org4942ca8" class="outline-3">
+<h3 id="org4942ca8"><span class="section-number-3">2.1</span> <code>src\main.cpp</code></h3>
 <div class="outline-text-3" id="text-2-1">
 <div class="org-src-container">
-<pre class="src src-cpp" id="orgb896776"><span class="linenr">  1: </span><span style="color: #ffb86c;">#include</span> <span style="color: #f8f8f2;">&lt;</span><span style="color: #f1fa8c;">libtcod.hpp</span><span style="color: #f8f8f2;">&gt;</span>
+<pre class="src src-cpp" id="org5379ca9"><span class="linenr">  1: </span><span style="color: #ffb86c;">#include</span> <span style="color: #f8f8f2;">&lt;</span><span style="color: #f1fa8c;">libtcod.hpp</span><span style="color: #f8f8f2;">&gt;</span>
 <span class="linenr">  2: </span><span style="color: #ffb86c;">#include</span> <span style="color: #f8f8f2;">&lt;</span><span style="color: #f1fa8c;">string</span><span style="color: #f8f8f2;">&gt;</span>
 <span class="linenr">  3: </span><span style="color: #ffb86c;">#include</span> <span style="color: #f8f8f2;">&lt;</span><span style="color: #f1fa8c;">utility</span><span style="color: #f8f8f2;">&gt;</span>
 <span class="linenr">  4: </span><span style="color: #ffb86c;">#include</span> <span style="color: #f8f8f2;">&lt;</span><span style="color: #f1fa8c;">cassert</span><span style="color: #f8f8f2;">&gt;</span>
@@ -516,104 +517,104 @@ All of this will be done by modifying our <code>src\main.cpp</code>.<br>
 <span class="linenr"> 10: </span>
 <span class="linenr"> 11: </span><span style="color: #ff79c6; font-weight: bold;">enum</span> <span style="color: #ff79c6; font-weight: bold;">class</span> <span style="color: #bd93f9;">actions</span>
 <span class="linenr"> 12: </span><span style="color: #f8f8f2;">{</span>
-<span class="linenr"> 13: </span>    <span style="color: #f8f8f2;">do_nothing</span>,
-<span class="linenr"> 14: </span>    <span style="color: #f8f8f2;">exit</span>,
-<span class="linenr"> 15: </span>    <span style="color: #f8f8f2;">move</span>,
-<span class="linenr"> 16: </span>    <span style="color: #f8f8f2;">fullscreen_toggle</span>,
+<span class="linenr"> 13: </span> <span style="color: #f8f8f2;">do_nothing</span>,
+<span class="linenr"> 14: </span> <span style="color: #f8f8f2;">exit</span>,
+<span class="linenr"> 15: </span> <span style="color: #f8f8f2;">move</span>,
+<span class="linenr"> 16: </span> <span style="color: #f8f8f2;">fullscreen_toggle</span>,
 <span class="linenr"> 17: </span><span style="color: #f8f8f2;">}</span>;
 <span class="linenr"> 18: </span>
 <span class="linenr"> 19: </span><span style="color: #ff79c6; font-weight: bold;">using</span> <span style="color: #bd93f9;">move_dir</span> = <span style="color: #8be9fd;">std</span>::<span style="color: #bd93f9;">pair</span><span style="color: #f8f8f2;">&lt;</span><span style="color: #bd93f9;">int</span>, <span style="color: #bd93f9;">int</span><span style="color: #f8f8f2;">&gt;</span>;
 <span class="linenr"> 20: </span>
 <span class="linenr"> 21: </span><span style="color: #ff79c6; font-weight: bold;">auto</span> <span style="color: #50fa7b; font-weight: bold;">handle_input</span><span style="color: #f8f8f2;">()</span> -&gt; <span style="color: #8be9fd;">std</span>::<span style="color: #bd93f9;">pair</span><span style="color: #f8f8f2;">&lt;</span><span style="color: #bd93f9;">actions</span>, <span style="color: #8be9fd;">std</span>::any<span style="color: #f8f8f2;">&gt;</span>
 <span class="linenr"> 22: </span><span style="color: #f8f8f2;">{</span>
-<span class="linenr"> 23: </span>    <span style="color: #ff79c6; font-weight: bold;">using</span> <span style="color: #bd93f9;">key_code</span> = TCOD_keycode_t;
-<span class="linenr"> 24: </span>    <span style="color: #ff79c6; font-weight: bold;">auto</span> <span style="color: #f8f8f2;">key</span> = <span style="color: #8be9fd;">console</span>::checkForKeypress<span style="color: #8be9fd;">()</span>;
+<span class="linenr"> 23: </span>  <span style="color: #ff79c6; font-weight: bold;">using</span> <span style="color: #bd93f9;">key_code</span> = TCOD_keycode_t;
+<span class="linenr"> 24: </span>  <span style="color: #ff79c6; font-weight: bold;">auto</span> <span style="color: #f8f8f2;">key</span> = <span style="color: #8be9fd;">console</span>::checkForKeypress<span style="color: #8be9fd;">()</span>;
 <span class="linenr"> 25: </span>
-<span class="linenr"> 26: </span>    <span style="color: #ff79c6; font-weight: bold;">switch</span> <span style="color: #8be9fd;">(</span>key.vk<span style="color: #8be9fd;">)</span>
-<span class="linenr"> 27: </span>    <span style="color: #8be9fd;">{</span>
-<span class="linenr"> 28: </span>        <span style="color: #ff79c6; font-weight: bold;">case</span> <span style="color: #8be9fd;">key_code</span>::TCODK_ESCAPE:
-<span class="linenr"> 29: </span>            <span style="color: #ff79c6; font-weight: bold;">return</span> <span style="color: #bd93f9;">{</span><span style="color: #8be9fd;">actions</span>::exit, 0<span style="color: #bd93f9;">}</span>;
-<span class="linenr"> 30: </span>        <span style="color: #ff79c6; font-weight: bold;">case</span> <span style="color: #8be9fd;">key_code</span>::TCODK_UP:
-<span class="linenr"> 31: </span>            <span style="color: #ff79c6; font-weight: bold;">return</span> <span style="color: #bd93f9;">{</span><span style="color: #8be9fd;">actions</span>::move, move_dir<span style="color: #ff79c6;">{</span>0, -1<span style="color: #ff79c6;">}</span><span style="color: #bd93f9;">}</span>;
-<span class="linenr"> 32: </span>        <span style="color: #ff79c6; font-weight: bold;">case</span> <span style="color: #8be9fd;">key_code</span>::TCODK_DOWN:
-<span class="linenr"> 33: </span>            <span style="color: #ff79c6; font-weight: bold;">return</span> <span style="color: #bd93f9;">{</span><span style="color: #8be9fd;">actions</span>::move, move_dir<span style="color: #ff79c6;">{</span>0, 1<span style="color: #ff79c6;">}</span><span style="color: #bd93f9;">}</span>;
-<span class="linenr"> 34: </span>        <span style="color: #ff79c6; font-weight: bold;">case</span> <span style="color: #8be9fd;">key_code</span>::TCODK_LEFT:
-<span class="linenr"> 35: </span>            <span style="color: #ff79c6; font-weight: bold;">return</span> <span style="color: #bd93f9;">{</span><span style="color: #8be9fd;">actions</span>::move, move_dir<span style="color: #ff79c6;">{</span>-1, 0<span style="color: #ff79c6;">}</span><span style="color: #bd93f9;">}</span>;
-<span class="linenr"> 36: </span>        <span style="color: #ff79c6; font-weight: bold;">case</span> <span style="color: #8be9fd;">key_code</span>::TCODK_RIGHT:
-<span class="linenr"> 37: </span>            <span style="color: #ff79c6; font-weight: bold;">return</span> <span style="color: #bd93f9;">{</span><span style="color: #8be9fd;">actions</span>::move, move_dir<span style="color: #ff79c6;">{</span>1, 0<span style="color: #ff79c6;">}</span><span style="color: #bd93f9;">}</span>;
-<span class="linenr"> 38: </span>        <span style="color: #ff79c6; font-weight: bold;">case</span> <span style="color: #8be9fd;">key_code</span>::TCODK_ENTER:
-<span class="linenr"> 39: </span>        <span style="color: #bd93f9;">{</span>
-<span class="linenr"> 40: </span>            <span style="color: #ff79c6; font-weight: bold;">if</span> <span style="color: #ff79c6;">(</span>key.lalt <span style="color: #ff79c6; font-weight: bold;">or</span> key.ralt<span style="color: #ff79c6;">)</span>
-<span class="linenr"> 41: </span>            <span style="color: #ff79c6;">{</span>
-<span class="linenr"> 42: </span>                <span style="color: #ff79c6; font-weight: bold;">return</span> <span style="color: #ffb86c;">{</span><span style="color: #8be9fd;">actions</span>::fullscreen_toggle, 0<span style="color: #ffb86c;">}</span>;
-<span class="linenr"> 43: </span>            <span style="color: #ff79c6;">}</span>
-<span class="linenr"> 44: </span>            <span style="color: #ff79c6; font-weight: bold;">break</span>;
-<span class="linenr"> 45: </span>        <span style="color: #bd93f9;">}</span>
-<span class="linenr"> 46: </span>    <span style="color: #8be9fd;">}</span>
+<span class="linenr"> 26: </span>  <span style="color: #ff79c6; font-weight: bold;">switch</span> <span style="color: #8be9fd;">(</span>key.vk<span style="color: #8be9fd;">)</span>
+<span class="linenr"> 27: </span>  <span style="color: #8be9fd;">{</span>
+<span class="linenr"> 28: </span>    <span style="color: #ff79c6; font-weight: bold;">case</span> <span style="color: #8be9fd;">key_code</span>::TCODK_ESCAPE:
+<span class="linenr"> 29: </span>      <span style="color: #ff79c6; font-weight: bold;">return</span> <span style="color: #bd93f9;">{</span><span style="color: #8be9fd;">actions</span>::exit, 0<span style="color: #bd93f9;">}</span>;
+<span class="linenr"> 30: </span>    <span style="color: #ff79c6; font-weight: bold;">case</span> <span style="color: #8be9fd;">key_code</span>::TCODK_UP:
+<span class="linenr"> 31: </span>      <span style="color: #ff79c6; font-weight: bold;">return</span> <span style="color: #bd93f9;">{</span><span style="color: #8be9fd;">actions</span>::move, move_dir<span style="color: #ff79c6;">{</span>0, -1<span style="color: #ff79c6;">}</span><span style="color: #bd93f9;">}</span>;
+<span class="linenr"> 32: </span>    <span style="color: #ff79c6; font-weight: bold;">case</span> <span style="color: #8be9fd;">key_code</span>::TCODK_DOWN:
+<span class="linenr"> 33: </span>      <span style="color: #ff79c6; font-weight: bold;">return</span> <span style="color: #bd93f9;">{</span><span style="color: #8be9fd;">actions</span>::move, move_dir<span style="color: #ff79c6;">{</span>0, 1<span style="color: #ff79c6;">}</span><span style="color: #bd93f9;">}</span>;
+<span class="linenr"> 34: </span>    <span style="color: #ff79c6; font-weight: bold;">case</span> <span style="color: #8be9fd;">key_code</span>::TCODK_LEFT:
+<span class="linenr"> 35: </span>      <span style="color: #ff79c6; font-weight: bold;">return</span> <span style="color: #bd93f9;">{</span><span style="color: #8be9fd;">actions</span>::move, move_dir<span style="color: #ff79c6;">{</span>-1, 0<span style="color: #ff79c6;">}</span><span style="color: #bd93f9;">}</span>;
+<span class="linenr"> 36: </span>    <span style="color: #ff79c6; font-weight: bold;">case</span> <span style="color: #8be9fd;">key_code</span>::TCODK_RIGHT:
+<span class="linenr"> 37: </span>      <span style="color: #ff79c6; font-weight: bold;">return</span> <span style="color: #bd93f9;">{</span><span style="color: #8be9fd;">actions</span>::move, move_dir<span style="color: #ff79c6;">{</span>1, 0<span style="color: #ff79c6;">}</span><span style="color: #bd93f9;">}</span>;
+<span class="linenr"> 38: </span>    <span style="color: #ff79c6; font-weight: bold;">case</span> <span style="color: #8be9fd;">key_code</span>::TCODK_ENTER:
+<span class="linenr"> 39: </span>    <span style="color: #bd93f9;">{</span>
+<span class="linenr"> 40: </span>      <span style="color: #ff79c6; font-weight: bold;">if</span> <span style="color: #ff79c6;">(</span>key.lalt <span style="color: #ff79c6; font-weight: bold;">or</span> key.ralt<span style="color: #ff79c6;">)</span>
+<span class="linenr"> 41: </span>      <span style="color: #ff79c6;">{</span>
+<span class="linenr"> 42: </span>        <span style="color: #ff79c6; font-weight: bold;">return</span> <span style="color: #ffb86c;">{</span><span style="color: #8be9fd;">actions</span>::fullscreen_toggle, 0<span style="color: #ffb86c;">}</span>;
+<span class="linenr"> 43: </span>      <span style="color: #ff79c6;">}</span>
+<span class="linenr"> 44: </span>      <span style="color: #ff79c6; font-weight: bold;">break</span>;
+<span class="linenr"> 45: </span>    <span style="color: #bd93f9;">}</span>
+<span class="linenr"> 46: </span>  <span style="color: #8be9fd;">}</span>
 <span class="linenr"> 47: </span>
-<span class="linenr"> 48: </span>    <span style="color: #ff79c6; font-weight: bold;">return</span> <span style="color: #8be9fd;">{}</span>; <span style="color: #6272a4;">// </span><span style="color: #6272a4;">will automatically return actions::do_nothing</span>
+<span class="linenr"> 48: </span>  <span style="color: #ff79c6; font-weight: bold;">return</span> <span style="color: #8be9fd;">{}</span>; <span style="color: #6272a4;">// </span><span style="color: #6272a4;">will automatically return actions::do_nothing</span>
 <span class="linenr"> 49: </span><span style="color: #f8f8f2;">}</span>
 <span class="linenr"> 50: </span>
 <span class="linenr"> 51: </span><span style="color: #bd93f9;">int</span> <span style="color: #50fa7b; font-weight: bold;">main</span><span style="color: #f8f8f2;">()</span>
 <span class="linenr"> 52: </span><span style="color: #f8f8f2;">{</span>
-<span class="linenr"> 53: </span>    <span style="color: #ff79c6; font-weight: bold;">constexpr</span> <span style="color: #ff79c6; font-weight: bold;">auto</span> <span style="color: #f8f8f2;">window_width</span>  = 100,
-<span class="linenr"> 54: </span>                   <span style="color: #f8f8f2;">window_height</span> = 56;
-<span class="linenr"> 55: </span>    <span style="color: #ff79c6; font-weight: bold;">constexpr</span> <span style="color: #ff79c6; font-weight: bold;">auto</span> <span style="color: #f8f8f2;">window_title</span>  = <span style="color: #f1fa8c;">"Rogue C++ Tutorial - Part 1"</span>sv,
-<span class="linenr"> 56: </span>                   <span style="color: #f8f8f2;">font_file</span>     = <span style="color: #f1fa8c;">"arial10x10.png"</span>sv;
+<span class="linenr"> 53: </span>  <span style="color: #ff79c6; font-weight: bold;">constexpr</span> <span style="color: #ff79c6; font-weight: bold;">auto</span> <span style="color: #f8f8f2;">window_width</span>  = 100,
+<span class="linenr"> 54: </span>                 <span style="color: #f8f8f2;">window_height</span> = 56;
+<span class="linenr"> 55: </span>  <span style="color: #ff79c6; font-weight: bold;">constexpr</span> <span style="color: #ff79c6; font-weight: bold;">auto</span> <span style="color: #f8f8f2;">window_title</span>  = <span style="color: #f1fa8c;">"Rogue C++ Tutorial - Part 1"</span>sv,
+<span class="linenr"> 56: </span>                 <span style="color: #f8f8f2;">font_file</span>     = <span style="color: #f1fa8c;">"arial10x10.png"</span>sv;
 <span class="linenr"> 57: </span>
-<span class="linenr"> 58: </span>    <span style="color: #8be9fd;">console</span>::setCustomFont<span style="color: #8be9fd;">(</span>font_file.data<span style="color: #bd93f9;">()</span>, TCOD_FONT_TYPE_GREYSCALE | TCOD_FONT_LAYOUT_TCOD<span style="color: #8be9fd;">)</span>;
+<span class="linenr"> 58: </span>  <span style="color: #8be9fd;">console</span>::setCustomFont<span style="color: #8be9fd;">(</span>font_file.data<span style="color: #bd93f9;">()</span>, TCOD_FONT_TYPE_GREYSCALE | TCOD_FONT_LAYOUT_TCOD<span style="color: #8be9fd;">)</span>;
 <span class="linenr"> 59: </span>
-<span class="linenr"> 60: </span>    <span style="color: #8be9fd;">console</span>::initRoot<span style="color: #8be9fd;">(</span>window_width, window_height,
-<span class="linenr"> 61: </span>                      window_title.data<span style="color: #bd93f9;">()</span>,
-<span class="linenr"> 62: </span>                      <span style="color: #8be9fd;">false</span>, TCOD_RENDERER_SDL2<span style="color: #8be9fd;">)</span>;
-<span class="linenr"> 63: </span>    atexit<span style="color: #8be9fd;">(</span>TCOD_quit<span style="color: #8be9fd;">)</span>; <span style="color: #6272a4;">// </span><span style="color: #6272a4;">the C-Runtime will automatically call this function.</span>
+<span class="linenr"> 60: </span>  <span style="color: #8be9fd;">console</span>::initRoot<span style="color: #8be9fd;">(</span>window_width, window_height,
+<span class="linenr"> 61: </span>                    window_title.data<span style="color: #bd93f9;">()</span>,
+<span class="linenr"> 62: </span>                    <span style="color: #8be9fd;">false</span>, TCOD_RENDERER_SDL2<span style="color: #8be9fd;">)</span>;
+<span class="linenr"> 63: </span>  atexit<span style="color: #8be9fd;">(</span>TCOD_quit<span style="color: #8be9fd;">)</span>; <span style="color: #6272a4;">// </span><span style="color: #6272a4;">the C-Runtime will automatically call this function.</span>
 <span class="linenr"> 64: </span>
-<span class="linenr"> 65: </span>    <span style="color: #ff79c6; font-weight: bold;">auto</span> <span style="color: #f8f8f2;">game_console</span> = console<span style="color: #8be9fd;">(</span>window_width, window_height<span style="color: #8be9fd;">)</span>;
+<span class="linenr"> 65: </span>  <span style="color: #ff79c6; font-weight: bold;">auto</span> <span style="color: #f8f8f2;">game_console</span> = console<span style="color: #8be9fd;">(</span>window_width, window_height<span style="color: #8be9fd;">)</span>;
 <span class="linenr"> 66: </span>
-<span class="linenr"> 67: </span>    <span style="color: #bd93f9;">bool</span> <span style="color: #f8f8f2;">exit_game</span> = <span style="color: #8be9fd;">false</span>;
-<span class="linenr"> 68: </span>    <span style="color: #bd93f9;">int</span> <span style="color: #f8f8f2;">player_x</span> = window_width / 2, 
-<span class="linenr"> 69: </span>        <span style="color: #f8f8f2;">player_y</span> = window_height / 2;
-<span class="linenr"> 70: </span>    <span style="color: #ff79c6; font-weight: bold;">while</span> <span style="color: #8be9fd;">(</span><span style="color: #ff79c6; font-weight: bold;">not</span> <span style="color: #bd93f9;">(</span><span style="color: #8be9fd;">console</span>::isWindowClosed<span style="color: #ff79c6;">()</span> <span style="color: #ff79c6; font-weight: bold;">or</span> exit_game<span style="color: #bd93f9;">)</span><span style="color: #8be9fd;">)</span>
-<span class="linenr"> 71: </span>    <span style="color: #8be9fd;">{</span>
-<span class="linenr"> 72: </span>        <span style="color: #ff79c6; font-weight: bold;">auto</span> <span style="color: #f8f8f2;">action</span> = handle_input<span style="color: #bd93f9;">()</span>;
-<span class="linenr"> 73: </span>        <span style="color: #ff79c6; font-weight: bold;">switch</span> <span style="color: #bd93f9;">(</span>action.first<span style="color: #bd93f9;">)</span>
-<span class="linenr"> 74: </span>        <span style="color: #bd93f9;">{</span>
-<span class="linenr"> 75: </span>            <span style="color: #ff79c6; font-weight: bold;">case</span> <span style="color: #8be9fd;">actions</span>::do_nothing:
-<span class="linenr"> 76: </span>                <span style="color: #ff79c6; font-weight: bold;">break</span>;
-<span class="linenr"> 77: </span>            <span style="color: #ff79c6; font-weight: bold;">case</span> <span style="color: #8be9fd;">actions</span>::exit:
-<span class="linenr"> 78: </span>                exit_game = <span style="color: #8be9fd;">true</span>;
-<span class="linenr"> 79: </span>                <span style="color: #ff79c6; font-weight: bold;">break</span>;
-<span class="linenr"> 80: </span>            <span style="color: #ff79c6; font-weight: bold;">case</span> <span style="color: #8be9fd;">actions</span>::move:
-<span class="linenr"> 81: </span>            <span style="color: #ff79c6;">{</span>
-<span class="linenr"> 82: </span>                <span style="color: #ff79c6; font-weight: bold;">auto</span> <span style="color: #f8f8f2;">dir</span> = <span style="color: #8be9fd;">std</span>::any_cast<span style="color: #ffb86c;">&lt;</span><span style="color: #bd93f9;">move_dir</span><span style="color: #ffb86c;">&gt;(</span>action.second<span style="color: #ffb86c;">)</span>;
-<span class="linenr"> 83: </span>                player_x += dir.first;
-<span class="linenr"> 84: </span>                player_y += dir.second;
-<span class="linenr"> 85: </span>                <span style="color: #ff79c6; font-weight: bold;">break</span>;
-<span class="linenr"> 86: </span>            <span style="color: #ff79c6;">}</span>
-<span class="linenr"> 87: </span>            <span style="color: #ff79c6; font-weight: bold;">case</span> <span style="color: #8be9fd;">actions</span>::fullscreen_toggle:
-<span class="linenr"> 88: </span>            <span style="color: #ff79c6;">{</span>
-<span class="linenr"> 89: </span>                game_console.setFullscreen<span style="color: #ffb86c;">(</span><span style="color: #ff79c6; font-weight: bold;">not</span> game_console.isFullscreen<span style="color: #50fa7b;">()</span><span style="color: #ffb86c;">)</span>;
-<span class="linenr"> 90: </span>                <span style="color: #ff79c6; font-weight: bold;">break</span>;
-<span class="linenr"> 91: </span>            <span style="color: #ff79c6;">}</span>
-<span class="linenr"> 92: </span>            <span style="color: #ff79c6; font-weight: bold;">default</span>:
-<span class="linenr"> 93: </span>                assert<span style="color: #ff79c6;">(</span><span style="color: #8be9fd;">false</span><span style="color: #ff79c6;">)</span>; <span style="color: #6272a4;">// </span><span style="color: #6272a4;">We forgot to handle some action. DEBUG!</span>
-<span class="linenr"> 94: </span>        <span style="color: #bd93f9;">}</span>
+<span class="linenr"> 67: </span>  <span style="color: #bd93f9;">bool</span> <span style="color: #f8f8f2;">exit_game</span> = <span style="color: #8be9fd;">false</span>;
+<span class="linenr"> 68: </span>  <span style="color: #bd93f9;">int</span> <span style="color: #f8f8f2;">player_x</span> = window_width / 2, 
+<span class="linenr"> 69: </span>      <span style="color: #f8f8f2;">player_y</span> = window_height / 2;
+<span class="linenr"> 70: </span>  <span style="color: #ff79c6; font-weight: bold;">while</span> <span style="color: #8be9fd;">(</span><span style="color: #ff79c6; font-weight: bold;">not</span> <span style="color: #bd93f9;">(</span><span style="color: #8be9fd;">console</span>::isWindowClosed<span style="color: #ff79c6;">()</span> <span style="color: #ff79c6; font-weight: bold;">or</span> exit_game<span style="color: #bd93f9;">)</span><span style="color: #8be9fd;">)</span>
+<span class="linenr"> 71: </span>  <span style="color: #8be9fd;">{</span>
+<span class="linenr"> 72: </span>    <span style="color: #ff79c6; font-weight: bold;">auto</span> <span style="color: #f8f8f2;">action</span> = handle_input<span style="color: #bd93f9;">()</span>;
+<span class="linenr"> 73: </span>    <span style="color: #ff79c6; font-weight: bold;">switch</span> <span style="color: #bd93f9;">(</span>action.first<span style="color: #bd93f9;">)</span>
+<span class="linenr"> 74: </span>    <span style="color: #bd93f9;">{</span>
+<span class="linenr"> 75: </span>      <span style="color: #ff79c6; font-weight: bold;">case</span> <span style="color: #8be9fd;">actions</span>::do_nothing:
+<span class="linenr"> 76: </span>        <span style="color: #ff79c6; font-weight: bold;">break</span>;
+<span class="linenr"> 77: </span>      <span style="color: #ff79c6; font-weight: bold;">case</span> <span style="color: #8be9fd;">actions</span>::exit:
+<span class="linenr"> 78: </span>        exit_game = <span style="color: #8be9fd;">true</span>;
+<span class="linenr"> 79: </span>        <span style="color: #ff79c6; font-weight: bold;">break</span>;
+<span class="linenr"> 80: </span>      <span style="color: #ff79c6; font-weight: bold;">case</span> <span style="color: #8be9fd;">actions</span>::move:
+<span class="linenr"> 81: </span>      <span style="color: #ff79c6;">{</span>
+<span class="linenr"> 82: </span>        <span style="color: #ff79c6; font-weight: bold;">auto</span> <span style="color: #f8f8f2;">dir</span> = <span style="color: #8be9fd;">std</span>::any_cast<span style="color: #ffb86c;">&lt;</span><span style="color: #bd93f9;">move_dir</span><span style="color: #ffb86c;">&gt;(</span>action.second<span style="color: #ffb86c;">)</span>;
+<span class="linenr"> 83: </span>        player_x += dir.first;
+<span class="linenr"> 84: </span>        player_y += dir.second;
+<span class="linenr"> 85: </span>        <span style="color: #ff79c6; font-weight: bold;">break</span>;
+<span class="linenr"> 86: </span>      <span style="color: #ff79c6;">}</span>
+<span class="linenr"> 87: </span>      <span style="color: #ff79c6; font-weight: bold;">case</span> <span style="color: #8be9fd;">actions</span>::fullscreen_toggle:
+<span class="linenr"> 88: </span>      <span style="color: #ff79c6;">{</span>
+<span class="linenr"> 89: </span>        game_console.setFullscreen<span style="color: #ffb86c;">(</span><span style="color: #ff79c6; font-weight: bold;">not</span> game_console.isFullscreen<span style="color: #50fa7b;">()</span><span style="color: #ffb86c;">)</span>;
+<span class="linenr"> 90: </span>        <span style="color: #ff79c6; font-weight: bold;">break</span>;
+<span class="linenr"> 91: </span>      <span style="color: #ff79c6;">}</span>
+<span class="linenr"> 92: </span>      <span style="color: #ff79c6; font-weight: bold;">default</span>:
+<span class="linenr"> 93: </span>        assert<span style="color: #ff79c6;">(</span><span style="color: #8be9fd;">false</span><span style="color: #ff79c6;">)</span>; <span style="color: #6272a4;">// </span><span style="color: #6272a4;">We forgot to handle some action. DEBUG!</span>
+<span class="linenr"> 94: </span>    <span style="color: #bd93f9;">}</span>
 <span class="linenr"> 95: </span>
-<span class="linenr"> 96: </span>        game_console.clear<span style="color: #bd93f9;">()</span>;
-<span class="linenr"> 97: </span>        game_console.setDefaultForeground<span style="color: #bd93f9;">(</span><span style="color: #8be9fd;">TCODColor</span>::white<span style="color: #bd93f9;">)</span>;
-<span class="linenr"> 98: </span>        game_console.putChar<span style="color: #bd93f9;">(</span>player_x, player_y, <span style="color: #f1fa8c;">'@'</span><span style="color: #bd93f9;">)</span>;
+<span class="linenr"> 96: </span>    game_console.clear<span style="color: #bd93f9;">()</span>;
+<span class="linenr"> 97: </span>    game_console.setDefaultForeground<span style="color: #bd93f9;">(</span><span style="color: #8be9fd;">TCODColor</span>::white<span style="color: #bd93f9;">)</span>;
+<span class="linenr"> 98: </span>    game_console.putChar<span style="color: #bd93f9;">(</span>player_x, player_y, <span style="color: #f1fa8c;">'@'</span><span style="color: #bd93f9;">)</span>;
 <span class="linenr"> 99: </span>
-<span class="linenr">100: </span>        <span style="color: #8be9fd;">console</span>::blit<span style="color: #bd93f9;">(</span>&amp;game_console, 0, 0, window_width, window_height, 
-<span class="linenr">101: </span>                      <span style="color: #8be9fd;">console</span>::root, 0, 0<span style="color: #bd93f9;">)</span>;
-<span class="linenr">102: </span>        <span style="color: #8be9fd;">console</span>::flush<span style="color: #bd93f9;">()</span>;
-<span class="linenr">103: </span>    <span style="color: #8be9fd;">}</span>
+<span class="linenr">100: </span>    <span style="color: #8be9fd;">console</span>::blit<span style="color: #bd93f9;">(</span>&amp;game_console, 0, 0, window_width, window_height, 
+<span class="linenr">101: </span>                  <span style="color: #8be9fd;">console</span>::root, 0, 0<span style="color: #bd93f9;">)</span>;
+<span class="linenr">102: </span>    <span style="color: #8be9fd;">console</span>::flush<span style="color: #bd93f9;">()</span>;
+<span class="linenr">103: </span>  <span style="color: #8be9fd;">}</span>
 <span class="linenr">104: </span>
-<span class="linenr">105: </span>    <span style="color: #ff79c6; font-weight: bold;">return</span> 0;
+<span class="linenr">105: </span>  <span style="color: #ff79c6; font-weight: bold;">return</span> 0;
 <span class="linenr">106: </span><span style="color: #f8f8f2;">}</span>
 </pre>
 </div>
 <p>
-Here's how it breaks down:<br>
+Here's how it breaks down:
 </p>
 <table>
 
@@ -622,220 +623,260 @@ Here's how it breaks down:<br>
 <col  class="org-right">
 
 <col  class="org-left">
+
+<col  class="org-left">
 </colgroup>
 <thead>
 <tr>
 <th scope="col" class="org-right">Line #</th>
+<th scope="col" class="org-left">&#xa0;</th>
 <th scope="col" class="org-left">Explaination</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td class="org-right">1-4</td>
+<td class="org-left">&#xa0;</td>
 <td class="org-left">We will be using functionality from these headers</td>
 </tr>
 
 <tr>
 <td class="org-right">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
 <td class="org-left"><code>libtcod</code>: this is the rendering library we are using.</td>
 </tr>
 
 <tr>
 <td class="org-right">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
 <td class="org-left"><code>string</code>: Standard C++ string library</td>
 </tr>
 
 <tr>
 <td class="org-right">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
 <td class="org-left"><code>utility</code>: contains <code>std::pair</code> type.</td>
 </tr>
 
 <tr>
 <td class="org-right">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
 <td class="org-left"><code>any</code>: for <code>std::any</code> type.</td>
 </tr>
 
 <tr>
 <td class="org-right">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
 <td class="org-left"><code>cassert</code>: this will bring in <code>assert</code> macro. Helps with Debugging.</td>
 </tr>
 </tbody>
 <tbody>
 <tr>
 <td class="org-right">7</td>
+<td class="org-left">&#xa0;</td>
 <td class="org-left">import namespace <code>std::literals</code>, so we can use string literals to for text</td>
 </tr>
 </tbody>
 <tbody>
 <tr>
 <td class="org-right">9</td>
+<td class="org-left">&#xa0;</td>
 <td class="org-left">I don't want to constantly be typing <code>TCODxxxx</code>, so we setup <code>console</code> as an Alias for <code>TCODConsole</code>, with help of <code>using</code> statement.</td>
 </tr>
 </tbody>
 <tbody>
 <tr>
 <td class="org-right">11-17</td>
+<td class="org-left">&#xa0;</td>
 <td class="org-left">These are actions we will be performing in this game. List will eventually get larger.</td>
 </tr>
 </tbody>
 <tbody>
 <tr>
 <td class="org-right">19</td>
+<td class="org-left">&#xa0;</td>
 <td class="org-left">Define <code>move_dir</code> (move direction) as simple pair of integers, using <code>std::pair</code>.</td>
 </tr>
 </tbody>
 <tbody>
 <tr>
 <td class="org-right">21-49</td>
+<td class="org-left">&#xa0;</td>
 <td class="org-left">This function handles our input. I am using "Trailing Return Type" format for function signature.</td>
 </tr>
 
 <tr>
 <td class="org-right">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
 <td class="org-left">For each key press we are interested in, this function will translate it into our actions enumeration</td>
 </tr>
 
 <tr>
 <td class="org-right">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
 <td class="org-left">Additionally, since we are returning a pair of "things", 2nd value can be anything (std::any).</td>
 </tr>
 </tbody>
 <tbody>
 <tr>
 <td class="org-right">23</td>
+<td class="org-left">&#xa0;</td>
 <td class="org-left"><code>libtcod</code> is actually a C library. So it tends to define enums in a C-style. Generally, in C++ it's recommended to use strong enum.</td>
 </tr>
 
 <tr>
 <td class="org-right">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
 <td class="org-left">Here I am just aliasing it to help with intellisense in VSCode.</td>
 </tr>
 </tbody>
 <tbody>
 <tr>
 <td class="org-right">53-55</td>
+<td class="org-left">&#xa0;</td>
 <td class="org-left">define width, height and title to use with console window. these are constexpr they'll get evaluated at compile time.</td>
 </tr>
 
 <tr>
 <td class="org-right">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
 <td class="org-left"><code>"xxx"sv</code> means create this as a <code>std::string_view</code>, more type safe than using <code>char[]</code> or <code>char*</code>.</td>
 </tr>
 </tbody>
 <tbody>
 <tr>
 <td class="org-right">56</td>
+<td class="org-left">&#xa0;</td>
 <td class="org-left">This is the font file we will be using. It will be placed in <code>build\bin\</code> directory by CMake.</td>
 </tr>
 </tbody>
 <tbody>
 <tr>
 <td class="org-right">58</td>
+<td class="org-left">&#xa0;</td>
 <td class="org-left">tell libTcod that we want to use a custom font file.</td>
 </tr>
 </tbody>
 <tbody>
 <tr>
 <td class="org-right">60</td>
+<td class="org-left">&#xa0;</td>
 <td class="org-left">use the variables we defined above to launch the console.</td>
 </tr>
 </tbody>
 <tbody>
 <tr>
 <td class="org-right">63</td>
+<td class="org-left">&#xa0;</td>
 <td class="org-left">Make sure that we call <code>TCOD_quit()</code> when the application exits.</td>
 </tr>
 </tbody>
 <tbody>
 <tr>
 <td class="org-right">65</td>
+<td class="org-left">&#xa0;</td>
 <td class="org-left">Get an instance of console. Instead of using root console.</td>
 </tr>
 </tbody>
 <tbody>
 <tr>
 <td class="org-right">67-69</td>
+<td class="org-left">&#xa0;</td>
 <td class="org-left">Some game specific variables,</td>
 </tr>
 
 <tr>
 <td class="org-right">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
 <td class="org-left">If <code>exit_game</code> is true, we will exit the loop</td>
 </tr>
 
 <tr>
 <td class="org-right">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
 <td class="org-left"><code>player_x</code> and <code>player_y</code> will control where the "@" character will be drawn.</td>
 </tr>
 </tbody>
 <tbody>
 <tr>
 <td class="org-right">70</td>
+<td class="org-left">&#xa0;</td>
 <td class="org-left">C++ defines <code>not</code>, <code>or</code>, <code>and</code>, et.al as <a href="https://en.cppreference.com/w/cpp/language/operator_alternative">keywords</a>. I prefer to use these in <code>if</code> statements, imo makes the condition easier to read.</td>
 </tr>
 
 <tr>
 <td class="org-right">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
 <td class="org-left">Keep in mind VSCode's C++ parser does not understand these, so it flags them as error. This is <a href="https://github.com/microsoft/vscode-cpptools/issues/1589">a bug in VSCode's C/C++ Extension.</a></td>
 </tr>
 </tbody>
 <tbody>
 <tr>
 <td class="org-right">72</td>
+<td class="org-left">&#xa0;</td>
 <td class="org-left">Call our input handling function, that we defined on line 21.</td>
 </tr>
 </tbody>
 <tbody>
 <tr>
 <td class="org-right">73-94</td>
+<td class="org-left">&#xa0;</td>
 <td class="org-left">Simple <code>switch</code> on <code>action</code>. <code>.first</code> here reads the 1st value of the pair that we returned from <code>handle_input</code>.</td>
 </tr>
 </tbody>
 <tbody>
 <tr>
 <td class="org-right">82</td>
+<td class="org-left">&#xa0;</td>
 <td class="org-left">because 2nd value of our pair is a <code>std::any</code> we have to use <code>std::any_cast</code> to go back to the type we put in.</td>
 </tr>
 </tbody>
 <tbody>
 <tr>
 <td class="org-right">83-84</td>
+<td class="org-left">&#xa0;</td>
 <td class="org-left">Update the value of player position using first and second value of the pair we got from line 82.</td>
 </tr>
 </tbody>
 <tbody>
 <tr>
 <td class="org-right">87-91</td>
+<td class="org-left">&#xa0;</td>
 <td class="org-left">Toggle fullscreen mode, by simple negation of current window state.</td>
 </tr>
 </tbody>
 <tbody>
 <tr>
 <td class="org-right">96</td>
+<td class="org-left">&#xa0;</td>
 <td class="org-left">Clear the console, so we have clean canvas</td>
 </tr>
 </tbody>
 <tbody>
 <tr>
 <td class="org-right">97</td>
+<td class="org-left">&#xa0;</td>
 <td class="org-left">Set foreground color to White</td>
 </tr>
 </tbody>
 <tbody>
 <tr>
 <td class="org-right">89</td>
+<td class="org-left">&#xa0;</td>
 <td class="org-left">Update the position of "@" using <code>player_x</code> and <code>player_y</code>.</td>
 </tr>
 </tbody>
 <tbody>
 <tr>
 <td class="org-right">100</td>
+<td class="org-left">&#xa0;</td>
 <td class="org-left">Blit our <code>game_console</code> on to <code>root</code> console.</td>
 </tr>
 </tbody>
 <tbody>
 <tr>
 <td class="org-right">102</td>
+<td class="org-left">&#xa0;</td>
 <td class="org-left">Flush whole thing to screen.</td>
 </tr>
 </tbody>
@@ -843,15 +884,16 @@ Here's how it breaks down:<br>
 </div>
 </div>
 
-<div id="outline-container-org3f07636" class="outline-3">
-<h3 id="org3f07636"><span class="section-number-3">2.2</span> <code>external\CMakeLists.txt</code></h3>
+
+<div id="outline-container-orga51c794" class="outline-3">
+<h3 id="orga51c794"><span class="section-number-3">2.2</span> <code>external\CMakeLists.txt</code></h3>
 <div class="outline-text-3" id="text-2-2">
 <p>
-At present we don't have any font texture in our <code>build\bin</code> folder. So like we did in <code>Setup</code> section we are going to tell CMake to copy that file over.<br>
-We'll do this by appending the copy command to our list of commands in <code>add_custom_target</code> function.<br>
+At present we don't have any font texture in our <code>build\bin</code> folder. So like we did in <code>Setup</code> section we are going to tell CMake to copy that file over.
+We'll do this by appending the copy command to our list of commands in <code>add_custom_target</code> function.
 </p>
 <div class="org-src-container">
-<pre class="src src-cmake" id="orgfffb082"><span class="linenr"> 7: </span><span style="color: #50fa7b; font-weight: bold;">add_custom_target</span><span style="color: #f8f8f2;">(</span>LIBTCOD_BINS
+<pre class="src src-cmake" id="org82f4ff0"><span class="linenr"> 7: </span><span style="color: #50fa7b; font-weight: bold;">add_custom_target</span><span style="color: #f8f8f2;">(</span>LIBTCOD_BINS
 <span class="linenr"> 8: </span>    COMMAND $<span style="color: #8be9fd;">{</span><span style="color: #f8f8f2;">CMAKE_COMMAND</span><span style="color: #8be9fd;">}</span> -E copy $<span style="color: #8be9fd;">{</span><span style="color: #f8f8f2;">LIBTCOD_DIR</span><span style="color: #8be9fd;">}</span>/libtcod.dll $<span style="color: #8be9fd;">{</span><span style="color: #f8f8f2;">EXECUTABLE_OUTPUT_PATH</span><span style="color: #8be9fd;">}</span>
 <span class="linenr"> 9: </span>    COMMAND $<span style="color: #8be9fd;">{</span><span style="color: #f8f8f2;">CMAKE_COMMAND</span><span style="color: #8be9fd;">}</span> -E copy $<span style="color: #8be9fd;">{</span><span style="color: #f8f8f2;">LIBTCOD_DIR</span><span style="color: #8be9fd;">}</span>/sdl2.dll $<span style="color: #8be9fd;">{</span><span style="color: #f8f8f2;">EXECUTABLE_OUTPUT_PATH</span><span style="color: #8be9fd;">}</span>
 <span class="linenr">10: </span>    COMMAND $<span style="color: #8be9fd;">{</span><span style="color: #f8f8f2;">CMAKE_COMMAND</span><span style="color: #8be9fd;">}</span> -E copy $<span style="color: #8be9fd;">{</span><span style="color: #f8f8f2;">LIBTCOD_DIR</span><span style="color: #8be9fd;">}</span>/data/fonts/arial10x10.png $<span style="color: #8be9fd;">{</span><span style="color: #f8f8f2;">EXECUTABLE_OUTPUT_PATH</span><span style="color: #8be9fd;">}</span>
@@ -860,62 +902,62 @@ We'll do this by appending the copy command to our list of commands in <code>add
 </div>
 
 <p>
-<a href="https://github.com/Roy-Fokker/roguelike/tree/e0ad47e8d2df92b0b9c54d36b53a044c927f7312">Git Repo on 2019/10/07</a><br>
+<a href="https://github.com/Roy-Fokker/roguelike/tree/e0ad47e8d2df92b0b9c54d36b53a044c927f7312">Git Repo on 2019/10/07</a>
 </p>
 </div>
 </div>
 </div>
-<div id="outline-container-org201583b" class="outline-2">
-<h2 id="org201583b"><span class="section-number-2">3</span> Entity System</h2>
+<div id="outline-container-org9b9aa23" class="outline-2">
+<h2 id="org9b9aa23"><span class="section-number-2">3</span> Entity System</h2>
 </div>
 
-<div id="outline-container-orgdbbca66" class="outline-2">
-<h2 id="orgdbbca66"><span class="section-number-2">4</span> Generating a Dungeon</h2>
+<div id="outline-container-orgb7d39dc" class="outline-2">
+<h2 id="orgb7d39dc"><span class="section-number-2">4</span> Generating a Dungeon</h2>
 </div>
 
-<div id="outline-container-org31810e0" class="outline-2">
-<h2 id="org31810e0"><span class="section-number-2">5</span> Field of View</h2>
+<div id="outline-container-org2716ab4" class="outline-2">
+<h2 id="org2716ab4"><span class="section-number-2">5</span> Field of View</h2>
 </div>
 
-<div id="outline-container-orgafc2c79" class="outline-2">
-<h2 id="orgafc2c79"><span class="section-number-2">6</span> Placing Enemies</h2>
+<div id="outline-container-orgcadb8aa" class="outline-2">
+<h2 id="orgcadb8aa"><span class="section-number-2">6</span> Placing Enemies</h2>
 </div>
 
-<div id="outline-container-orgc86b2c7" class="outline-2">
-<h2 id="orgc86b2c7"><span class="section-number-2">7</span> Combat Loop</h2>
+<div id="outline-container-orgaf475ae" class="outline-2">
+<h2 id="orgaf475ae"><span class="section-number-2">7</span> Combat Loop</h2>
 </div>
 
-<div id="outline-container-org908553c" class="outline-2">
-<h2 id="org908553c"><span class="section-number-2">8</span> User Interface</h2>
+<div id="outline-container-org84ea773" class="outline-2">
+<h2 id="org84ea773"><span class="section-number-2">8</span> User Interface</h2>
 </div>
 
-<div id="outline-container-orgbbac475" class="outline-2">
-<h2 id="orgbbac475"><span class="section-number-2">9</span> Items and Inventory</h2>
+<div id="outline-container-org80ed987" class="outline-2">
+<h2 id="org80ed987"><span class="section-number-2">9</span> Items and Inventory</h2>
 </div>
 
-<div id="outline-container-org197a732" class="outline-2">
-<h2 id="org197a732"><span class="section-number-2">10</span> Equiping Items</h2>
+<div id="outline-container-org6a89f8e" class="outline-2">
+<h2 id="org6a89f8e"><span class="section-number-2">10</span> Equiping Items</h2>
 </div>
 
-<div id="outline-container-org4d6a7a0" class="outline-2">
-<h2 id="org4d6a7a0"><span class="section-number-2">11</span> Weapons and Targetting</h2>
+<div id="outline-container-org21f037f" class="outline-2">
+<h2 id="org21f037f"><span class="section-number-2">11</span> Weapons and Targetting</h2>
 </div>
 
-<div id="outline-container-orgf8ad092" class="outline-2">
-<h2 id="orgf8ad092"><span class="section-number-2">12</span> Saving and Loading Game State</h2>
+<div id="outline-container-org775cddc" class="outline-2">
+<h2 id="org775cddc"><span class="section-number-2">12</span> Saving and Loading Game State</h2>
 </div>
 
-<div id="outline-container-org2c7a8ce" class="outline-2">
-<h2 id="org2c7a8ce"><span class="section-number-2">13</span> Dungeon Delving</h2>
+<div id="outline-container-org225c20b" class="outline-2">
+<h2 id="org225c20b"><span class="section-number-2">13</span> Dungeon Delving</h2>
 </div>
 
-<div id="outline-container-org18a9164" class="outline-2">
-<h2 id="org18a9164"><span class="section-number-2">14</span> Difficulty Curve</h2>
+<div id="outline-container-org7f9a835" class="outline-2">
+<h2 id="org7f9a835"><span class="section-number-2">14</span> Difficulty Curve</h2>
 </div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Neel Raiyani</p>
-<p class="date">Created: 2019-10-07 Mon 22:52</p>
+<p class="date">Created: 2019-10-08 Tue 17:07</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
