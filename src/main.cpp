@@ -35,6 +35,14 @@ auto handle_input() -> std::pair<actions, std::any>
 			return {actions::move, move_dir{-1, 0}};
 		case key_code::TCODK_RIGHT:
 			return {actions::move, move_dir{1, 0}};
+		case key_code::TCODK_ENTER:
+		{
+			if (key.lalt or key.ralt)
+			{
+				return {actions::fullscreen_toggle, 0};
+			}
+			break;
+		}
 	}
 
 	return {}; // will automatically return actions::do_nothing
@@ -68,6 +76,11 @@ int main()
 				auto dir = std::any_cast<move_dir>(action.second);
 				player_x += dir.first;
 				player_y += dir.second;
+				break;
+			}
+			case actions::fullscreen_toggle:
+			{
+				console::setFullscreen(not console::isFullscreen());
 				break;
 			}
 			default:

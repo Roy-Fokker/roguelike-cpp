@@ -227,6 +227,8 @@ It's written in sort of literal programming format. Documentation is written in 
 	Running the executable, should open a window, with =@= in the middle of the window. Program does nothing else, for now...
 
 * Drawing Player and Moving around
+  *NOTE*: A word about the code and explainations, I won't be explaining every feature of C++ being used. Perhaps, you are new to C++, but not new to programming, code should make sense to you. For any keywords, or classes from Standard Library that are new for you, I suggest looking it up in [[https://www.cppreference.com][Cpp Reference]]. In general, I write C++ heavily influenced by [[http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines][C++ Core Guidelines]], code is formatted in [[https://en.wikipedia.org/wiki/Indentation_style#Allman_style][Allman style]]. You might prefer some other styles/means, feel free to write in a way that is comfortable to you.
+
   From here on out, we are going to focus on our rogue game. Rest of this document follows similar structure as Python RogueLike Tutorials.
   There will be some differences, as C++ and Python are different languages, and operate with different mindsets.
 
@@ -238,143 +240,156 @@ It's written in sort of literal programming format. Documentation is written in 
   All of this will be done by modifying our ~src\main.cpp~. 
   #+name: src\main.cpp
   #+begin_src cpp -n
-    #include <libtcod.hpp>
-    #include <string>
-    #include <utility>
-    #include <cassert>
-    #include <any>
+	#include <libtcod.hpp>
+	#include <string>
+	#include <utility>
+	#include <cassert>
+	#include <any>
 
-    using namespace std::literals;
+	using namespace std::literals;
 
-    using console = TCODConsole;
+	using console = TCODConsole;
 
-    enum class actions
-    {
-        do_nothing,
-        exit,
-        move,
-        fullscreen_toggle,
-    };
+	enum class actions
+	{
+		do_nothing,
+		exit,
+		move,
+		fullscreen_toggle,
+	};
 
-    using move_dir = std::pair<int, int>;
+	using move_dir = std::pair<int, int>;
 
-    auto handle_input() -> std::pair<actions, std::any>
-    {
-        using key_code = TCOD_keycode_t;
-        auto key = console::checkForKeypress();
+	auto handle_input() -> std::pair<actions, std::any>
+	{
+		using key_code = TCOD_keycode_t;
+		auto key = console::checkForKeypress();
 
-        switch (key.vk)
-        {
-        case key_code::TCODK_ESCAPE:
-            return {actions::exit, 0};
-        case key_code::TCODK_UP:
-            return {actions::move, move_dir{0, -1}};
-        case key_code::TCODK_DOWN:
-            return {actions::move, move_dir{0, 1}};
-        case key_code::TCODK_LEFT:
-            return {actions::move, move_dir{-1, 0}};
-        case key_code::TCODK_RIGHT:
-            return {actions::move, move_dir{1, 0}};
-        }
+		switch (key.vk)
+		{
+			case key_code::TCODK_ESCAPE:
+				return {actions::exit, 0};
+			case key_code::TCODK_UP:
+				return {actions::move, move_dir{0, -1}};
+			case key_code::TCODK_DOWN:
+				return {actions::move, move_dir{0, 1}};
+			case key_code::TCODK_LEFT:
+				return {actions::move, move_dir{-1, 0}};
+			case key_code::TCODK_RIGHT:
+				return {actions::move, move_dir{1, 0}};
+			case key_code::TCODK_ENTER:
+			{
+				if (key.lalt or key.ralt)
+				{
+					return {actions::fullscreen_toggle, 0};
+				}
+				break;
+			}
+		}
 
-        return {}; // will automatically return actions::do_nothing
-    }
+		return {}; // will automatically return actions::do_nothing
+	}
 
-    int main()
-    {
-        constexpr auto window_width  = 80,
-                       window_height = 50;
-        constexpr auto window_title = "Rogue C++ Tutorial - Part 1"sv;
+	int main()
+	{
+		constexpr auto window_width  = 80,
+					   window_height = 50;
+		constexpr auto window_title = "Rogue C++ Tutorial - Part 1"sv;
 
-        console::initRoot(window_width, window_height,
-                          window_title.data(),
-                          false, TCOD_RENDERER_SDL2);
+		console::initRoot(window_width, window_height,
+						  window_title.data(),
+						  false, TCOD_RENDERER_SDL2);
 	
-        bool exit_game = false;
-        int player_x = 40, 
-            player_y = 25;
-        while (not (console::isWindowClosed() or exit_game))
-        {
-            auto action = handle_input();
-            switch (action.first)
-            {
-            case actions::do_nothing:
-                break;
-            case actions::exit:
-                exit_game = true;
-                break;
-            case actions::move:
-            {
-                auto dir = std::any_cast<move_dir>(action.second);
-                player_x += dir.first;
-                player_y += dir.second;
-                break;
-            }
-            case actions::fullscreen_toggle:
-                break;
-            default:
-                assert(false); // default case, if we forgot to handle some action in future
-            }
+		bool exit_game = false;
+		int player_x = 40, 
+			player_y = 25;
+		while (not (console::isWindowClosed() or exit_game))
+		{
+			auto action = handle_input();
+			switch (action.first)
+			{
+				case actions::do_nothing:
+					break;
+				case actions::exit:
+					exit_game = true;
+					break;
+				case actions::move:
+				{
+					auto dir = std::any_cast<move_dir>(action.second);
+					player_x += dir.first;
+					player_y += dir.second;
+					break;
+				}
+				case actions::fullscreen_toggle:
+				{
+					console::setFullscreen(not console::isFullscreen());
+					break;
+				}
+				default:
+					assert(false); // default case, if we forgot to handle some action in future
+			}
 
-            console::root->clear();
-            console::root->putChar(player_x, player_y, '@');
-            console::flush();
-        }
+			console::root->clear();
+			console::root->putChar(player_x, player_y, '@');
+			console::flush();
+		}
 
-        TCOD_quit(); // must call manually for now.
+		TCOD_quit(); // must call manually for now.
 
-        return 0;
-    }
+		return 0;
+	}
   #+end_src
-
-  Let's break it down:
-  | Line # | Explaination                                                                                                                         |
-  |--------+--------------------------------------------------------------------------------------------------------------------------------------|
-  |    1-4 | We will be using functionality from these headers                                                                                    |
-  |        | ~libtcod~: this is the rendering library we are using.                                                                               |
-  |        | ~string~: Standard C++ string library                                                                                                |
-  |        | ~utility~: contains ~std::pair~ type.                                                                                                |
-  |        | ~any~: for ~std::any~ type.                                                                                                          |
-  |        | ~cassert~: this will bring in ~assert~ macro. Helps with Debugging.                                                                  |
-  |--------+--------------------------------------------------------------------------------------------------------------------------------------|
-  |      7 | import namespace =std::literals=, so we can use string literals to for text                                                          |
-  |--------+--------------------------------------------------------------------------------------------------------------------------------------|
-  |      9 | I don't want to constantly be typing =TCODxxxx=, so we put in an Alias for =TCODConsole=, with help of ~using~ statement.            |
-  |--------+--------------------------------------------------------------------------------------------------------------------------------------|
-  |  11-17 | These are actions we will be performing in this game. List will eventually get larger.                                               |
-  |--------+--------------------------------------------------------------------------------------------------------------------------------------|
-  |     19 | Define =move_dir= (move direction) as simple pair of integers, using ~std::pair~.                                                    |
-  |--------+--------------------------------------------------------------------------------------------------------------------------------------|
-  |  21-38 | This function handles our input. I am using "Trailing Return Type" format for function signature.                                    |
-  |        | For each key press we are interested in, this function will translate it into our actions enumeration                                |
-  |        | Additionally, since we are returning a pair of "things", 2nd value can be anything (std::any).                                       |
-  |--------+--------------------------------------------------------------------------------------------------------------------------------------|
-  |     24 | ~libtcod~ is actually a C library. So it tends to define enums in a C-style. Generally, in C++ it's recommended to use strong enum.  |
-  |        | Here I am just aliasing it to help with intellisense in VSCode.                                                                      |
-  |--------+--------------------------------------------------------------------------------------------------------------------------------------|
-  |  45-47 | define width, height and title to use with console window. these are constexpr they'll get evaluated at compile time.                |
-  |        | ~"xxx"sv~ means create this as a =std::string_view=, more type safe than using =char[]= or =char*=.                                  |
-  |--------+--------------------------------------------------------------------------------------------------------------------------------------|
-  |     49 | use the variables we defined above to launch the console.                                                                            |
-  |--------+--------------------------------------------------------------------------------------------------------------------------------------|
-  |  53-55 | Some game specific variables,                                                                                                        |
-  |        | If ~exit_game~ is true, we will exit the loop                                                                                        |
-  |        | ~player_x~ and ~player_y~ will control where the "@" character will be drawn.                                                        |
-  |--------+--------------------------------------------------------------------------------------------------------------------------------------|
-  |     56 | C++ defines =not=, =or=, =and=, et.al as keywords. I prefer to use these in =if= statements, imo makes the condition easier to read. |
-  |--------+--------------------------------------------------------------------------------------------------------------------------------------|
-  |     58 | Call our input handling function, that we defined on line 21.                                                                        |
-  |--------+--------------------------------------------------------------------------------------------------------------------------------------|
-  |  59-77 | Simple =switch= on =action=. ~.first~ here reads the 1st value of the pair that we returned from =handle_input=.                     |
-  |--------+--------------------------------------------------------------------------------------------------------------------------------------|
-  |     68 | because 2nd value of our pair is a =std::any= we have to use ~std::any_cast~ to go back to the type we put in.                       |
-  |--------+--------------------------------------------------------------------------------------------------------------------------------------|
-  |  69-70 | Update the value of player position using first and second value of the pair we got from line 68.                                    |
-  |--------+--------------------------------------------------------------------------------------------------------------------------------------|
-  |     80 | Update the position of "@" using ~player_x~ and ~player_y~.                                                                          |
-  |--------+--------------------------------------------------------------------------------------------------------------------------------------|
-  |     84 | Lastly, we have to call ~TCOD_quit()~ to properly exit the game.                                                                     |
-  |--------+--------------------------------------------------------------------------------------------------------------------------------------|
+  Here's how it breaks down:
+  | Line # | Explaination                                                                                                                          |
+  |--------+---------------------------------------------------------------------------------------------------------------------------------------|
+  |    1-4 | We will be using functionality from these headers                                                                                     |
+  |        | ~libtcod~: this is the rendering library we are using.                                                                                |
+  |        | ~string~: Standard C++ string library                                                                                                 |
+  |        | ~utility~: contains ~std::pair~ type.                                                                                                 |
+  |        | ~any~: for ~std::any~ type.                                                                                                           |
+  |        | ~cassert~: this will bring in ~assert~ macro. Helps with Debugging.                                                                   |
+  |--------+---------------------------------------------------------------------------------------------------------------------------------------|
+  |      7 | import namespace =std::literals=, so we can use string literals to for text                                                           |
+  |--------+---------------------------------------------------------------------------------------------------------------------------------------|
+  |      9 | I don't want to constantly be typing =TCODxxxx=, so we setup ~console~ as an Alias for =TCODConsole=, with help of ~using~ statement. |
+  |--------+---------------------------------------------------------------------------------------------------------------------------------------|
+  |  11-17 | These are actions we will be performing in this game. List will eventually get larger.                                                |
+  |--------+---------------------------------------------------------------------------------------------------------------------------------------|
+  |     19 | Define =move_dir= (move direction) as simple pair of integers, using ~std::pair~.                                                     |
+  |--------+---------------------------------------------------------------------------------------------------------------------------------------|
+  |  21-46 | This function handles our input. I am using "Trailing Return Type" format for function signature.                                     |
+  |        | For each key press we are interested in, this function will translate it into our actions enumeration                                 |
+  |        | Additionally, since we are returning a pair of "things", 2nd value can be anything (std::any).                                        |
+  |--------+---------------------------------------------------------------------------------------------------------------------------------------|
+  |     24 | ~libtcod~ is actually a C library. So it tends to define enums in a C-style. Generally, in C++ it's recommended to use strong enum.   |
+  |        | Here I am just aliasing it to help with intellisense in VSCode.                                                                       |
+  |--------+---------------------------------------------------------------------------------------------------------------------------------------|
+  |  53-55 | define width, height and title to use with console window. these are constexpr they'll get evaluated at compile time.                 |
+  |        | ~"xxx"sv~ means create this as a =std::string_view=, more type safe than using =char[]= or =char*=.                                   |
+  |--------+---------------------------------------------------------------------------------------------------------------------------------------|
+  |     57 | use the variables we defined above to launch the console.                                                                             |
+  |--------+---------------------------------------------------------------------------------------------------------------------------------------|
+  |  61-63 | Some game specific variables,                                                                                                         |
+  |        | If ~exit_game~ is true, we will exit the loop                                                                                         |
+  |        | ~player_x~ and ~player_y~ will control where the "@" character will be drawn.                                                         |
+  |--------+---------------------------------------------------------------------------------------------------------------------------------------|
+  |     64 | C++ defines =not=, =or=, =and=, et.al as keywords. I prefer to use these in =if= statements, imo makes the condition easier to read.  |
+  |        | Keep in mind VSCode's C++ parser does not understand these, so it flags them as error. This is [[https://github.com/microsoft/vscode-cpptools/issues/1589][a bug in VSCode's C/C++ Extension.]]     |
+  |--------+---------------------------------------------------------------------------------------------------------------------------------------|
+  |     66 | Call our input handling function, that we defined on line 21.                                                                         |
+  |--------+---------------------------------------------------------------------------------------------------------------------------------------|
+  |  67-87 | Simple =switch= on =action=. ~.first~ here reads the 1st value of the pair that we returned from =handle_input=.                      |
+  |--------+---------------------------------------------------------------------------------------------------------------------------------------|
+  |     76 | because 2nd value of our pair is a =std::any= we have to use ~std::any_cast~ to go back to the type we put in.                        |
+  |--------+---------------------------------------------------------------------------------------------------------------------------------------|
+  |  77-78 | Update the value of player position using first and second value of the pair we got from line 68.                                     |
+  |--------+---------------------------------------------------------------------------------------------------------------------------------------|
+  |  81-85 | Toggle fullscreen mode, by simple negation of current window state.                                                                   |
+  |--------+---------------------------------------------------------------------------------------------------------------------------------------|
+  |     91 | Update the position of "@" using ~player_x~ and ~player_y~.                                                                           |
+  |--------+---------------------------------------------------------------------------------------------------------------------------------------|
+  |     95 | Lastly, we have to call ~TCOD_quit()~ to properly exit the game.                                                                      |
+  |--------+---------------------------------------------------------------------------------------------------------------------------------------|
 
 * Entity System
 
