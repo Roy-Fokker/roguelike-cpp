@@ -25,16 +25,16 @@ auto handle_input() -> std::pair<actions, std::any>
 
 	switch (key.vk)
 	{
-	case key_code::TCODK_ESCAPE:
-		return {actions::exit, 0};
-	case key_code::TCODK_UP:
-		return {actions::move, move_dir{0, -1}};
-	case key_code::TCODK_DOWN:
-		return {actions::move, move_dir{0, 1}};
-	case key_code::TCODK_LEFT:
-		return {actions::move, move_dir{-1, 0}};
-	case key_code::TCODK_RIGHT:
-		return {actions::move, move_dir{1, 0}};
+		case key_code::TCODK_ESCAPE:
+			return {actions::exit, 0};
+		case key_code::TCODK_UP:
+			return {actions::move, move_dir{0, -1}};
+		case key_code::TCODK_DOWN:
+			return {actions::move, move_dir{0, 1}};
+		case key_code::TCODK_LEFT:
+			return {actions::move, move_dir{-1, 0}};
+		case key_code::TCODK_RIGHT:
+			return {actions::move, move_dir{1, 0}};
 	}
 
 	return {}; // will automatically return actions::do_nothing
@@ -58,22 +58,20 @@ int main()
 		auto action = handle_input();
 		switch (action.first)
 		{
-		case actions::do_nothing:
-			break;
-		case actions::exit:
-			exit_game = true;
-			break;
-		case actions::move:
-		{
-			auto dir = std::any_cast<move_dir>(action.second);
-			player_x += dir.first;
-			player_y += dir.second;
-			break;
-		}
-		case actions::fullscreen_toggle:
-			break;
-		default:
-			assert(false); // default case, if we forgot to handle some action in future
+			case actions::do_nothing:
+				break;
+			case actions::exit:
+				exit_game = true;
+				break;
+			case actions::move:
+			{
+				auto dir = std::any_cast<move_dir>(action.second);
+				player_x += dir.first;
+				player_y += dir.second;
+				break;
+			}
+			default:
+				assert(false); // default case, if we forgot to handle some action in future
 		}
 
 		console::root->clear();
