@@ -5,10 +5,10 @@
 #+SETUPFILE: notes-style.org
 #+OPTIONS: H:3, toc:1, \n:t
 #+EXPORT_FILE_NAME: docs\index.html
-#+STARTUP: showall
+#+STARTUP: showall wrap
 
 This file documents my attempts at going through a process of making a Rogue-Like game.
-The associated source code lives in [[https://github.com/Roy-Fokker/roguelike][GitHub Repo]].
+The associated source code lives in [[https://github.com/Roy-Fokker/roguelike][GitHub Repo]]. State of Repository at end of each section is linked-to at bottom of each section.
 
 It's written in sort of literal programming format. Documentation is written in Emacs Org-Mode and exported to html which used by github to display this page. As emacs is not being used for any code related purposes, rest of this document ignores this aspect.
 
@@ -225,7 +225,8 @@ It's written in sort of literal programming format. Documentation is written in 
 	
 	Hit build in VSCode, and it should generate ~rogue.exe~ in ~\build\bin~ directory, as well, copy the necessary libtcod dlls there.
 	Running the executable, should open a window, with =@= in the middle of the window. Program does nothing else, for now...
-
+	
+  [[https://github.com/Roy-Fokker/roguelike/tree/f9022f035ffb9e36ed6bdbbfad7e1303180249e4][Git Repo]]
 * Drawing Player and Moving around
   *NOTE*: A word about the code and explainations, I won't be explaining every feature of C++ being used. Perhaps, you are new to C++, but not new to programming, code should make sense to you. For any keywords, or classes from Standard Library that are new for you, I suggest looking it up in [[https://www.cppreference.com][Cpp Reference]]. In general, I write C++ heavily influenced by [[http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines][C++ Core Guidelines]], code is formatted in [[https://en.wikipedia.org/wiki/Indentation_style#Allman_style][Allman style]]. You might prefer some other styles/means, feel free to write in a way that is comfortable to you.
 
@@ -391,8 +392,9 @@ It's written in sort of literal programming format. Documentation is written in 
   |     95 | Lastly, we have to call ~TCOD_quit()~ to properly exit the game.                                                                      |
   |--------+---------------------------------------------------------------------------------------------------------------------------------------|
 
+  [[https://github.com/Roy-Fokker/roguelike/tree/44243e03c1b23bf43eec4efc21542980456219bd][Git Repo]]
 * Entity System
-
+  
 * Generating a Dungeon
 
 * Field of View
