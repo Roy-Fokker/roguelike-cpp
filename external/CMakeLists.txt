@@ -7,4 +7,5 @@ find_library(LIBTCOD_LIB libtcod ${LIBTCOD_DIR})
 add_custom_target(LIBTCOD_BINS
     COMMAND ${CMAKE_COMMAND} -E copy ${LIBTCOD_DIR}/libtcod.dll ${EXECUTABLE_OUTPUT_PATH}
     COMMAND ${CMAKE_COMMAND} -E copy ${LIBTCOD_DIR}/sdl2.dll ${EXECUTABLE_OUTPUT_PATH}
+    COMMAND ${CMAKE_COMMAND} -E copy ${LIBTCOD_DIR}/data/fonts/arial10x10.png ${EXECUTABLE_OUTPUT_PATH}
 )

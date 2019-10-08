@@ -50,17 +50,23 @@ auto handle_input() -> std::pair<actions, std::any>
 
 int main()
 {
-	constexpr auto window_width  = 80,
-	               window_height = 50;
-	constexpr auto window_title = "Rogue C++ Tutorial - Part 1"sv;
+	constexpr auto window_width  = 100,
+	               window_height = 56;
+	constexpr auto window_title  = "Rogue C++ Tutorial - Part 1"sv,
+	               font_file     = "arial10x10.png"sv;
+
+	console::setCustomFont(font_file.data(), TCOD_FONT_TYPE_GREYSCALE | TCOD_FONT_LAYOUT_TCOD);
 
 	console::initRoot(window_width, window_height,
 	                  window_title.data(),
 	                  false, TCOD_RENDERER_SDL2);
+	atexit(TCOD_quit); // the C-Runtime will automatically call this function.
 	
+	auto game_console = console(window_width, window_height);
+
 	bool exit_game = false;
-	int player_x = 40, 
-	    player_y = 25;
+	int player_x = window_width / 2, 
+	    player_y = window_height / 2;
 	while (not (console::isWindowClosed() or exit_game))
 	{
 		auto action = handle_input();
@@ -80,19 +86,21 @@ int main()
 			}
 			case actions::fullscreen_toggle:
 			{
-				console::setFullscreen(not console::isFullscreen());
+				game_console.setFullscreen(not game_console.isFullscreen());
 				break;
 			}
 			default:
-				assert(false); // default case, if we forgot to handle some action in future
+				assert(false); // We forgot to handle some action. DEBUG!
 		}
 
-		console::root->clear();
-		console::root->putChar(player_x, player_y, '@');
+		game_console.clear();
+		game_console.setDefaultForeground(TCODColor::white);
+		game_console.putChar(player_x, player_y, '@');
+
+		console::blit(&game_console, 0, 0, window_width, window_height, 
+		              console::root, 0, 0);
 		console::flush();
 	}
-
-	TCOD_quit(); // must call manually for now.
 
 	return 0;
 }
