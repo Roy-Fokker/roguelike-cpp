@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2019-10-07 Mon 22:50 -->
+<!-- 2019-10-07 Mon 22:52 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Rogue-Like Game in C++17</title>
@@ -87,20 +87,20 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orgd40cc99">1. Setup</a></li>
-<li><a href="#org06a48ab">2. Drawing Player and Moving around</a></li>
-<li><a href="#orgc7084c1">3. Entity System</a></li>
-<li><a href="#orgd99cb7c">4. Generating a Dungeon</a></li>
-<li><a href="#org7774e76">5. Field of View</a></li>
-<li><a href="#org95fd8ee">6. Placing Enemies</a></li>
-<li><a href="#org81606a3">7. Combat Loop</a></li>
-<li><a href="#org978218c">8. User Interface</a></li>
-<li><a href="#org68104e5">9. Items and Inventory</a></li>
-<li><a href="#org9e744e2">10. Equiping Items</a></li>
-<li><a href="#org2d6d3b3">11. Weapons and Targetting</a></li>
-<li><a href="#org0f71b10">12. Saving and Loading Game State</a></li>
-<li><a href="#org72eacd7">13. Dungeon Delving</a></li>
-<li><a href="#org09d6aed">14. Difficulty Curve</a></li>
+<li><a href="#orge916c62">1. Setup</a></li>
+<li><a href="#orgf8bfb02">2. Drawing Player and Moving around</a></li>
+<li><a href="#org201583b">3. Entity System</a></li>
+<li><a href="#orgdbbca66">4. Generating a Dungeon</a></li>
+<li><a href="#org31810e0">5. Field of View</a></li>
+<li><a href="#orgafc2c79">6. Placing Enemies</a></li>
+<li><a href="#orgc86b2c7">7. Combat Loop</a></li>
+<li><a href="#org908553c">8. User Interface</a></li>
+<li><a href="#orgbbac475">9. Items and Inventory</a></li>
+<li><a href="#org197a732">10. Equiping Items</a></li>
+<li><a href="#org4d6a7a0">11. Weapons and Targetting</a></li>
+<li><a href="#orgf8ad092">12. Saving and Loading Game State</a></li>
+<li><a href="#org2c7a8ce">13. Dungeon Delving</a></li>
+<li><a href="#org18a9164">14. Difficulty Curve</a></li>
 </ul>
 </div>
 </nav>
@@ -113,16 +113,16 @@ The associated source code lives in <a href="https://github.com/Roy-Fokker/rogue
 It's written in sort of literal programming format. Documentation is written in Emacs Org-Mode and exported to html which used by github to display this page. As emacs is not being used for any code related purposes, rest of this document ignores this aspect.<br>
 </p>
 
-<div id="outline-container-orgd40cc99" class="outline-2">
-<h2 id="orgd40cc99"><span class="section-number-2">1</span> Setup</h2>
+<div id="outline-container-orge916c62" class="outline-2">
+<h2 id="orge916c62"><span class="section-number-2">1</span> Setup</h2>
 <div class="outline-text-2" id="text-1">
 </div>
-<div id="outline-container-org3d70e2b" class="outline-3">
-<h3 id="org3d70e2b"><span class="section-number-3">1.1</span> Environment Setup</h3>
+<div id="outline-container-org17b527d" class="outline-3">
+<h3 id="org17b527d"><span class="section-number-3">1.1</span> Environment Setup</h3>
 <div class="outline-text-3" id="text-1-1">
 </div>
-<div id="outline-container-org499617d" class="outline-4">
-<h4 id="org499617d"><span class="section-number-4">1.1.1</span> Tools of the trade:</h4>
+<div id="outline-container-orga4a139b" class="outline-4">
+<h4 id="orga4a139b"><span class="section-number-4">1.1.1</span> Tools of the trade:</h4>
 <div class="outline-text-4" id="text-1-1-1">
 <p>
 Below is listing of tools I am using<br>
@@ -179,8 +179,8 @@ Below is listing of tools I am using<br>
 </div>
 </div>
 
-<div id="outline-container-org90d7937" class="outline-4">
-<h4 id="org90d7937"><span class="section-number-4">1.1.2</span> Editor Configuration</h4>
+<div id="outline-container-orge1e945b" class="outline-4">
+<h4 id="orge1e945b"><span class="section-number-4">1.1.2</span> Editor Configuration</h4>
 <div class="outline-text-4" id="text-1-1-2">
 <p>
 Following extensions are installed in VSCode<br>
@@ -198,8 +198,8 @@ This will installed 2 other extensions<br>
 </div>
 </div>
 
-<div id="outline-container-orgb19ec7d" class="outline-4">
-<h4 id="orgb19ec7d"><span class="section-number-4">1.1.3</span> vcpkg configuration</h4>
+<div id="outline-container-org3611b22" class="outline-4">
+<h4 id="org3611b22"><span class="section-number-4">1.1.3</span> vcpkg configuration</h4>
 <div class="outline-text-4" id="text-1-1-3">
 <ul class="org-ul">
 <li>Add Environment Variable called VCPKG_ROOT and point it to location of your vcpkg installation directory.<br>
@@ -211,12 +211,12 @@ Again for me this is 'x64-Windows'.<br></li>
 </div>
 </div>
 
-<div id="outline-container-org0b727c3" class="outline-3">
-<h3 id="org0b727c3"><span class="section-number-3">1.2</span> Project Setup</h3>
+<div id="outline-container-org26b2483" class="outline-3">
+<h3 id="org26b2483"><span class="section-number-3">1.2</span> Project Setup</h3>
 <div class="outline-text-3" id="text-1-2">
 </div>
-<div id="outline-container-org584b8a0" class="outline-4">
-<h4 id="org584b8a0"><span class="section-number-4">1.2.1</span> Folder Structure</h4>
+<div id="outline-container-orgb309684" class="outline-4">
+<h4 id="orgb309684"><span class="section-number-4">1.2.1</span> Folder Structure</h4>
 <div class="outline-text-4" id="text-1-2-1">
 <p>
 This is how i've structured the project folders. The name of the Root Folder doesn't matter, in my case it's called <code>roguelike</code>.<br>
@@ -230,14 +230,14 @@ This is how i've structured the project folders. The name of the Root Folder doe
 </pre>
 </div>
 </div>
-<div id="outline-container-orga359913" class="outline-4">
-<h4 id="orga359913"><span class="section-number-4">1.2.2</span> <code>\.gitignore</code> file</h4>
+<div id="outline-container-orgd95b22f" class="outline-4">
+<h4 id="orgd95b22f"><span class="section-number-4">1.2.2</span> <code>\.gitignore</code> file</h4>
 <div class="outline-text-4" id="text-1-2-2">
 <p>
 We'll be ignore following files and folders. No point in adding these to our git repo.<br>
 </p>
 <div class="org-src-container">
-<pre class="src src-markdown" id="org0ed43bf"><span class="linenr"> 1: </span><span style="color: #b3b3b3;"># </span><span style="color: #50fa7b; font-weight: bold;">cmake build directory</span>
+<pre class="src src-markdown" id="orgac6cfa1"><span class="linenr"> 1: </span><span style="color: #b3b3b3;"># </span><span style="color: #50fa7b; font-weight: bold;">cmake build directory</span>
 <span class="linenr"> 2: </span>build/
 <span class="linenr"> 3: </span>CMakeCache.txt
 <span class="linenr"> 4: </span>CMakeFiles/
@@ -254,8 +254,8 @@ We'll be ignore following files and folders. No point in adding these to our git
 </div>
 </div>
 </div>
-<div id="outline-container-orgf68f115" class="outline-4">
-<h4 id="orgf68f115"><span class="section-number-4">1.2.3</span> CMake configuration</h4>
+<div id="outline-container-org2538625" class="outline-4">
+<h4 id="org2538625"><span class="section-number-4">1.2.3</span> CMake configuration</h4>
 <div class="outline-text-4" id="text-1-2-3">
 <p>
 After you create the CMakeList.txt file below, VSCode should recognize this folder as being CMake project.<br>
@@ -271,7 +271,7 @@ This in the root of our project. We define basic things about how cmake should d
 Lines 3 to 6 tell cmake to use vcpkg toolchain file.<br>
 </p>
 <div class="org-src-container">
-<pre class="src src-cmake" id="org4a14e38"><span class="linenr"> 1: </span><span style="color: #50fa7b; font-weight: bold;">cmake_minimum_required</span><span style="color: #f8f8f2;">(</span>VERSION 3.15.0<span style="color: #f8f8f2;">)</span>
+<pre class="src src-cmake" id="org6d18697"><span class="linenr"> 1: </span><span style="color: #50fa7b; font-weight: bold;">cmake_minimum_required</span><span style="color: #f8f8f2;">(</span>VERSION 3.15.0<span style="color: #f8f8f2;">)</span>
 <span class="linenr"> 2: </span>
 <span class="linenr"> 3: </span><span style="color: #ff79c6; font-weight: bold;">if</span><span style="color: #f8f8f2;">(</span>DEFINED ENV<span style="color: #8be9fd;">{</span>VCPKG_ROOT<span style="color: #8be9fd;">}</span> AND NOT DEFINED CMAKE_TOOLCHAIN_FILE<span style="color: #f8f8f2;">)</span>
 <span class="linenr"> 4: </span>  <span style="color: #50fa7b; font-weight: bold;">set</span><span style="color: #f8f8f2;">(</span>CMAKE_TOOLCHAIN_FILE <span style="color: #f1fa8c;">"$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"</span>
@@ -296,7 +296,7 @@ We also tell it we want to use C++17 standard. This doesn't actually work with M
 So&#x2026; we have to explictly tell cmake to pass some parameters to MSVC compiler<br>
 </p>
 <div class="org-src-container">
-<pre class="src src-cmake" id="org09a1d42"><span class="linenr"> 1: </span><span style="color: #50fa7b; font-weight: bold;">find_package</span><span style="color: #f8f8f2;">(</span>fmt REQUIRED<span style="color: #f8f8f2;">)</span>
+<pre class="src src-cmake" id="orgcb06e94"><span class="linenr"> 1: </span><span style="color: #50fa7b; font-weight: bold;">find_package</span><span style="color: #f8f8f2;">(</span>fmt REQUIRED<span style="color: #f8f8f2;">)</span>
 <span class="linenr"> 2: </span>
 <span class="linenr"> 3: </span><span style="color: #50fa7b; font-weight: bold;">add_executable</span><span style="color: #f8f8f2;">(</span>rogue main.cpp<span style="color: #f8f8f2;">)</span>
 <span class="linenr"> 4: </span>
@@ -316,8 +316,8 @@ So&#x2026; we have to explictly tell cmake to pass some parameters to MSVC compi
 </ul>
 </div>
 </div>
-<div id="outline-container-org4a2cdc1" class="outline-4">
-<h4 id="org4a2cdc1"><span class="section-number-4">1.2.4</span> CMake Hello World test file</h4>
+<div id="outline-container-orgfa3ff19" class="outline-4">
+<h4 id="orgfa3ff19"><span class="section-number-4">1.2.4</span> CMake Hello World test file</h4>
 <div class="outline-text-4" id="text-1-2-4">
 <p>
 Time to test if the Setup is done properly.<br>
@@ -359,8 +359,8 @@ It can be executed by calling <code>\build\src\rogue.exe</code> from the project
 </div>
 </div>
 
-<div id="outline-container-orge54408e" class="outline-4">
-<h4 id="orge54408e"><span class="section-number-4">1.2.5</span> libTCOD Configuration</h4>
+<div id="outline-container-org5b2c43b" class="outline-4">
+<h4 id="org5b2c43b"><span class="section-number-4">1.2.5</span> libTCOD Configuration</h4>
 <div class="outline-text-4" id="text-1-2-5">
 <p>
 The above Setup section looks like a lot of work just to get "Hello, World" printed on to console. We could have avoided all of that hassle by not using cmake. But I want to learn cmake, so&#x2026;<br>
@@ -388,7 +388,7 @@ Having downloaded <a href="https://github.com/libtcod/libtcod/releases/download/
 I've extracted the contents of the zip file into <code>\external\libtcod-1.14.0-x86_64-msvc</code> folder. I've also added the folder to our gitignore list. We don't need everything in the archive only some parts.<br>
 </p>
 <div class="org-src-container">
-<pre class="src src-markdown" id="org8ba5849"><span class="linenr">15: </span><span style="color: #b3b3b3;"># </span><span style="color: #50fa7b; font-weight: bold;">the prebuilt libtcod files</span>
+<pre class="src src-markdown" id="org692b79b"><span class="linenr">15: </span><span style="color: #b3b3b3;"># </span><span style="color: #50fa7b; font-weight: bold;">the prebuilt libtcod files</span>
 <span class="linenr">16: </span>external/libtcod-1.14.0-x86_64-msvc/
 </pre>
 </div>
@@ -398,7 +398,7 @@ Now we create a <code>external\CMakeLists.txt</code> file, this will tell cmake 
 We also put in a custom target, so that cmake will copy the .dll files into same directory as our executable. This way when we run our game, we don't get missing dll errors.<br>
 </p>
 <div class="org-src-container">
-<pre class="src src-cmake" id="org2b9d512"><span class="linenr"> 1: </span><span style="color: #6272a4;"># Add directories for libtcod</span>
+<pre class="src src-cmake" id="orgcc220d2"><span class="linenr"> 1: </span><span style="color: #6272a4;"># Add directories for libtcod</span>
 <span class="linenr"> 2: </span><span style="color: #50fa7b; font-weight: bold;">set</span><span style="color: #f8f8f2;">(</span>LIBTCOD_DIR <span style="color: #f1fa8c;">"${</span><span style="color: #f8f8f2;">CMAKE_CURRENT_SOURCE_DIR</span><span style="color: #f1fa8c;">}/libtcod-1.14.0-x86_64-msvc"</span><span style="color: #f8f8f2;">)</span>
 <span class="linenr"> 3: </span>
 <span class="linenr"> 4: </span><span style="color: #50fa7b; font-weight: bold;">set</span><span style="color: #f8f8f2;">(</span>LIBTCOD_INCLUDE <span style="color: #f1fa8c;">"${</span><span style="color: #f8f8f2;">LIBTCOD_DIR</span><span style="color: #f1fa8c;">}/include/"</span> CACHE PATH <span style="color: #f1fa8c;">"Path to Libtcod Include"</span><span style="color: #f8f8f2;">)</span>
@@ -415,7 +415,7 @@ We also put in a custom target, so that cmake will copy the .dll files into same
 Next, we modify our root <code>CMakeLists.txt</code>, by adding <code>add_subdirectory(external)</code> to line before <code>src</code> directory is added.<br>
 </p>
 <div class="org-src-container">
-<pre class="src src-cmake" id="org3f1f370"><span class="linenr">15: </span><span style="color: #50fa7b; font-weight: bold;">add_subdirectory</span><span style="color: #f8f8f2;">(</span>external<span style="color: #f8f8f2;">)</span>
+<pre class="src src-cmake" id="org29532e2"><span class="linenr">15: </span><span style="color: #50fa7b; font-weight: bold;">add_subdirectory</span><span style="color: #f8f8f2;">(</span>external<span style="color: #f8f8f2;">)</span>
 <span class="linenr">16: </span><span style="color: #50fa7b; font-weight: bold;">add_subdirectory</span><span style="color: #f8f8f2;">(</span>src<span style="color: #f8f8f2;">)</span>
 </pre>
 </div>
@@ -424,7 +424,7 @@ Next, we modify our root <code>CMakeLists.txt</code>, by adding <code>add_subdir
 Lastly, we need to tell <code>src\CMakeLists.txt</code> to consume <code>libtcod</code>.<br>
 </p>
 <div class="org-src-container">
-<pre class="src src-cmake" id="org4ff7ab9"><span class="linenr">17: </span><span style="color: #50fa7b; font-weight: bold;">target_include_directories</span><span style="color: #f8f8f2;">(</span>rogue PRIVATE $<span style="color: #8be9fd;">{</span><span style="color: #f8f8f2;">LIBTCOD_INCLUDE</span><span style="color: #8be9fd;">}</span><span style="color: #f8f8f2;">)</span>
+<pre class="src src-cmake" id="orgc8b2791"><span class="linenr">17: </span><span style="color: #50fa7b; font-weight: bold;">target_include_directories</span><span style="color: #f8f8f2;">(</span>rogue PRIVATE $<span style="color: #8be9fd;">{</span><span style="color: #f8f8f2;">LIBTCOD_INCLUDE</span><span style="color: #8be9fd;">}</span><span style="color: #f8f8f2;">)</span>
 <span class="linenr">18: </span>
 <span class="linenr">19: </span><span style="color: #50fa7b; font-weight: bold;">target_link_libraries</span><span style="color: #f8f8f2;">(</span>rogue PRIVATE fmt::fmt $<span style="color: #8be9fd;">{</span><span style="color: #f8f8f2;">LIBTCOD_LIB</span><span style="color: #8be9fd;">}</span><span style="color: #f8f8f2;">)</span>
 <span class="linenr">20: </span>
@@ -434,15 +434,15 @@ Lastly, we need to tell <code>src\CMakeLists.txt</code> to consume <code>libtcod
 </div>
 </div>
 
-<div id="outline-container-org4532aab" class="outline-4">
-<h4 id="org4532aab"><span class="section-number-4">1.2.6</span> libTCOD Test file/executable</h4>
+<div id="outline-container-orgf7b4b19" class="outline-4">
+<h4 id="orgf7b4b19"><span class="section-number-4">1.2.6</span> libTCOD Test file/executable</h4>
 <div class="outline-text-4" id="text-1-2-6">
 <p>
 Phew, so much CMAKE, we can finally see if all this setup is working.<br>
 Let's modify our <code>main.cpp</code> to actually call libtcod<br>
 </p>
 <div class="org-src-container">
-<pre class="src src-cpp" id="org5bf61f8"><span class="linenr"> 1: </span><span style="color: #ffb86c;">#include</span> <span style="color: #f8f8f2;">&lt;</span><span style="color: #f1fa8c;">libtcod.hpp</span><span style="color: #f8f8f2;">&gt;</span>
+<pre class="src src-cpp" id="org55fa7f9"><span class="linenr"> 1: </span><span style="color: #ffb86c;">#include</span> <span style="color: #f8f8f2;">&lt;</span><span style="color: #f1fa8c;">libtcod.hpp</span><span style="color: #f8f8f2;">&gt;</span>
 <span class="linenr"> 2: </span>
 <span class="linenr"> 3: </span><span style="color: #bd93f9;">int</span> <span style="color: #50fa7b; font-weight: bold;">main</span><span style="color: #f8f8f2;">()</span>
 <span class="linenr"> 4: </span><span style="color: #f8f8f2;">{</span>
@@ -474,8 +474,8 @@ Running the executable, should open a window, with <code>@</code> in the middle 
 </div>
 </div>
 </div>
-<div id="outline-container-org06a48ab" class="outline-2">
-<h2 id="org06a48ab"><span class="section-number-2">2</span> Drawing Player and Moving around</h2>
+<div id="outline-container-orgf8bfb02" class="outline-2">
+<h2 id="orgf8bfb02"><span class="section-number-2">2</span> Drawing Player and Moving around</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 <b>NOTE</b>: A word about the code and explainations, I won't be explaining every feature of C++ being used. Perhaps, you are new to C++, but not new to programming, code should make sense to you. For any keywords, or classes from Standard Library that are new for you, I suggest looking it up in <a href="https://www.cppreference.com">Cpp Reference</a>. In general, I write C++ heavily influenced by <a href="http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines">C++ Core Guidelines</a>, code is formatted in <a href="https://en.wikipedia.org/wiki/Indentation_style#Allman_style">Allman style</a>. You might prefer some other styles/means, feel free to write in a way that is comfortable to you.<br>
@@ -500,11 +500,11 @@ For this section, our goals are:<br>
 All of this will be done by modifying our <code>src\main.cpp</code>.<br>
 </p>
 </div>
-<div id="outline-container-org5d697b7" class="outline-3">
-<h3 id="org5d697b7"><span class="section-number-3">2.1</span> <code>src\main.cpp</code></h3>
+<div id="outline-container-org4e61aea" class="outline-3">
+<h3 id="org4e61aea"><span class="section-number-3">2.1</span> <code>src\main.cpp</code></h3>
 <div class="outline-text-3" id="text-2-1">
 <div class="org-src-container">
-<pre class="src src-cpp" id="orgf8fc670"><span class="linenr">  1: </span><span style="color: #ffb86c;">#include</span> <span style="color: #f8f8f2;">&lt;</span><span style="color: #f1fa8c;">libtcod.hpp</span><span style="color: #f8f8f2;">&gt;</span>
+<pre class="src src-cpp" id="orgb896776"><span class="linenr">  1: </span><span style="color: #ffb86c;">#include</span> <span style="color: #f8f8f2;">&lt;</span><span style="color: #f1fa8c;">libtcod.hpp</span><span style="color: #f8f8f2;">&gt;</span>
 <span class="linenr">  2: </span><span style="color: #ffb86c;">#include</span> <span style="color: #f8f8f2;">&lt;</span><span style="color: #f1fa8c;">string</span><span style="color: #f8f8f2;">&gt;</span>
 <span class="linenr">  3: </span><span style="color: #ffb86c;">#include</span> <span style="color: #f8f8f2;">&lt;</span><span style="color: #f1fa8c;">utility</span><span style="color: #f8f8f2;">&gt;</span>
 <span class="linenr">  4: </span><span style="color: #ffb86c;">#include</span> <span style="color: #f8f8f2;">&lt;</span><span style="color: #f1fa8c;">cassert</span><span style="color: #f8f8f2;">&gt;</span>
@@ -843,15 +843,15 @@ Here's how it breaks down:<br>
 </div>
 </div>
 
-<div id="outline-container-org723fa4b" class="outline-3">
-<h3 id="org723fa4b"><span class="section-number-3">2.2</span> <code>external\CMakeLists.txt</code></h3>
+<div id="outline-container-org3f07636" class="outline-3">
+<h3 id="org3f07636"><span class="section-number-3">2.2</span> <code>external\CMakeLists.txt</code></h3>
 <div class="outline-text-3" id="text-2-2">
 <p>
 At present we don't have any font texture in our <code>build\bin</code> folder. So like we did in <code>Setup</code> section we are going to tell CMake to copy that file over.<br>
 We'll do this by appending the copy command to our list of commands in <code>add_custom_target</code> function.<br>
 </p>
 <div class="org-src-container">
-<pre class="src src-cmake" id="org30c9b39"><span class="linenr"> 7: </span><span style="color: #50fa7b; font-weight: bold;">add_custom_target</span><span style="color: #f8f8f2;">(</span>LIBTCOD_BINS
+<pre class="src src-cmake" id="orgfffb082"><span class="linenr"> 7: </span><span style="color: #50fa7b; font-weight: bold;">add_custom_target</span><span style="color: #f8f8f2;">(</span>LIBTCOD_BINS
 <span class="linenr"> 8: </span>    COMMAND $<span style="color: #8be9fd;">{</span><span style="color: #f8f8f2;">CMAKE_COMMAND</span><span style="color: #8be9fd;">}</span> -E copy $<span style="color: #8be9fd;">{</span><span style="color: #f8f8f2;">LIBTCOD_DIR</span><span style="color: #8be9fd;">}</span>/libtcod.dll $<span style="color: #8be9fd;">{</span><span style="color: #f8f8f2;">EXECUTABLE_OUTPUT_PATH</span><span style="color: #8be9fd;">}</span>
 <span class="linenr"> 9: </span>    COMMAND $<span style="color: #8be9fd;">{</span><span style="color: #f8f8f2;">CMAKE_COMMAND</span><span style="color: #8be9fd;">}</span> -E copy $<span style="color: #8be9fd;">{</span><span style="color: #f8f8f2;">LIBTCOD_DIR</span><span style="color: #8be9fd;">}</span>/sdl2.dll $<span style="color: #8be9fd;">{</span><span style="color: #f8f8f2;">EXECUTABLE_OUTPUT_PATH</span><span style="color: #8be9fd;">}</span>
 <span class="linenr">10: </span>    COMMAND $<span style="color: #8be9fd;">{</span><span style="color: #f8f8f2;">CMAKE_COMMAND</span><span style="color: #8be9fd;">}</span> -E copy $<span style="color: #8be9fd;">{</span><span style="color: #f8f8f2;">LIBTCOD_DIR</span><span style="color: #8be9fd;">}</span>/data/fonts/arial10x10.png $<span style="color: #8be9fd;">{</span><span style="color: #f8f8f2;">EXECUTABLE_OUTPUT_PATH</span><span style="color: #8be9fd;">}</span>
@@ -860,62 +860,62 @@ We'll do this by appending the copy command to our list of commands in <code>add
 </div>
 
 <p>
-<a href="https://github.com/Roy-Fokker/roguelike/tree/44243e03c1b23bf43eec4efc21542980456219bd">Git Repo on 2019/10/07</a><br>
+<a href="https://github.com/Roy-Fokker/roguelike/tree/e0ad47e8d2df92b0b9c54d36b53a044c927f7312">Git Repo on 2019/10/07</a><br>
 </p>
 </div>
 </div>
 </div>
-<div id="outline-container-orgc7084c1" class="outline-2">
-<h2 id="orgc7084c1"><span class="section-number-2">3</span> Entity System</h2>
+<div id="outline-container-org201583b" class="outline-2">
+<h2 id="org201583b"><span class="section-number-2">3</span> Entity System</h2>
 </div>
 
-<div id="outline-container-orgd99cb7c" class="outline-2">
-<h2 id="orgd99cb7c"><span class="section-number-2">4</span> Generating a Dungeon</h2>
+<div id="outline-container-orgdbbca66" class="outline-2">
+<h2 id="orgdbbca66"><span class="section-number-2">4</span> Generating a Dungeon</h2>
 </div>
 
-<div id="outline-container-org7774e76" class="outline-2">
-<h2 id="org7774e76"><span class="section-number-2">5</span> Field of View</h2>
+<div id="outline-container-org31810e0" class="outline-2">
+<h2 id="org31810e0"><span class="section-number-2">5</span> Field of View</h2>
 </div>
 
-<div id="outline-container-org95fd8ee" class="outline-2">
-<h2 id="org95fd8ee"><span class="section-number-2">6</span> Placing Enemies</h2>
+<div id="outline-container-orgafc2c79" class="outline-2">
+<h2 id="orgafc2c79"><span class="section-number-2">6</span> Placing Enemies</h2>
 </div>
 
-<div id="outline-container-org81606a3" class="outline-2">
-<h2 id="org81606a3"><span class="section-number-2">7</span> Combat Loop</h2>
+<div id="outline-container-orgc86b2c7" class="outline-2">
+<h2 id="orgc86b2c7"><span class="section-number-2">7</span> Combat Loop</h2>
 </div>
 
-<div id="outline-container-org978218c" class="outline-2">
-<h2 id="org978218c"><span class="section-number-2">8</span> User Interface</h2>
+<div id="outline-container-org908553c" class="outline-2">
+<h2 id="org908553c"><span class="section-number-2">8</span> User Interface</h2>
 </div>
 
-<div id="outline-container-org68104e5" class="outline-2">
-<h2 id="org68104e5"><span class="section-number-2">9</span> Items and Inventory</h2>
+<div id="outline-container-orgbbac475" class="outline-2">
+<h2 id="orgbbac475"><span class="section-number-2">9</span> Items and Inventory</h2>
 </div>
 
-<div id="outline-container-org9e744e2" class="outline-2">
-<h2 id="org9e744e2"><span class="section-number-2">10</span> Equiping Items</h2>
+<div id="outline-container-org197a732" class="outline-2">
+<h2 id="org197a732"><span class="section-number-2">10</span> Equiping Items</h2>
 </div>
 
-<div id="outline-container-org2d6d3b3" class="outline-2">
-<h2 id="org2d6d3b3"><span class="section-number-2">11</span> Weapons and Targetting</h2>
+<div id="outline-container-org4d6a7a0" class="outline-2">
+<h2 id="org4d6a7a0"><span class="section-number-2">11</span> Weapons and Targetting</h2>
 </div>
 
-<div id="outline-container-org0f71b10" class="outline-2">
-<h2 id="org0f71b10"><span class="section-number-2">12</span> Saving and Loading Game State</h2>
+<div id="outline-container-orgf8ad092" class="outline-2">
+<h2 id="orgf8ad092"><span class="section-number-2">12</span> Saving and Loading Game State</h2>
 </div>
 
-<div id="outline-container-org72eacd7" class="outline-2">
-<h2 id="org72eacd7"><span class="section-number-2">13</span> Dungeon Delving</h2>
+<div id="outline-container-org2c7a8ce" class="outline-2">
+<h2 id="org2c7a8ce"><span class="section-number-2">13</span> Dungeon Delving</h2>
 </div>
 
-<div id="outline-container-org09d6aed" class="outline-2">
-<h2 id="org09d6aed"><span class="section-number-2">14</span> Difficulty Curve</h2>
+<div id="outline-container-org18a9164" class="outline-2">
+<h2 id="org18a9164"><span class="section-number-2">14</span> Difficulty Curve</h2>
 </div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Neel Raiyani</p>
-<p class="date">Created: 2019-10-07 Mon 22:50</p>
+<p class="date">Created: 2019-10-07 Mon 22:52</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
