@@ -226,7 +226,7 @@ It's written in sort of literal programming format. Documentation is written in 
 	Hit build in VSCode, and it should generate ~rogue.exe~ in ~\build\bin~ directory, as well, copy the necessary libtcod dlls there.
 	Running the executable, should open a window, with =@= in the middle of the window. Program does nothing else, for now...
 	
-  [[https://github.com/Roy-Fokker/roguelike/tree/f9022f035ffb9e36ed6bdbbfad7e1303180249e4][Git Repo]]
+  [[https://github.com/Roy-Fokker/roguelike/tree/f9022f035ffb9e36ed6bdbbfad7e1303180249e4][Git Repo on 2019/10/06]]
 * Drawing Player and Moving around
   *NOTE*: A word about the code and explainations, I won't be explaining every feature of C++ being used. Perhaps, you are new to C++, but not new to programming, code should make sense to you. For any keywords, or classes from Standard Library that are new for you, I suggest looking it up in [[https://www.cppreference.com][Cpp Reference]]. In general, I write C++ heavily influenced by [[http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines][C++ Core Guidelines]], code is formatted in [[https://en.wikipedia.org/wiki/Indentation_style#Allman_style][Allman style]]. You might prefer some other styles/means, feel free to write in a way that is comfortable to you.
 
@@ -237,8 +237,10 @@ It's written in sort of literal programming format. Documentation is written in 
   For this section, our goals are:
   - handle input, so '=@=' moves around
   - catch when '=ESC=' key is pressed to exit from game
+  - catch when '=Alt+Enter=' key combination is pressed to toggle fullscreen mode
   - load a custom font for displaying characters on screen
   All of this will be done by modifying our ~src\main.cpp~. 
+** ~src\main.cpp~
   #+name: src\main.cpp
   #+begin_src cpp -n
 	#include <libtcod.hpp>
@@ -293,17 +295,23 @@ It's written in sort of literal programming format. Documentation is written in 
 
 	int main()
 	{
-		constexpr auto window_width  = 80,
-					   window_height = 50;
-		constexpr auto window_title = "Rogue C++ Tutorial - Part 1"sv;
+		constexpr auto window_width  = 100,
+					   window_height = 56;
+		constexpr auto window_title  = "Rogue C++ Tutorial - Part 1"sv,
+					   font_file     = "arial10x10.png"sv;
+
+		console::setCustomFont(font_file.data(), TCOD_FONT_TYPE_GREYSCALE | TCOD_FONT_LAYOUT_TCOD);
 
 		console::initRoot(window_width, window_height,
 						  window_title.data(),
 						  false, TCOD_RENDERER_SDL2);
+		atexit(TCOD_quit); // the C-Runtime will automatically call this function.
 	
+		auto game_console = console(window_width, window_height);
+
 		bool exit_game = false;
-		int player_x = 40, 
-			player_y = 25;
+		int player_x = window_width / 2, 
+			player_y = window_height / 2;
 		while (not (console::isWindowClosed() or exit_game))
 		{
 			auto action = handle_input();
@@ -323,19 +331,21 @@ It's written in sort of literal programming format. Documentation is written in 
 				}
 				case actions::fullscreen_toggle:
 				{
-					console::setFullscreen(not console::isFullscreen());
+					game_console.setFullscreen(not game_console.isFullscreen());
 					break;
 				}
 				default:
-					assert(false); // default case, if we forgot to handle some action in future
+					assert(false); // We forgot to handle some action. DEBUG!
 			}
 
-			console::root->clear();
-			console::root->putChar(player_x, player_y, '@');
+			game_console.clear();
+			game_console.setDefaultForeground(TCODColor::white);
+			game_console.putChar(player_x, player_y, '@');
+
+			console::blit(&game_console, 0, 0, window_width, window_height, 
+						  console::root, 0, 0);
 			console::flush();
 		}
-
-		TCOD_quit(); // must call manually for now.
 
 		return 0;
 	}
@@ -358,41 +368,67 @@ It's written in sort of literal programming format. Documentation is written in 
   |--------+---------------------------------------------------------------------------------------------------------------------------------------|
   |     19 | Define =move_dir= (move direction) as simple pair of integers, using ~std::pair~.                                                     |
   |--------+---------------------------------------------------------------------------------------------------------------------------------------|
-  |  21-46 | This function handles our input. I am using "Trailing Return Type" format for function signature.                                     |
+  |  21-49 | This function handles our input. I am using "Trailing Return Type" format for function signature.                                     |
   |        | For each key press we are interested in, this function will translate it into our actions enumeration                                 |
   |        | Additionally, since we are returning a pair of "things", 2nd value can be anything (std::any).                                        |
   |--------+---------------------------------------------------------------------------------------------------------------------------------------|
-  |     24 | ~libtcod~ is actually a C library. So it tends to define enums in a C-style. Generally, in C++ it's recommended to use strong enum.   |
+  |     23 | ~libtcod~ is actually a C library. So it tends to define enums in a C-style. Generally, in C++ it's recommended to use strong enum.   |
   |        | Here I am just aliasing it to help with intellisense in VSCode.                                                                       |
   |--------+---------------------------------------------------------------------------------------------------------------------------------------|
   |  53-55 | define width, height and title to use with console window. these are constexpr they'll get evaluated at compile time.                 |
   |        | ~"xxx"sv~ means create this as a =std::string_view=, more type safe than using =char[]= or =char*=.                                   |
   |--------+---------------------------------------------------------------------------------------------------------------------------------------|
-  |     57 | use the variables we defined above to launch the console.                                                                             |
+  |     56 | This is the font file we will be using. It will be placed in ~build\bin\~ directory by CMake.                                         |
   |--------+---------------------------------------------------------------------------------------------------------------------------------------|
-  |  61-63 | Some game specific variables,                                                                                                         |
+  |     58 | tell libTcod that we want to use a custom font file.                                                                                  |
+  |--------+---------------------------------------------------------------------------------------------------------------------------------------|
+  |     60 | use the variables we defined above to launch the console.                                                                             |
+  |--------+---------------------------------------------------------------------------------------------------------------------------------------|
+  |     63 | Make sure that we call ~TCOD_quit()~ when the application exits.                                                                      |
+  |--------+---------------------------------------------------------------------------------------------------------------------------------------|
+  |     65 | Get an instance of console. Instead of using root console.                                                                            |
+  |--------+---------------------------------------------------------------------------------------------------------------------------------------|
+  |  67-69 | Some game specific variables,                                                                                                         |
   |        | If ~exit_game~ is true, we will exit the loop                                                                                         |
   |        | ~player_x~ and ~player_y~ will control where the "@" character will be drawn.                                                         |
   |--------+---------------------------------------------------------------------------------------------------------------------------------------|
-  |     64 | C++ defines =not=, =or=, =and=, et.al as keywords. I prefer to use these in =if= statements, imo makes the condition easier to read.  |
+  |     70 | C++ defines =not=, =or=, =and=, et.al as [[https://en.cppreference.com/w/cpp/language/operator_alternative][keywords]]. I prefer to use these in =if= statements, imo makes the condition easier to read.  |
   |        | Keep in mind VSCode's C++ parser does not understand these, so it flags them as error. This is [[https://github.com/microsoft/vscode-cpptools/issues/1589][a bug in VSCode's C/C++ Extension.]]     |
   |--------+---------------------------------------------------------------------------------------------------------------------------------------|
-  |     66 | Call our input handling function, that we defined on line 21.                                                                         |
+  |     72 | Call our input handling function, that we defined on line 21.                                                                         |
   |--------+---------------------------------------------------------------------------------------------------------------------------------------|
-  |  67-87 | Simple =switch= on =action=. ~.first~ here reads the 1st value of the pair that we returned from =handle_input=.                      |
+  |  73-94 | Simple =switch= on =action=. ~.first~ here reads the 1st value of the pair that we returned from =handle_input=.                      |
   |--------+---------------------------------------------------------------------------------------------------------------------------------------|
-  |     76 | because 2nd value of our pair is a =std::any= we have to use ~std::any_cast~ to go back to the type we put in.                        |
+  |     82 | because 2nd value of our pair is a =std::any= we have to use ~std::any_cast~ to go back to the type we put in.                        |
   |--------+---------------------------------------------------------------------------------------------------------------------------------------|
-  |  77-78 | Update the value of player position using first and second value of the pair we got from line 68.                                     |
+  |  83-84 | Update the value of player position using first and second value of the pair we got from line 82.                                     |
   |--------+---------------------------------------------------------------------------------------------------------------------------------------|
-  |  81-85 | Toggle fullscreen mode, by simple negation of current window state.                                                                   |
+  |  87-91 | Toggle fullscreen mode, by simple negation of current window state.                                                                   |
   |--------+---------------------------------------------------------------------------------------------------------------------------------------|
-  |     91 | Update the position of "@" using ~player_x~ and ~player_y~.                                                                           |
+  |     96 | Clear the console, so we have clean canvas                                                                                            |
   |--------+---------------------------------------------------------------------------------------------------------------------------------------|
-  |     95 | Lastly, we have to call ~TCOD_quit()~ to properly exit the game.                                                                      |
+  |     97 | Set foreground color to White                                                                                                         |
+  |--------+---------------------------------------------------------------------------------------------------------------------------------------|
+  |     89 | Update the position of "@" using ~player_x~ and ~player_y~.                                                                           |
+  |--------+---------------------------------------------------------------------------------------------------------------------------------------|
+  |    100 | Blit our ~game_console~ on to ~root~ console.                                                                                         |
+  |--------+---------------------------------------------------------------------------------------------------------------------------------------|
+  |    102 | Flush whole thing to screen.                                                                                                          |
   |--------+---------------------------------------------------------------------------------------------------------------------------------------|
 
-  [[https://github.com/Roy-Fokker/roguelike/tree/44243e03c1b23bf43eec4efc21542980456219bd][Git Repo]]
+** ~external\CMakeLists.txt~
+   At present we don't have any font texture in our ~build\bin~ folder. So like we did in =Setup= section we are going to tell CMake to copy that file over.
+   We'll do this by appending the copy command to our list of commands in ~add_custom_target~ function.
+   #+name: external\CMakeLists.txt
+   #+begin_src cmake -n 7
+	 add_custom_target(LIBTCOD_BINS
+		 COMMAND ${CMAKE_COMMAND} -E copy ${LIBTCOD_DIR}/libtcod.dll ${EXECUTABLE_OUTPUT_PATH}
+		 COMMAND ${CMAKE_COMMAND} -E copy ${LIBTCOD_DIR}/sdl2.dll ${EXECUTABLE_OUTPUT_PATH}
+		 COMMAND ${CMAKE_COMMAND} -E copy ${LIBTCOD_DIR}/data/fonts/arial10x10.png ${EXECUTABLE_OUTPUT_PATH}
+	 )
+   #+end_src
+
+  [[https://github.com/Roy-Fokker/roguelike/tree/44243e03c1b23bf43eec4efc21542980456219bd][Git Repo on 2019/10/07]]
 * Entity System
   
 * Generating a Dungeon
