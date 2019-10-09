@@ -75,8 +75,8 @@ struct Entity
 	{
 		layer.setDefaultForeground(color);
 		layer.putChar(pos.x, pos.y,        // location to draw entity on
-	                  chr,                 // entity's char representation
-	                  TCOD_BKGND_NONE);    // no background color
+		              chr,                 // entity's char representation
+		              TCOD_BKGND_NONE);    // no background color
 	}
 };
 
