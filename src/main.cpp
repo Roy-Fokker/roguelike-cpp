@@ -50,12 +50,12 @@ auto handle_input() -> std::pair<actions, std::any>
 
 int main()
 {
-	constexpr auto window_width  = 100,
-	               window_height = 56;
-	constexpr auto window_title  = "Rogue C++ Tutorial - Part 1"sv,
-	               font_file     = "arial10x10.png"sv;
+	constexpr auto window_width  = 80,
+	               window_height = 50;
+	constexpr auto window_title  = "Rogue C++ Tutorial - Part 1\0"sv,
+	               font_file     = "arial10x10.png\0"sv;
 
-	console::setCustomFont(font_file.data(), TCOD_FONT_TYPE_GREYSCALE | TCOD_FONT_LAYOUT_TCOD);
+	console::setCustomFont(font_file.data(), TCOD_FONT_TYPE_GREYSCALE | TCOD_FONT_LAYOUT_TCOD, 32, 8);
 
 	console::initRoot(window_width, window_height,
 	                  window_title.data(),
