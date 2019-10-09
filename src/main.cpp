@@ -1,12 +1,12 @@
-#include <libtcod.hpp>  // LIBTCOD header
-#include <string>       // C++ String header for std::string_view, ""sv
-#include <utility>      // C++ Utility header for std::pair
-#include <cassert>      // C Assert header for assert()
-#include <any>          // C++ Any header for std::any and std::any_cast<>
+#include <libtcod.hpp>  // Provided by CMake from external\libtcod-1.14.0-x86_64-msvc\include
+#include <string>       // for std::string_view, ""sv
+#include <utility>      // for std::pair
+#include <cassert>      // for assert()
+#include <any>          // for std::any and std::any_cast<>
 
 using namespace std::literals; // ensure we can use ""sv
 
-using console = TCODConsole;   // Alias TCODConsole as console
+using console = TCODConsole;   // To avoid typeing TCODConsole everywhere. Personal Preference
 
 // Actions user/player can do within context of the game
 enum class actions
