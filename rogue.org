@@ -261,7 +261,7 @@ Line # | Explaination \\
 5 | C++ Any header, to pull in =std::any= class \\
 
 #+name: src\main.cpp
-#+begin_src cpp +n 7
+#+begin_src cpp -n 7
   using namespace std::literals;
 
   using console = TCODConsole;
@@ -270,7 +270,7 @@ Line # | Explaination \\
 9 | I don't want to constantly be typing =TCODxxxx=, so we setup ~console~ as an Alias for =TCODConsole=, with help of ~using~ statement. \\
 
 #+name: src\main.cpp
-#+begin_src cpp +n 11
+#+begin_src cpp -n 11
   enum class actions
   {
    do_nothing,
@@ -286,7 +286,7 @@ Line # | Explaination \\
 19 | Define =move_dir= (move direction) as simple pair of integers, using ~std::pair~. \\
 
 #+name: src\main.cpp
-#+begin_src cpp +n 21
+#+begin_src cpp -n 21
   auto handle_input() -> std::pair<actions, std::any>
   {
 	using key_code = TCOD_keycode_t;
@@ -321,7 +321,7 @@ Line # | Explaination \\
 23 | ~libtcod~ is actually a C library. So it tends to define enums in a C-style. Generally, in C++ it's recommended to use strong enum. Here I am just aliasing it to help with intellisense in VSCode. \\
 
 #+name: src\main.cpp
-#+begin_src cpp +n 53
+#+begin_src cpp -n 53
   int main()
   {
 	constexpr auto window_width  = 100,
@@ -343,13 +343,13 @@ Line # | Explaination \\
 63 | Make sure that we call ~TCOD_quit()~ when the application exits. \\
 
 #+name: src\main.cpp
-#+begin_src cpp +n 65
+#+begin_src cpp -n 65
 	auto game_console = console(window_width, window_height);
 #+end_src
 65 | Get an instance of console. Instead of using root console. \\
 
 #+name: src\main.cpp
-#+begin_src cpp +n 67
+#+begin_src cpp -n 67
 	bool exit_game = false;
 	int player_x = window_width / 2, 
 		player_y = window_height / 2;
@@ -360,7 +360,7 @@ Line # | Explaination \\
 70 | C++ defines =not=, =or=, =and=, et.al as [[https://en.cppreference.com/w/cpp/language/operator_alternative][keywords]]. I perfer to use these in =if= statements, and generally where similar type of conditions need to be checked. Keep in mind VSCode's C++ parser does not understand these keywords. This is a bug in [[https://github.com/microsoft/vscode-cpptools/issues/1589][VSCode]].\\
 
 #+name: src\main.cpp
-#+begin_src cpp +n 72
+#+begin_src cpp -n 72
 	  auto action = handle_input();
 	  switch (action.first)
 	  {
@@ -392,7 +392,7 @@ Line # | Explaination \\
 87-91 |  Toggle fullscreen mode, by simple negation of current window state. \\
 
 #+name: src\main.cpp
-#+begin_src cpp +n 96
+#+begin_src cpp -n 96
 	  game_console.clear();
 	  game_console.setDefaultForeground(TCODColor::white);
 	  game_console.putChar(player_x, player_y, '@');
