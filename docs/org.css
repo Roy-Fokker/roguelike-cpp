@@ -623,7 +623,9 @@ body {
 	color: #8be9fd;
 }
 
-.org-rainbow-delimiters-base {}
+.org-rainbow-delimiters-base {
+	font-weight: lighter;
+}
 
 .org-rainbow-delimiters-depth-1 {
 	/* rainbow-delimiters-depth-1-face */
