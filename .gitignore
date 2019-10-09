@@ -6,6 +6,7 @@ CMakeFiles/
 # vscode and visual studio specific
 .vscode/
 .vs/
+CMake*.json
 
 # org-mode temp files
 ./*.html
