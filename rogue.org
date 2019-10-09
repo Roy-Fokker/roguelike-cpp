@@ -242,8 +242,8 @@ For this section, our goals are:
 - handle input, so '=@=' moves around
 - catch when '=ESC=' key is pressed to exit from game
 - catch when '=Alt+Enter=' key combination is pressed to toggle fullscreen mode
-- load a custom font for displaying characters on screen
-  All of this will be done by modifying our ~src\main.cpp~. 
+- load a custom font for displaying characters on screen \\
+All of this will be done by modifying our ~src\main.cpp~. 
 ** ~src\main.cpp~
 #+name: src\main.cpp
 #+begin_src cpp -n
@@ -252,11 +252,25 @@ For this section, our goals are:
   #include <utility>
   #include <cassert>
   #include <any>
+#+end_src
+Line # | Explaination \\
+1 | This is the main header for =libtcod= \\
+2 | C++ String header, pulling in classes/functions to handled strings. \\
+3 | C++ Utlity header, to pull in =std::pair= class \\
+4 | C Assert header, pulls in =assert= macro, useful for debugging \\
+5 | C++ Any header, to pull in =std::any= class \\
 
+#+name: src\main.cpp
+#+begin_src cpp +n 7
   using namespace std::literals;
 
   using console = TCODConsole;
+#+end_src
+7 | Import namespace =std::literals=, so we can use string literals for text. e.g "xxx"sv \\
+9 | I don't want to constantly be typing =TCODxxxx=, so we setup ~console~ as an Alias for =TCODConsole=, with help of ~using~ statement. \\
 
+#+name: src\main.cpp
+#+begin_src cpp +n 11
   enum class actions
   {
    do_nothing,
@@ -266,7 +280,13 @@ For this section, our goals are:
   };
 
   using move_dir = std::pair<int, int>;
+#+end_src
 
+11-17 | These are actions we will be performing in this game. List will eventually get larger. \\
+19 | Define =move_dir= (move direction) as simple pair of integers, using ~std::pair~. \\
+
+#+name: src\main.cpp
+#+begin_src cpp +n 21
   auto handle_input() -> std::pair<actions, std::any>
   {
 	using key_code = TCOD_keycode_t;
@@ -296,13 +316,18 @@ For this section, our goals are:
 
 	return {}; // will automatically return actions::do_nothing
   }
+#+end_src
+21-49 | This function handles our input. I am using "Trailing Return Type" format for function signature. For each key press we are interested in, this function will translate it into our actions enumeration. Additionally, since we are returning a pair of "things", 2nd value can be anything (std::any). \\
+23 | ~libtcod~ is actually a C library. So it tends to define enums in a C-style. Generally, in C++ it's recommended to use strong enum. Here I am just aliasing it to help with intellisense in VSCode. \\
 
+#+name: src\main.cpp
+#+begin_src cpp +n 53
   int main()
   {
 	constexpr auto window_width  = 100,
 				   window_height = 56;
-	constexpr auto window_title  = "Rogue C++ Tutorial - Part 1"sv,
-				   font_file     = "arial10x10.png"sv;
+	constexpr auto window_title  = "Rogue C++ Tutorial - Part 1\0"sv,
+				   font_file     = "arial10x10.png\0"sv;
 
 	console::setCustomFont(font_file.data(), TCOD_FONT_TYPE_GREYSCALE | TCOD_FONT_LAYOUT_TCOD);
 
@@ -310,14 +335,32 @@ For this section, our goals are:
 					  window_title.data(),
 					  false, TCOD_RENDERER_SDL2);
 	atexit(TCOD_quit); // the C-Runtime will automatically call this function.
+#+end_src
+53-55 | define width, height and title to use with console window. these are constexpr they'll get evaluated at compile time. ~"xxx"sv~ means create this as a =std::string_view=, more type safe than using =char[]= or =char*=. ~std::string_view~ is not automatically null terminated, so we have to ensure that our ~"xxx"~ contains ~"\0"~ suffix, e.g ~"xxx\0"sv~. \\
+56 | This is the font file we will be using. It will be placed in ~build\bin\~ directory by CMake. \\
+58 | tell libTcod that we want to use a custom font file. \\
+60 | use the variables we defined above to launch the console. \\
+63 | Make sure that we call ~TCOD_quit()~ when the application exits. \\
 
+#+name: src\main.cpp
+#+begin_src cpp +n 65
 	auto game_console = console(window_width, window_height);
+#+end_src
+65 | Get an instance of console. Instead of using root console. \\
 
+#+name: src\main.cpp
+#+begin_src cpp +n 67
 	bool exit_game = false;
 	int player_x = window_width / 2, 
 		player_y = window_height / 2;
 	while (not (console::isWindowClosed() or exit_game))
 	{
+#+end_src
+67-69 | Some game specific variables, if ~exit_game~ is true, we will exit the loop ~player_x~ and ~player_y~ will control where the "@" character will be drawn.\\
+70 | C++ defines =not=, =or=, =and=, et.al as [[https://en.cppreference.com/w/cpp/language/operator_alternative][keywords]]. I perfer to use these in =if= statements, and generally where similar type of conditions need to be checked. Keep in mind VSCode's C++ parser does not understand these keywords. This is a bug in [[https://github.com/microsoft/vscode-cpptools/issues/1589][VSCode]].\\
+
+#+name: src\main.cpp
+#+begin_src cpp +n 72
 	  auto action = handle_input();
 	  switch (action.first)
 	  {
@@ -341,7 +384,15 @@ For this section, our goals are:
 		default:
 		  assert(false); // We forgot to handle some action. DEBUG!
 	  }
+#+end_src
+72 | Call our input handling function, that we defined on line 21. \\
+73-94 | Simple =switch= on =action=. ~.first~ here reads the 1st value of the pair that we returned from =handle_input=. \\
+82 | Because 2nd value of our pair is a =std::any= we have to use ~std::any_cast~ to go back to the type we put in. \\
+83-84 | Update the value of player position using first and second value of the pair we got from line 82. \\
+87-91 |  Toggle fullscreen mode, by simple negation of current window state. \\
 
+#+name: src\main.cpp
+#+begin_src cpp +n 96
 	  game_console.clear();
 	  game_console.setDefaultForeground(TCODColor::white);
 	  game_console.putChar(player_x, player_y, '@');
@@ -354,74 +405,11 @@ For this section, our goals are:
 	return 0;
   }
 #+end_src
-Here's how it breaks down:
-|--------+---+---------------------------------------------------------------------------------------------------------------------------------------|
-|  <r50> |   | <l>                                                                                                                                   |
-| Line # |   | Explaination                                                                                                                          |
-|--------+---+---------------------------------------------------------------------------------------------------------------------------------------|
-|    1-4 |   | We will be using functionality from these headers                                                                                     |
-|        |   | ~libtcod~: this is the rendering library we are using.                                                                                |
-|        |   | ~string~: Standard C++ string library                                                                                                 |
-|        |   | ~utility~: contains ~std::pair~ type.                                                                                                 |
-|        |   | ~any~: for ~std::any~ type.                                                                                                           |
-|        |   | ~cassert~: this will bring in ~assert~ macro. Helps with Debugging.                                                                   |
-|--------+---+---------------------------------------------------------------------------------------------------------------------------------------|
-|      7 |   | import namespace =std::literals=, so we can use string literals to for text                                                           |
-|--------+---+---------------------------------------------------------------------------------------------------------------------------------------|
-|      9 |   | I don't want to constantly be typing =TCODxxxx=, so we setup ~console~ as an Alias for =TCODConsole=, with help of ~using~ statement. |
-|--------+---+---------------------------------------------------------------------------------------------------------------------------------------|
-|  11-17 |   | These are actions we will be performing in this game. List will eventually get larger.                                                |
-|--------+---+---------------------------------------------------------------------------------------------------------------------------------------|
-|     19 |   | Define =move_dir= (move direction) as simple pair of integers, using ~std::pair~.                                                     |
-|--------+---+---------------------------------------------------------------------------------------------------------------------------------------|
-|  21-49 |   | This function handles our input. I am using "Trailing Return Type" format for function signature.                                     |
-|        |   | For each key press we are interested in, this function will translate it into our actions enumeration                                 |
-|        |   | Additionally, since we are returning a pair of "things", 2nd value can be anything (std::any).                                        |
-|--------+---+---------------------------------------------------------------------------------------------------------------------------------------|
-|     23 |   | ~libtcod~ is actually a C library. So it tends to define enums in a C-style. Generally, in C++ it's recommended to use strong enum.   |
-|        |   | Here I am just aliasing it to help with intellisense in VSCode.                                                                       |
-|--------+---+---------------------------------------------------------------------------------------------------------------------------------------|
-|  53-55 |   | define width, height and title to use with console window. these are constexpr they'll get evaluated at compile time.                 |
-|        |   | ~"xxx"sv~ means create this as a =std::string_view=, more type safe than using =char[]= or =char*=.                                   |
-|--------+---+---------------------------------------------------------------------------------------------------------------------------------------|
-|     56 |   | This is the font file we will be using. It will be placed in ~build\bin\~ directory by CMake.                                         |
-|--------+---+---------------------------------------------------------------------------------------------------------------------------------------|
-|     58 |   | tell libTcod that we want to use a custom font file.                                                                                  |
-|--------+---+---------------------------------------------------------------------------------------------------------------------------------------|
-|     60 |   | use the variables we defined above to launch the console.                                                                             |
-|--------+---+---------------------------------------------------------------------------------------------------------------------------------------|
-|     63 |   | Make sure that we call ~TCOD_quit()~ when the application exits.                                                                      |
-|--------+---+---------------------------------------------------------------------------------------------------------------------------------------|
-|     65 |   | Get an instance of console. Instead of using root console.                                                                            |
-|--------+---+---------------------------------------------------------------------------------------------------------------------------------------|
-|  67-69 |   | Some game specific variables,                                                                                                         |
-|        |   | If ~exit_game~ is true, we will exit the loop                                                                                         |
-|        |   | ~player_x~ and ~player_y~ will control where the "@" character will be drawn.                                                         |
-|--------+---+---------------------------------------------------------------------------------------------------------------------------------------|
-|     70 |   | C++ defines =not=, =or=, =and=, et.al as [[https://en.cppreference.com/w/cpp/language/operator_alternative][keywords]]. I prefer to use these in =if= statements, imo makes the condition easier to read.  |
-|        |   | Keep in mind VSCode's C++ parser does not understand these, so it flags them as error. This is [[https://github.com/microsoft/vscode-cpptools/issues/1589][a bug in VSCode's C/C++ Extension.]]     |
-|--------+---+---------------------------------------------------------------------------------------------------------------------------------------|
-|     72 |   | Call our input handling function, that we defined on line 21.                                                                         |
-|--------+---+---------------------------------------------------------------------------------------------------------------------------------------|
-|  73-94 |   | Simple =switch= on =action=. ~.first~ here reads the 1st value of the pair that we returned from =handle_input=.                      |
-|--------+---+---------------------------------------------------------------------------------------------------------------------------------------|
-|     82 |   | because 2nd value of our pair is a =std::any= we have to use ~std::any_cast~ to go back to the type we put in.                        |
-|--------+---+---------------------------------------------------------------------------------------------------------------------------------------|
-|  83-84 |   | Update the value of player position using first and second value of the pair we got from line 82.                                     |
-|--------+---+---------------------------------------------------------------------------------------------------------------------------------------|
-|  87-91 |   | Toggle fullscreen mode, by simple negation of current window state.                                                                   |
-|--------+---+---------------------------------------------------------------------------------------------------------------------------------------|
-|     96 |   | Clear the console, so we have clean canvas                                                                                            |
-|--------+---+---------------------------------------------------------------------------------------------------------------------------------------|
-|     97 |   | Set foreground color to White                                                                                                         |
-|--------+---+---------------------------------------------------------------------------------------------------------------------------------------|
-|     89 |   | Update the position of "@" using ~player_x~ and ~player_y~.                                                                           |
-|--------+---+---------------------------------------------------------------------------------------------------------------------------------------|
-|    100 |   | Blit our ~game_console~ on to ~root~ console.                                                                                         |
-|--------+---+---------------------------------------------------------------------------------------------------------------------------------------|
-|    102 |   | Flush whole thing to screen.                                                                                                          |
-|--------+---+---------------------------------------------------------------------------------------------------------------------------------------|
-
+96 | Clear the console, so we have clean canvas \\
+97 | Set foreground color to White \\                                                                    
+89 | Update the position of "@" using ~player_x~ and ~player_y~. \\
+100 | Blit our ~game_console~ on to ~root~ console. \\
+102 | Flush whole thing to screen. \\
 
 ** ~external\CMakeLists.txt~
 At present we don't have any font texture in our ~build\bin~ folder. So like we did in =Setup= section we are going to tell CMake to copy that file over.
