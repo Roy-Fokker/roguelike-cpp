@@ -1,15 +1,21 @@
 #include "console.hpp"
 #include "game_entity.hpp"
 
-// HACK: we need to ensure that TCOD_quit is only called once
-// during application exit. So, we check if root console is was
-// initialized, if not, then we pass TCOD_quit to atexit. 
-static bool root_initialized {false};
-void setup_exit () {
-	if (not root_initialized)
-	{
-		root_initialized = true;
-		atexit(TCOD_quit);
+#include <libtcod.hpp>
+#include <cassert>
+
+namespace
+{
+	// HACK: we need to ensure that TCOD_quit is only called once
+	// during application exit. So, we check if root console is was
+	// initialized, if not, then we pass TCOD_quit to atexit. 
+	static bool root_initialized {false};
+	void setup_exit () {
+		if (not root_initialized)
+		{
+			root_initialized = true;
+			atexit(TCOD_quit);
+		}
 	}
 }
 
