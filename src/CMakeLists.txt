@@ -26,9 +26,11 @@ target_compile_options(rogue
         $<$<CXX_COMPILER_ID:MSVC>:/W3 /permissive- /Zc:__cplusplus /std:c++17>)
 
 # Define "DEBUG" if the Build type is Debug
+# Define only for MSVC to silence deprecated header warnings
 target_compile_definitions(rogue
     PRIVATE
-        $<$<CONFIG:Debug>:DEBUG _DEBUG>)
+        $<$<CONFIG:Debug>:DEBUG _DEBUG>
+        $<$<CXX_COMPILER_ID:MSVC>:_SILENCE_CXX17_C_HEADER_DEPRECATION_WARNING>)
 
 # Add the LIBTCOD include directory to compiler include path for rogue executable.
 target_include_directories(rogue 
