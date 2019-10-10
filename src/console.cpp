@@ -58,9 +58,11 @@ void console_root::present()
 	TCODConsole::flush();
 }
 
-console_layer::console_layer(console_root root, layer_size size_) :
+console_layer::console_layer(layer_size size_) :
 	size{ size_ }
 {
+	assert(root_initialized); // STOP, didn't initialize console_root
+
 	layer = std::make_unique<TCODConsole>(size.width, size.height);
 }
 

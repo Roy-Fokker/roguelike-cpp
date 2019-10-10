@@ -54,7 +54,7 @@ class console_layer
 	friend console_root;
 public:
 	console_layer() = delete;
-	console_layer(console_root root, layer_size size);
+	console_layer(layer_size size);
 	~console_layer();
 
 	void clear();

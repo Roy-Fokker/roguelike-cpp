@@ -62,7 +62,7 @@ int main()
 	                         font_path);
 	
 	// Console game layer, all game rendering will be done on layers
-	auto game_layer = console_layer(root, { window_width, window_height });
+	auto game_layer = console_layer({ window_width, window_height });
 
 	bool exit_game = false;	             // should we exit the game?
 	game_entity player                   // Player Entity object
