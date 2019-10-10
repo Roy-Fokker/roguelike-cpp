@@ -26,7 +26,7 @@ console_root::console_root(std::string_view title,
 {
 	if (not font_path.empty())
 	{
-		TCODConsole::setCustomFont(font_path.string().c_str(), 
+		TCODConsole::setCustomFont(font_path.string().c_str(), // string().c_str() is required because on Windows path is wchar, TCOD expects char.
 		                           TCOD_FONT_TYPE_GREYSCALE | TCOD_FONT_LAYOUT_TCOD);
 	}
 
@@ -37,8 +37,6 @@ console_root::console_root(std::string_view title,
 	
 	setup_exit();
 }
-
-console_root::~console_root() = default;
 
 auto console_root::is_window_closed() const -> bool
 {

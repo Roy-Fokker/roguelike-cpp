@@ -1,10 +1,11 @@
 #pragma once
 
-#include <libtcod.hpp>
 #include <cstdint>
 #include <string_view>
 #include <filesystem>
 #include <memory>
+
+class TCODConsole; // Forward declare TCODConsole, so we aren't including the header here.
 
 // Size of the console window and layer
 struct console_size
@@ -23,14 +24,16 @@ struct layer_pos
 
 class console_layer;
 
-class console_root
+// Class encapsulating methods for Root Console
+// It is marked as final because we don't want to "lazily" inherit 
+// from it.
+class console_root final 
 {
 public:
 	console_root() = delete;
 	console_root(std::string_view title, 
 	             console_size size, 
 	             const std::filesystem::path &font_path = "");
-	~console_root();
 
 	auto is_window_closed() const -> bool;
 
@@ -51,7 +54,6 @@ struct game_entity;
 
 class console_layer
 {
-	friend console_root;
 public:
 	console_layer() = delete;
 	console_layer(layer_size size);
@@ -65,5 +67,7 @@ public:
 private:
 	std::unique_ptr<TCODConsole> layer { nullptr };
 	layer_size size;
+
+	friend console_root;
 };
 
