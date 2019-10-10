@@ -1,3 +1,5 @@
+/*    SPDX-License-Identifier: MIT    */
+
 #include "console.hpp"     // for our console_root and console_layer classes
 #include "game_entity.hpp" // for out game_entity class
 

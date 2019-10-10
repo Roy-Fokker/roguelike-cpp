@@ -1,3 +1,5 @@
+/*    SPDX-License-Identifier: MIT    */
+
 #include "console.hpp"
 #include "game_entity.hpp"
 

@@ -1,3 +1,5 @@
+## SPDX-License-Identifier: MIT
+
 # Create a FILE-local variable for LIBTCOD directory
 set(LIBTCOD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/libtcod-1.14.0-x86_64-msvc")
 

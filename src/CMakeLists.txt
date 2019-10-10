@@ -1,3 +1,5 @@
+## SPDX-License-Identifier: MIT
+
 # Find the fmtlib package installed by vcpkg.
 # fmtlib can be installed by running following command in shell
 # => vcpkg install fmt

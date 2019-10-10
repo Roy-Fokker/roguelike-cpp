@@ -1,3 +1,5 @@
+## SPDX-License-Identifier: MIT
+
 # Root Cmake file.
 # Sets up overall project configuration.
 
