@@ -3,8 +3,17 @@
 # => vcpkg install fmt
 find_package(fmt REQUIRED)
 
-# Define the executable we want to build, and the src files it's going to use.
-add_executable(rogue main.cpp)
+# Define the executable we want to build.
+add_executable(rogue)
+
+# Source files used to build rogue.exe
+target_sources(rogue
+    PRIVATE
+        main.cpp
+        console.cpp
+        console.hpp
+        game_entity.cpp
+        game_entity.hpp)
 
 # Tell the build system we have to use C++17 Standard
 target_compile_features(rogue PRIVATE cxx_std_17)
