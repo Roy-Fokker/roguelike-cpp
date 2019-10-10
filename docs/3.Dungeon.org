@@ -1,0 +1,4 @@
+#+SETUPFILE: theme.org
+#+SUBTITLE: Dungeon Generation
+#+OPTIONS: H:2
+

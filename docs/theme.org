@@ -1,5 +1,11 @@
-# Theme for Roguelike Tutorials in C++17
+#+TITLE: Roguelike Game in C++17
+#+AUTHOR: Neel Raiyani [Roy Fokker]
+#+EMAIL: nraiyani@gmail.com
+#+LANGUAGE: en
 
+#+STARTUP: showall noindent entitiespretty
+
+# Theme for Roguelike Tutorials in C++17
 # Turn off default internal styles
 #+OPTIONS: html-style:nil html5-fancy:t
 #+OPTIONS: H:3, toc:1

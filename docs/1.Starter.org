@@ -1,0 +1,3 @@
+#+SETUPFILE: theme.org
+#+SUBTITLE: Console and moving around
+#+OPTIONS: H:1 num:nil

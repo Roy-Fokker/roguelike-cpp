@@ -1,0 +1,3 @@
+#+SETUPFILE: theme.org
+#+SUBTITLE: The entity and the map
+#+OPTIONS: H:1 num:nil

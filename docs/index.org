@@ -1,0 +1,50 @@
+#+SETUPFILE: theme.org
+#+SUBTITLE: Introduction
+#+OPTIONS: H:1 num:nil
+
+* Goal of this project
+This project documents my attempts at going through the process of making a 
+Roguelike game in ~Modern C++~. The associated source code lives in 
+[[https://www.github.com/roy-fokker/roguelike][GitHub Repository]]. At the end of each milestone, there will be a link to 
+state of the repository to that point in time.
+
+Code is heavily commented, so it should not require any "getting into writer's
+mind" on reader's part. If some aspect is confusing to you, the dear reader, 
+please open an issue on github repo. Alternatively you can reach out to me 
+on [[irc://irc.afternet.org/#gamedev][Afternet.org's #GameDev IRC channel]].
+
+All the code is written and tested on MS Windows OS, version 7 and 10. I do not
+have a Apple MacOS nor do I have access to a GNU/Linux based OS. However, given 
+that non of the code is utilizing Win32 specific functionality, it should be 
+relatively easy to build this project on those OSes, given appropriate development
+environment setup.
+
+* Influences on the approach
+The project is based on and follows the approach taken/presented by [[http://www.rogueliketutorials.com/tutorials/tcod/][Roguelike Tutorials]]
+as well as the variant [[https://tomassedovic.github.io/roguelike-tutorial/index.html][Roguelike Tutorials in Rust]]. Project uses the same library 
+=libtcod= referred here on out as =tcod=.
+
+The C++ code itself is written in ~ISO Standard C++ 17~, it does not utilize any compiler
+specific extensions. It is formatted in ~Allman~ style, with =snake_case= naming, and =TAB=
+for indent and =SPACE= for alignment. On my machine =TAB Size= is configured to be ~4~, you 
+can change it for your specific preference. Other C++ coding guideline, loosely, being followed
+is [[http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines][C++ Core Guidelines]]. 
+
+* Log of Code
+0. [@0] [[file:0.Setup.org][Environment and project setup]].
+1. [[file:1.Starter.org][Console and moving around]].
+2. [[file:2.Entity_Map.org][The entity and the map]].
+3. [[file:3.Dungeon.org][Dungeon generation]].
+
+* References
+- [[http://www.rogueliketutorials.com/tutorials/tcod/][Roguelike Tutorials]]
+- [[https://tomassedovic.github.io/roguelike-tutorial/index.html][Roguelike Tutorials in Rust]]
+- [[http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines][C++ Core Guidelines]]
+- [[https://en.cppreference.com/w/][C++ Reference]]
+
+* Licence
+All code in this repo is marked as being under [[https://spdx.org/licenses/MIT.html][MIT licence]]. Only the code i.e. ~*.cpp~, ~*.hpp~ 
+and ~CMakeLists.txt~.
+-----
+
+
