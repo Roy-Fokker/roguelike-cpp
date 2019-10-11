@@ -31,6 +31,12 @@ of other things and creatures that could exist. So to fix that further we delve.
 
   [[https://github.com/Roy-Fokker/roguelike/tree/Part-2a][GitHub Repo]]
 
+** Code
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-2a/src/main.cpp">
+</ui-code>
+#+end_export
+
 * Refactoring
   Before we go any further, we need to reorganize the code a bit. Everything is 
   currently in the ~main.cpp~. It's getting a bit crowded, and difficult to visualize

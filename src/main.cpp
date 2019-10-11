@@ -51,6 +51,8 @@ auto handle_input() -> std::pair<actions, std::any>
 	return {}; // No key was pressed, return do_nothing.
 }
 
+
+
 int main()
 {
 	constexpr auto window_width = 80, 

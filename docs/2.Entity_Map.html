@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2019-10-10 Thu 21:53 -->
+<!-- 2019-10-10 Thu 23:13 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Roguelike Game in C++17</title>
@@ -10,6 +10,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="org.css" rel="stylesheet" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
 <script type="text/javascript">
 /*
 @licstart  The following is the entire license notice for the
@@ -66,11 +67,11 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orgd38fb63">Goals</a></li>
-<li><a href="#org399e3b0">Entity</a></li>
-<li><a href="#org7c8ea5c">Refactoring</a></li>
-<li><a href="#org8f4f826">Map</a></li>
-<li><a href="#org0b8835d">Links</a></li>
+<li><a href="#org1429378">Goals</a></li>
+<li><a href="#orga0c92f9">Entity</a></li>
+<li><a href="#org34cb0ef">Refactoring</a></li>
+<li><a href="#orgc42a928">Map</a></li>
+<li><a href="#orged23982">Links</a></li>
 </ul>
 </div>
 </nav>
@@ -79,9 +80,9 @@ Moving around in a blank world is not fun. Also, code at present has no concept
 of other things and creatures that could exist. So to fix that further we delve.
 </p>
 
-<div id="outline-container-orgd38fb63" class="outline-2">
-<h2 id="orgd38fb63">Goals</h2>
-<div class="outline-text-2" id="text-orgd38fb63">
+<div id="outline-container-org1429378" class="outline-2">
+<h2 id="org1429378">Goals</h2>
+<div class="outline-text-2" id="text-org1429378">
 <p>
 We have two main goals for this part. 
 </p>
@@ -92,9 +93,9 @@ We have two main goals for this part.
 </div>
 </div>
 
-<div id="outline-container-org399e3b0" class="outline-2">
-<h2 id="org399e3b0">Entity</h2>
-<div class="outline-text-2" id="text-org399e3b0">
+<div id="outline-container-orga0c92f9" class="outline-2">
+<h2 id="orga0c92f9">Entity</h2>
+<div class="outline-text-2" id="text-orga0c92f9">
 <p>
 First thing we'll do is replace <code>move_dir</code> typedef, with a strongly-typed struct.
 <code>position</code> struct will have 2 members <code>x</code> and <code>y</code>. Anywhere we had <code>move_dir</code> gets
@@ -125,11 +126,20 @@ the two console method calls with one <code>player.draw_entity</code> call.
 <a href="https://github.com/Roy-Fokker/roguelike/tree/Part-2a">GitHub Repo</a>
 </p>
 </div>
+
+<ul class="org-ul">
+<li><a id="org2b09f00"></a>Code<br>
+<div class="outline-text-3" id="text-org2b09f00">
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-2a/src/main.cpp">
+</ui-code>
+</div>
+</li>
+</ul>
 </div>
 
-<div id="outline-container-org7c8ea5c" class="outline-2">
-<h2 id="org7c8ea5c">Refactoring</h2>
-<div class="outline-text-2" id="text-org7c8ea5c">
+<div id="outline-container-org34cb0ef" class="outline-2">
+<h2 id="org34cb0ef">Refactoring</h2>
+<div class="outline-text-2" id="text-org34cb0ef">
 <p>
 Before we go any further, we need to reorganize the code a bit. Everything is 
 currently in the <code>main.cpp</code>. It's getting a bit crowded, and difficult to visualize
@@ -172,13 +182,13 @@ entity to move it by a specific offset position.
 </div>
 </div>
 
-<div id="outline-container-org8f4f826" class="outline-2">
-<h2 id="org8f4f826">Map</h2>
+<div id="outline-container-orgc42a928" class="outline-2">
+<h2 id="orgc42a928">Map</h2>
 </div>
 
-<div id="outline-container-org0b8835d" class="outline-2">
-<h2 id="org0b8835d">Links</h2>
-<div class="outline-text-2" id="text-org0b8835d">
+<div id="outline-container-orged23982" class="outline-2">
+<h2 id="orged23982">Links</h2>
+<div class="outline-text-2" id="text-orged23982">
 <p>
 ╣ <a href="https://github.com/Roy-Fokker/roguelike/tree/Part-2b">GitHub Repo</a> ╠═══<br>
 ╣ <a href="index.html">Home</a> ╠═══<br>
@@ -192,7 +202,7 @@ entity to move it by a specific offset position.
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Neel Raiyani [Roy Fokker]</p>
-<p class="date">Created: 2019-10-10 Thu 21:53</p>
+<p class="date">Created: 2019-10-10 Thu 23:13</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
