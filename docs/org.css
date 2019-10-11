@@ -723,3 +723,8 @@ li {
 	margin-bottom: 1em;
 }
 
+ui-code
+{
+	width: 100%;
+	overflow: scroll;
+}

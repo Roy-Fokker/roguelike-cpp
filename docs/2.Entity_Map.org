@@ -14,6 +14,10 @@ of other things and creatures that could exist. So to fix that further we delve.
   First thing we'll do is replace =move_dir= typedef, with a strongly-typed struct.
   =position= struct will have 2 members =x= and =y=. Anywhere we had =move_dir= gets
   replaced by =position=.
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-2a/src/main.cpp#L20-L25">
+</ui-code>
+#+end_export
   
   Next we create an =Entity= struct, this will describe our game entities. It has 
   3 member variables: =position=, =character= and =color=. It also has 2 member 
@@ -21,21 +25,34 @@ of other things and creatures that could exist. So to fix that further we delve.
   updates entity's =position=. =draw_entity= takes a console object by reference
   and calls console's methods to draw itself. This part we'll change in next section
   as current setup is not ideal.
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-2a/src/main.cpp#L58-L81">
+</ui-code>
+#+end_export
 
   Now we change =main= function, replace =player_x= and =player_y= with =player= entity
   object, with same position values are before while also adding character and color 
   to be used.
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-2a/src/main.cpp#L104-L110">
+</ui-code>
+#+end_export
+
+  In the ~actions~ switch block, change how the player position is updated.
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-2a/src/main.cpp#L122-L126">
+</ui-code>
+#+end_export
 
   And further down, below the ~actions~ switch block, where drawing occurs, we change
   the two console method calls with one =player.draw_entity= call.
-
-  [[https://github.com/Roy-Fokker/roguelike/tree/Part-2a][GitHub Repo]]
-
-** Code
 #+begin_export html
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-2a/src/main.cpp">
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-2a/src/main.cpp#L137-L139">
 </ui-code>
 #+end_export
+
+
+  [[https://github.com/Roy-Fokker/roguelike/tree/Part-2a][GitHub Repo]]
 
 * Refactoring
   Before we go any further, we need to reorganize the code a bit. Everything is 
