@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2019-10-10 Thu 19:50 -->
+<!-- 2019-10-10 Thu 21:11 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Roguelike Game in C++17</title>
@@ -66,18 +66,18 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org02811fe">Goal of this project</a></li>
-<li><a href="#org98c61c1">Influences on the approach</a></li>
-<li><a href="#orgc1b8b46">Log of Code</a></li>
-<li><a href="#orgc2e1ea3">References</a></li>
-<li><a href="#orga7a32ca">Licence</a></li>
+<li><a href="#org724a773">Goal of this project</a></li>
+<li><a href="#orge17e9d4">Influences on the approach</a></li>
+<li><a href="#org1131f99">Log of Code</a></li>
+<li><a href="#org28c5e7a">References</a></li>
+<li><a href="#orga433ac7">Licence</a></li>
 </ul>
 </div>
 </nav>
 
-<div id="outline-container-org02811fe" class="outline-2">
-<h2 id="org02811fe">Goal of this project</h2>
-<div class="outline-text-2" id="text-org02811fe">
+<div id="outline-container-org724a773" class="outline-2">
+<h2 id="org724a773">Goal of this project</h2>
+<div class="outline-text-2" id="text-org724a773">
 <p>
 This project documents my attempts at going through the process of making a 
 Roguelike game in <code>Modern C++</code>. The associated source code lives in 
@@ -102,9 +102,9 @@ environment setup.
 </div>
 </div>
 
-<div id="outline-container-org98c61c1" class="outline-2">
-<h2 id="org98c61c1">Influences on the approach</h2>
-<div class="outline-text-2" id="text-org98c61c1">
+<div id="outline-container-orge17e9d4" class="outline-2">
+<h2 id="orge17e9d4">Influences on the approach</h2>
+<div class="outline-text-2" id="text-orge17e9d4">
 <p>
 The project is based on and follows the approach taken/presented by <a href="http://www.rogueliketutorials.com/tutorials/tcod/">Roguelike Tutorials</a>
 as well as the variant <a href="https://tomassedovic.github.io/roguelike-tutorial/index.html">Roguelike Tutorials in Rust</a>. Project uses the same library 
@@ -119,12 +119,19 @@ can change it for your specific preference. I prefer to use <code>Trailing Retur
 method and function declarations and definitions. Other C++ coding guideline, loosely, 
 being followed is <a href="http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines">C++ Core Guidelines</a>. 
 </p>
+
+<p>
+Actually, I lied about writing purely <code>Standard C++ 17</code>. There is one non-standard feature
+that is used in every header file. And that is <code>#pragma once</code>, which is a short hand way of 
+defining <code>include guards</code>, not to mention less error prone. Every compiler capable of C++17 
+supports it.
+</p>
 </div>
 </div>
 
-<div id="outline-container-orgc1b8b46" class="outline-2">
-<h2 id="orgc1b8b46">Log of Code</h2>
-<div class="outline-text-2" id="text-orgc1b8b46">
+<div id="outline-container-org1131f99" class="outline-2">
+<h2 id="org1131f99">Log of Code</h2>
+<div class="outline-text-2" id="text-org1131f99">
 <ol class="org-ol">
 <li value="0"><a href="0.Setup.html">Environment and project setup</a>.</li>
 <li><a href="1.Starter.html">Console and moving around</a>.</li>
@@ -134,9 +141,9 @@ being followed is <a href="http://isocpp.github.io/CppCoreGuidelines/CppCoreGuid
 </div>
 </div>
 
-<div id="outline-container-orgc2e1ea3" class="outline-2">
-<h2 id="orgc2e1ea3">References</h2>
-<div class="outline-text-2" id="text-orgc2e1ea3">
+<div id="outline-container-org28c5e7a" class="outline-2">
+<h2 id="org28c5e7a">References</h2>
+<div class="outline-text-2" id="text-org28c5e7a">
 <ul class="org-ul">
 <li><a href="http://www.rogueliketutorials.com/tutorials/tcod/">Roguelike Tutorials</a></li>
 <li><a href="https://tomassedovic.github.io/roguelike-tutorial/index.html">Roguelike Tutorials in Rust</a></li>
@@ -146,9 +153,9 @@ being followed is <a href="http://isocpp.github.io/CppCoreGuidelines/CppCoreGuid
 </div>
 </div>
 
-<div id="outline-container-orga7a32ca" class="outline-2">
-<h2 id="orga7a32ca">Licence</h2>
-<div class="outline-text-2" id="text-orga7a32ca">
+<div id="outline-container-orga433ac7" class="outline-2">
+<h2 id="orga433ac7">Licence</h2>
+<div class="outline-text-2" id="text-orga433ac7">
 <p>
 All code in this repo is marked as being under <a href="https://spdx.org/licenses/MIT.html">MIT licence</a>. Only the code i.e. <code>*.cpp</code>, <code>*.hpp</code> 
 and <code>CMakeLists.txt</code>.
@@ -159,7 +166,7 @@ and <code>CMakeLists.txt</code>.
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Neel Raiyani [Roy Fokker]</p>
-<p class="date">Created: 2019-10-10 Thu 19:50</p>
+<p class="date">Created: 2019-10-10 Thu 21:11</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

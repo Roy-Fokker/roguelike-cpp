@@ -70,11 +70,11 @@ a roguelike make. So, onwards we go...
 
 	The switch expects a =std::pair= with =.first= type being action and
 	=.second= type being data. For the moment, data is only used by ~move~ 
-	case, where =.second= is of =position= type and is used to update
-	player position. 
+	case, where =.second= is another =std::pair= type and is used to update
+	player position. Second =std::pair= is typedef'd to =move_dir=.
 
-	=position= type has two members =x= and =y=, representing the offset
-	value to move the player in for respective axis.
+	=move_dir='s two members =first= and =second=, representing the offset
+	value to move the player in ~X~ and ~Y~ axis respectively.
 
 ** Key press handling
    The function handling key presses will transform the key pressed into 
@@ -84,7 +84,7 @@ a roguelike make. So, onwards we go...
    Tuple will have to things in it, in order
    1. one action value from within our actions enum.
    2. one data object held by =std::any= type. Depending on the action, 
-	   data can be either a =position= type, or =nullptr=
+	   data can be either a =std::pair= type, or =nullptr=
 	
    For our current set of actions, we have to check about 6 different 
    key presses.

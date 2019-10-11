@@ -1,3 +1,69 @@
 #+SETUPFILE: theme.org
 #+SUBTITLE: The entity and the map
 #+OPTIONS: H:1 num:nil
+
+Moving around in a blank world is not fun. Also, code at present has no concept
+of other things and creatures that could exist. So to fix that further we delve.
+
+* Goals
+  We have two main goals for this part. 
+  - Use an =Entity= class, to manage information like ~player~'s state and abilities.
+  - Use an =Map= class to setup some obstacles.
+
+* Entity
+  First thing we'll do is replace =move_dir= typedef, with a strongly-typed struct.
+  =position= struct will have 2 members =x= and =y=. Anywhere we had =move_dir= gets
+  replaced by =position=.
+  
+  Next we create an =Entity= struct, this will describe our game entities. It has 
+  3 member variables: =position=, =character= and =color=. It also has 2 member 
+  functions: =move_by= and =draw_entity=. =move_by= takes an offset position and 
+  updates entity's =position=. =draw_entity= takes a console object by reference
+  and calls console's methods to draw itself. This part we'll change in next section
+  as current setup is not ideal.
+
+  Now we change =main= function, replace =player_x= and =player_y= with =player= entity
+  object, with same position values are before while also adding character and color 
+  to be used.
+
+  And further down, below the ~actions~ switch block, where drawing occurs, we change
+  the two console method calls with one =player.draw_entity= call.
+
+  [[https://github.com/Roy-Fokker/roguelike/tree/Part-2a][GitHub Repo]]
+
+* Refactoring
+  Before we go any further, we need to reorganize the code a bit. Everything is 
+  currently in the ~main.cpp~. It's getting a bit crowded, and difficult to visualize
+  the full flow. So will we break down our program in to multiple files.
+  - ~main.cpp~: start of the application remains here.
+  - ~console.[cpp, hpp]~: our "wrapped" ~tcod~ console objects.
+  - ~game_entity.[cpp, hpp]~: entity class lives here.
+  The concept here is, right now we are directly using ~tcod~ functions and objects.
+  We want to clean up that usage a bit, make it more "safer". ~tcod~'s root console
+  methods are exposed as static member functions. And one has to know the exact order
+  to call some of them in. So in order to not memorize or constantly check the documentation
+  we wrap those, as we use them, in =console_root= class.
+
+  =console_root= when initialized, will ensure that root console exists, and ensure that
+  =TCOD_quit= will get called on exit. It will also expose methods which wrap functionality
+  we use, e.g. =toggle_fullscreen=.
+
+  =console_layer= is another class that is in ~console.cpp|.hpp~, this wraps ~tcod~'s
+  offscreen buffer. It also has =draw= method, which will take an =entity= object and 
+  draw it out to contained offscreen buffer.
+
+  =game_entity= at this moment it only has 3 member variables and 1 method. Member 
+  variables describe where and how entity is to be drawn. Method allows owner of 
+  entity to move it by a specific offset position.
+
+  [[https://github.com/Roy-Fokker/roguelike/tree/Part-2b][GitHub Repo]]
+
+* Map
+
+* Links
+╣ [[https://github.com/Roy-Fokker/roguelike/tree/Part-2b][GitHub Repo]] ╠═══\\
+╣ [[file:index.org][Home]] ╠═══\\
+╣ Prev: [[file:1.Starter.org][Console and moving around]] ╠═══ \\
+╣ Next: [[file:3.Dungeon.org][Dungeon generation]] ╠═══
+
+-----

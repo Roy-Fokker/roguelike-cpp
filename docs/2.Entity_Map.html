@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2019-10-10 Thu 16:39 -->
+<!-- 2019-10-10 Thu 21:53 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Roguelike Game in C++17</title>
@@ -62,10 +62,137 @@ for the JavaScript code in this tag.
 <header>
 <h1 class="title">Roguelike Game in C++17</h1>
 <p class="subtitle">The entity and the map</p>
-</header></div>
+</header><nav id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgd38fb63">Goals</a></li>
+<li><a href="#org399e3b0">Entity</a></li>
+<li><a href="#org7c8ea5c">Refactoring</a></li>
+<li><a href="#org8f4f826">Map</a></li>
+<li><a href="#org0b8835d">Links</a></li>
+</ul>
+</div>
+</nav>
+<p>
+Moving around in a blank world is not fun. Also, code at present has no concept
+of other things and creatures that could exist. So to fix that further we delve.
+</p>
+
+<div id="outline-container-orgd38fb63" class="outline-2">
+<h2 id="orgd38fb63">Goals</h2>
+<div class="outline-text-2" id="text-orgd38fb63">
+<p>
+We have two main goals for this part. 
+</p>
+<ul class="org-ul">
+<li>Use an <code>Entity</code> class, to manage information like <code>player</code>'s state and abilities.</li>
+<li>Use an <code>Map</code> class to setup some obstacles.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org399e3b0" class="outline-2">
+<h2 id="org399e3b0">Entity</h2>
+<div class="outline-text-2" id="text-org399e3b0">
+<p>
+First thing we'll do is replace <code>move_dir</code> typedef, with a strongly-typed struct.
+<code>position</code> struct will have 2 members <code>x</code> and <code>y</code>. Anywhere we had <code>move_dir</code> gets
+replaced by <code>position</code>.
+</p>
+
+<p>
+Next we create an <code>Entity</code> struct, this will describe our game entities. It has 
+3 member variables: <code>position</code>, <code>character</code> and <code>color</code>. It also has 2 member 
+functions: <code>move_by</code> and <code>draw_entity</code>. <code>move_by</code> takes an offset position and 
+updates entity's <code>position</code>. <code>draw_entity</code> takes a console object by reference
+and calls console's methods to draw itself. This part we'll change in next section
+as current setup is not ideal.
+</p>
+
+<p>
+Now we change <code>main</code> function, replace <code>player_x</code> and <code>player_y</code> with <code>player</code> entity
+object, with same position values are before while also adding character and color 
+to be used.
+</p>
+
+<p>
+And further down, below the <code>actions</code> switch block, where drawing occurs, we change
+the two console method calls with one <code>player.draw_entity</code> call.
+</p>
+
+<p>
+<a href="https://github.com/Roy-Fokker/roguelike/tree/Part-2a">GitHub Repo</a>
+</p>
+</div>
+</div>
+
+<div id="outline-container-org7c8ea5c" class="outline-2">
+<h2 id="org7c8ea5c">Refactoring</h2>
+<div class="outline-text-2" id="text-org7c8ea5c">
+<p>
+Before we go any further, we need to reorganize the code a bit. Everything is 
+currently in the <code>main.cpp</code>. It's getting a bit crowded, and difficult to visualize
+the full flow. So will we break down our program in to multiple files.
+</p>
+<ul class="org-ul">
+<li><code>main.cpp</code>: start of the application remains here.</li>
+<li><code>console.[cpp, hpp]</code>: our "wrapped" <code>tcod</code> console objects.</li>
+<li><code>game_entity.[cpp, hpp]</code>: entity class lives here.</li>
+</ul>
+<p>
+The concept here is, right now we are directly using <code>tcod</code> functions and objects.
+We want to clean up that usage a bit, make it more "safer". <code>tcod</code>'s root console
+methods are exposed as static member functions. And one has to know the exact order
+to call some of them in. So in order to not memorize or constantly check the documentation
+we wrap those, as we use them, in <code>console_root</code> class.
+</p>
+
+<p>
+<code>console_root</code> when initialized, will ensure that root console exists, and ensure that
+<code>TCOD_quit</code> will get called on exit. It will also expose methods which wrap functionality
+we use, e.g. <code>toggle_fullscreen</code>.
+</p>
+
+<p>
+<code>console_layer</code> is another class that is in <code>console.cpp|.hpp</code>, this wraps <code>tcod</code>'s
+offscreen buffer. It also has <code>draw</code> method, which will take an <code>entity</code> object and 
+draw it out to contained offscreen buffer.
+</p>
+
+<p>
+<code>game_entity</code> at this moment it only has 3 member variables and 1 method. Member 
+variables describe where and how entity is to be drawn. Method allows owner of 
+entity to move it by a specific offset position.
+</p>
+
+<p>
+<a href="https://github.com/Roy-Fokker/roguelike/tree/Part-2b">GitHub Repo</a>
+</p>
+</div>
+</div>
+
+<div id="outline-container-org8f4f826" class="outline-2">
+<h2 id="org8f4f826">Map</h2>
+</div>
+
+<div id="outline-container-org0b8835d" class="outline-2">
+<h2 id="org0b8835d">Links</h2>
+<div class="outline-text-2" id="text-org0b8835d">
+<p>
+╣ <a href="https://github.com/Roy-Fokker/roguelike/tree/Part-2b">GitHub Repo</a> ╠═══<br>
+╣ <a href="index.html">Home</a> ╠═══<br>
+╣ Prev: <a href="1.Starter.html">Console and moving around</a> ╠═══ <br>
+╣ Next: <a href="3.Dungeon.html">Dungeon generation</a> ╠═══
+</p>
+
+<hr>
+</div>
+</div>
+</div>
 <div id="postamble" class="status">
 <p class="author">Author: Neel Raiyani [Roy Fokker]</p>
-<p class="date">Created: 2019-10-10 Thu 16:39</p>
+<p class="date">Created: 2019-10-10 Thu 21:53</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

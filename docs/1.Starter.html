@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2019-10-10 Thu 20:00 -->
+<!-- 2019-10-10 Thu 21:43 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Roguelike Game in C++17</title>
@@ -66,11 +66,11 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org1e01b93">Goals</a></li>
-<li><a href="#orgb4600c2">Refactoring</a></li>
-<li><a href="#org7a12c13">Loading Custom Font</a></li>
-<li><a href="#org6af8e28">Handling Input</a></li>
-<li><a href="#orgac3eade">Links</a></li>
+<li><a href="#orgb680f32">Goals</a></li>
+<li><a href="#orgd0950b4">Refactoring</a></li>
+<li><a href="#orgc6a10e2">Loading Custom Font</a></li>
+<li><a href="#org44e61de">Handling Input</a></li>
+<li><a href="#orgeec8f0b">Links</a></li>
 </ul>
 </div>
 </nav>
@@ -80,9 +80,9 @@ presents a window with <code>@</code> in middle of the screen. But that does not
 a roguelike make. So, onwards we go&#x2026;
 </p>
 
-<div id="outline-container-org1e01b93" class="outline-2">
-<h2 id="org1e01b93">Goals</h2>
-<div class="outline-text-2" id="text-org1e01b93">
+<div id="outline-container-orgb680f32" class="outline-2">
+<h2 id="orgb680f32">Goals</h2>
+<div class="outline-text-2" id="text-orgb680f32">
 <p>
 For this section the goals are:
 </p>
@@ -102,9 +102,9 @@ That list doesn't look too bad, relatively simple goals.
 </div>
 </div>
 
-<div id="outline-container-orgb4600c2" class="outline-2">
-<h2 id="orgb4600c2">Refactoring</h2>
-<div class="outline-text-2" id="text-orgb4600c2">
+<div id="outline-container-orgd0950b4" class="outline-2">
+<h2 id="orgd0950b4">Refactoring</h2>
+<div class="outline-text-2" id="text-orgd0950b4">
 <p>
 The code renders <code>@</code> in a hard coded position directly on what <code>tcod</code>
 calls the root console. Ideally, it would be rendered on to some
@@ -126,9 +126,9 @@ on <code>game_console</code> using <code>putChar</code> method.
 </div>
 </div>
 
-<div id="outline-container-org7a12c13" class="outline-2">
-<h2 id="org7a12c13">Loading Custom Font</h2>
-<div class="outline-text-2" id="text-org7a12c13">
+<div id="outline-container-orgc6a10e2" class="outline-2">
+<h2 id="orgc6a10e2">Loading Custom Font</h2>
+<div class="outline-text-2" id="text-orgc6a10e2">
 <p>
 For this we use <code>setCustomFont</code> method of the <code>TCODConsole</code> class. Reading
 the documentation of <code>tcod</code>, we learn that <code>setCustomFont</code> must be called
@@ -152,9 +152,9 @@ to copy 3 files, two <code>.dll</code> and one <code>.png</code>.
 </div>
 </div>
 
-<div id="outline-container-org6af8e28" class="outline-2">
-<h2 id="org6af8e28">Handling Input</h2>
-<div class="outline-text-2" id="text-org6af8e28">
+<div id="outline-container-org44e61de" class="outline-2">
+<h2 id="org44e61de">Handling Input</h2>
+<div class="outline-text-2" id="text-org44e61de">
 <p>
 Compared to font loading, this is bit more involved. Basically, this 
 task can be divided into two smaller concepts.
@@ -165,9 +165,9 @@ task can be divided into two smaller concepts.
 </ul>
 </div>
 
-<div id="outline-container-orgf7e1a80" class="outline-3">
-<h3 id="orgf7e1a80">Action handling</h3>
-<div class="outline-text-3" id="text-orgf7e1a80">
+<div id="outline-container-org0fbf6f1" class="outline-3">
+<h3 id="org0fbf6f1">Action handling</h3>
+<div class="outline-text-3" id="text-org0fbf6f1">
 <p>
 Player in our game can do set of actions on any given turn/frame.
 For the moment these are
@@ -194,20 +194,20 @@ In future, we may change this aspect, for now it's good enough.
 <p>
 The switch expects a <code>std::pair</code> with <code>.first</code> type being action and
 <code>.second</code> type being data. For the moment, data is only used by <code>move</code> 
-case, where <code>.second</code> is of <code>position</code> type and is used to update
-player position. 
+case, where <code>.second</code> is another <code>std::pair</code> type and is used to update
+player position. Second <code>std::pair</code> is typedef'd to <code>move_dir</code>.
 </p>
 
 <p>
-<code>position</code> type has two members <code>x</code> and <code>y</code>, representing the offset
-value to move the player in for respective axis.
+<code>move_dir</code>'s two members <code>first</code> and <code>second</code>, representing the offset
+value to move the player in <code>X</code> and <code>Y</code> axis respectively.
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgeb79138" class="outline-3">
-<h3 id="orgeb79138">Key press handling</h3>
-<div class="outline-text-3" id="text-orgeb79138">
+<div id="outline-container-orge93fbde" class="outline-3">
+<h3 id="orge93fbde">Key press handling</h3>
+<div class="outline-text-3" id="text-orge93fbde">
 <p>
 The function handling key presses will transform the key pressed into 
 an action from our actions list.
@@ -220,7 +220,7 @@ Tuple will have to things in it, in order
 <ol class="org-ol">
 <li>one action value from within our actions enum.</li>
 <li>one data object held by <code>std::any</code> type. Depending on the action, 
-data can be either a <code>position</code> type, or <code>nullptr</code></li>
+data can be either a <code>std::pair</code> type, or <code>nullptr</code></li>
 </ol>
 
 <p>
@@ -251,9 +251,9 @@ when <code>ALT</code> and <code>ENTER</code> keys are pressed together.
 </div>
 </div>
 
-<div id="outline-container-orgac3eade" class="outline-2">
-<h2 id="orgac3eade">Links</h2>
-<div class="outline-text-2" id="text-orgac3eade">
+<div id="outline-container-orgeec8f0b" class="outline-2">
+<h2 id="orgeec8f0b">Links</h2>
+<div class="outline-text-2" id="text-orgeec8f0b">
 <p>
 ╣ <a href="https://github.com/Roy-Fokker/roguelike/tree/Part-1b">GitHub Repo</a> ╠═══<br>
 ╣ <a href="index.html">Home</a> ╠═══<br>
@@ -267,7 +267,7 @@ when <code>ALT</code> and <code>ENTER</code> keys are pressed together.
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Neel Raiyani [Roy Fokker]</p>
-<p class="date">Created: 2019-10-10 Thu 20:00</p>
+<p class="date">Created: 2019-10-10 Thu 21:43</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

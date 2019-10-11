@@ -31,6 +31,11 @@ can change it for your specific preference. I prefer to use =Trailing Return Typ
 method and function declarations and definitions. Other C++ coding guideline, loosely, 
 being followed is [[http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines][C++ Core Guidelines]]. 
 
+Actually, I lied about writing purely ~Standard C++ 17~. There is one non-standard feature
+that is used in every header file. And that is =#pragma once=, which is a short hand way of 
+defining ~include guards~, not to mention less error prone. Every compiler capable of C++17 
+supports it.
+
 * Log of Code
 0. [@0] [[file:0.Setup.org][Environment and project setup]].
 1. [[file:1.Starter.org][Console and moving around]].
