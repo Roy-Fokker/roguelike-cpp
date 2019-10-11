@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2019-10-10 Thu 16:39 -->
+<!-- 2019-10-10 Thu 19:53 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Roguelike Game in C++17</title>
@@ -66,51 +66,51 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orgc400f7c">Tools</a></li>
-<li><a href="#org8f0eb20">Configuration</a></li>
-<li><a href="#org3468842">Project Structure</a></li>
-<li><a href="#orge45ad55">Build configuration</a></li>
-<li><a href="#org4e6bc99">Project specific editor configuration</a></li>
-<li><a href="#org378f92a">The Starter Project</a></li>
-<li><a href="#orge1cdd34">Links</a></li>
+<li><a href="#org683dd79">Tools</a></li>
+<li><a href="#orgb44e450">Configuration</a></li>
+<li><a href="#org6144e9a">Project Structure</a></li>
+<li><a href="#org2795d2f">Build configuration</a></li>
+<li><a href="#orgfaf3ab8">Project specific editor configuration</a></li>
+<li><a href="#orgc079903">The Starter Project</a></li>
+<li><a href="#org9599c29">Links</a></li>
 </ul>
 </div>
 </nav>
 
-<div id="outline-container-orgc400f7c" class="outline-2">
-<h2 id="orgc400f7c">Tools</h2>
-<div class="outline-text-2" id="text-orgc400f7c">
+<div id="outline-container-org683dd79" class="outline-2">
+<h2 id="org683dd79">Tools</h2>
+<div class="outline-text-2" id="text-org683dd79">
 <p>
 Below is the listing of software, I have installed to write, version, build and debug.
 In install order:
 </p>
 <ul class="org-ul">
-<li><a href="https://visualstudio.microsoft.com/vs/">Visual Studio 2019 Community</a>: I am using MSVC compiler, this is easiest way to get that.
+<li><a href="https://visualstudio.microsoft.com/vs/">Visual Studio 2019 Community</a>: I am using MSVC compiler, this is easiest way to get that.<br>
 <code>Version</code>: <code>16.3.2</code>.</li>
-<li><a href="https://code.visualstudio.com/">Visual Studio Code</a>: Pretty decent code editor, with plenty of extensions and good release cycle.
+<li><a href="https://code.visualstudio.com/">Visual Studio Code</a>: Pretty decent code editor, with plenty of extensions and good release cycle. <br>
 <code>Version</code>: <code>1.38.1</code>.</li>
-<li><a href="https://cmake.org/">CMake</a>: build generator. Seems to be one of the popular C++ build generators, supports many compilers and OSes.
+<li><a href="https://cmake.org/">CMake</a>: build generator. Seems to be one of the popular C++ build generators, supports many compilers and OSes. <br>
 <code>Version</code>: <code>3.15.1</code>.</li>
-<li><a href="https://github.com/Microsoft/vcpkg">VCpkg</a>: C++ package manager and installer. Installs and builds packages from source, as such requires compiler already installed.
+<li><a href="https://github.com/Microsoft/vcpkg">VCpkg</a>: C++ package manager and installer. Installs and builds packages from source, as such requires compiler already installed. <br>
 <code>Version</code>: <code>2019.09</code>.</li>
-<li><a href="https://git-scm.com/">GIT-SCM</a>: Defacto version control system for any new code project. Also since github.com repo only works with git.
+<li><a href="https://git-scm.com/">GIT-SCM</a>: Defacto version control system for any new code project. Also since github.com repo only works with git.<br>
 <code>Version</code>: <code>2.23.0</code>.</li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org8f0eb20" class="outline-2">
-<h2 id="org8f0eb20">Configuration</h2>
-<div class="outline-text-2" id="text-org8f0eb20">
+<div id="outline-container-orgb44e450" class="outline-2">
+<h2 id="orgb44e450">Configuration</h2>
+<div class="outline-text-2" id="text-orgb44e450">
 <p>
 After having installed the software above, there is a need to do some configuration.
 </p>
 </div>
-<div id="outline-container-org712909d" class="outline-3">
-<h3 id="org712909d">VSCode Extensions</h3>
-<div class="outline-text-3" id="text-org712909d">
+<div id="outline-container-orgf4d522d" class="outline-3">
+<h3 id="orgf4d522d">VSCode Extensions</h3>
+<div class="outline-text-3" id="text-orgf4d522d">
 <p>
-While VSCode is quite well featured out of the box, I prefer some extras to make the experince nicer.
+While VSCode is quite well featured out of the box, I prefer some extras to make the experience nicer.
 </p>
 <ul class="org-ul">
 <li><a href="https://marketplace.visualstudio.com/items?itemName=CoenraadS.bracket-pair-colorizer-2">Bracket Pair Colorizer 2</a>: <code>Optional</code>, Quality of Life improvement. Find the code much easier to read when I can 
@@ -127,9 +127,9 @@ This will installed 2 other extensions
 </div>
 </div>
 
-<div id="outline-container-orgb8143a6" class="outline-3">
-<h3 id="orgb8143a6">VCpkg Configuration</h3>
-<div class="outline-text-3" id="text-orgb8143a6">
+<div id="outline-container-orgab696b8" class="outline-3">
+<h3 id="orgab696b8">VCpkg Configuration</h3>
+<div class="outline-text-3" id="text-orgab696b8">
 <p>
 Installation instructions for VCpkg are pretty good. There was no need to deviate from it. <br>
 I did add following two User Environment variables.
@@ -142,15 +142,15 @@ I did add following two User Environment variables.
 </div>
 </div>
 
-<div id="outline-container-org3468842" class="outline-2">
-<h2 id="org3468842">Project Structure</h2>
-<div class="outline-text-2" id="text-org3468842">
+<div id="outline-container-org6144e9a" class="outline-2">
+<h2 id="org6144e9a">Project Structure</h2>
+<div class="outline-text-2" id="text-org6144e9a">
 <p>
 The project's files are structured in following manner. 
 I am not listing files and directories not directly created by me. e.g <code>.git</code> and <code>.vscode</code> folders. <br>
 </p>
 <div class="org-src-container">
-<pre class="src src-shell" id="org98aaf4c">\roguelike<span style="color: #f1fa8c;">\ </span>                <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Project's Root Folder</span>
+<pre class="src src-shell" id="org2d5f908">\roguelike<span style="color: #f1fa8c;">\ </span>                <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Project's Root Folder</span>
 \roguelike\build<span style="color: #f1fa8c;">\ </span>          <span style="color: #6272a4;"># </span><span style="color: #6272a4;">CMake build output will go here</span>
 \roguelike\docs<span style="color: #f1fa8c;">\ </span>           <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Github will use this as website folder</span>
 \roguelike\src<span style="color: #f1fa8c;">\ </span>            <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Project's source code lives here</span>
@@ -160,16 +160,16 @@ I am not listing files and directories not directly created by me. e.g <code>.gi
 </div>
 </div>
 
-<div id="outline-container-orge45ad55" class="outline-2">
-<h2 id="orge45ad55">Build configuration</h2>
-<div class="outline-text-2" id="text-orge45ad55">
+<div id="outline-container-org2795d2f" class="outline-2">
+<h2 id="org2795d2f">Build configuration</h2>
+<div class="outline-text-2" id="text-org2795d2f">
 <p>
 CMake requires that every folder that participates in our build have a <code>CMakeLists.txt</code> file.
 For this project, those folders are <code>src</code> and <code>external</code>. So we have total of 3 <code>CMakeLists.txt</code> files.
 Located as such:
 </p>
 <div class="org-src-container">
-<pre class="src src-shell" id="orgf663223">\roguelike\CMakeLists.txt           <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Primary/Root CMake file</span>
+<pre class="src src-shell" id="orga739365">\roguelike\CMakeLists.txt           <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Primary/Root CMake file</span>
 \roguelike\src\CMakeLists.txt       <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Tell CMake how to build source for project</span>
 \roguelike\external\CMakeLists.txt  <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Tell CMake how to consume dependencies</span>
 </pre>
@@ -181,9 +181,9 @@ trigger <code>CMake Tools</code> which will create a build script. This can be e
 </div>
 </div>
 
-<div id="outline-container-org4e6bc99" class="outline-2">
-<h2 id="org4e6bc99">Project specific editor configuration</h2>
-<div class="outline-text-2" id="text-org4e6bc99">
+<div id="outline-container-orgfaf3ab8" class="outline-2">
+<h2 id="orgfaf3ab8">Project specific editor configuration</h2>
+<div class="outline-text-2" id="text-orgfaf3ab8">
 <p>
 In order to make the code editing and debugging with VSCode a little bit less frustrating, there is a
 need to do some project specific setup.
@@ -202,7 +202,7 @@ Select "<code>C++(Windows)</code>" as environment.<br>
 This will then create a <code>launch.json</code> file in <code>.vscode</code> directory. Modify this file, by changing following values.
 </p>
 <div class="org-src-container">
-<pre class="src src-js" id="org98a516d"><span style="color: #f1fa8c;">"program"</span>: <span style="color: #f1fa8c;">"${command:cmake.launchTargetPath}"</span>,
+<pre class="src src-js" id="orgba82d18"><span style="color: #f1fa8c;">"program"</span>: <span style="color: #f1fa8c;">"${command:cmake.launchTargetPath}"</span>,
 <span style="color: #f1fa8c;">"cwd"</span>: <span style="color: #f1fa8c;">"${workspaceFolder}\\build\\bin"</span>,
 <span style="color: #f1fa8c;">"externalConsole"</span>: <span style="color: #8be9fd;">true</span>
 </pre>
@@ -214,13 +214,13 @@ After this is done, debugger can be launched using <code>F5</code>.
 </div>
 </div>
 
-<div id="outline-container-org378f92a" class="outline-2">
-<h2 id="org378f92a">The Starter Project</h2>
-<div class="outline-text-2" id="text-org378f92a">
+<div id="outline-container-orgc079903" class="outline-2">
+<h2 id="orgc079903">The Starter Project</h2>
+<div class="outline-text-2" id="text-orgc079903">
 </div>
-<div id="outline-container-orgc806acc" class="outline-3">
-<h3 id="orgc806acc">Hello World!</h3>
-<div class="outline-text-3" id="text-orgc806acc">
+<div id="outline-container-org8cf38bb" class="outline-3">
+<h3 id="org8cf38bb">Hello World!</h3>
+<div class="outline-text-3" id="text-org8cf38bb">
 <p>
 You can view the <a href="https://github.com/Roy-Fokker/roguelike/tree/Part-0a">setup starter project</a> on the github repo. Building it will require that you 
 install <code>fmt</code> using <code>vcpkg</code>. Project up to this point doesn't do much other than print 
@@ -229,9 +229,9 @@ install <code>fmt</code> using <code>vcpkg</code>. Project up to this point does
 </div>
 </div>
 
-<div id="outline-container-orgf0e02be" class="outline-3">
-<h3 id="orgf0e02be">Using TCOD</h3>
-<div class="outline-text-3" id="text-orgf0e02be">
+<div id="outline-container-org234f9d6" class="outline-3">
+<h3 id="org234f9d6">Using TCOD</h3>
+<div class="outline-text-3" id="text-org234f9d6">
 <p>
 In order to get a character on the screen, we need <code>libtcod</code>. We have two options here. 
 </p>
@@ -259,9 +259,9 @@ the changes made to all the <code>CMakeLists.txt</code> as well as the <code>src
 </div>
 </div>
 
-<div id="outline-container-orge1cdd34" class="outline-2">
-<h2 id="orge1cdd34">Links</h2>
-<div class="outline-text-2" id="text-orge1cdd34">
+<div id="outline-container-org9599c29" class="outline-2">
+<h2 id="org9599c29">Links</h2>
+<div class="outline-text-2" id="text-org9599c29">
 <p>
 ╣ <a href="https://github.com/Roy-Fokker/roguelike/tree/Part-0b">GitHub Repo</a> ╠═══<br>
 ╣ <a href="index.html">Home</a> ╠═══<br>
@@ -274,7 +274,7 @@ the changes made to all the <code>CMakeLists.txt</code> as well as the <code>src
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Neel Raiyani [Roy Fokker]</p>
-<p class="date">Created: 2019-10-10 Thu 16:39</p>
+<p class="date">Created: 2019-10-10 Thu 19:53</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

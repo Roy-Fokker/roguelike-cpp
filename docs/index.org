@@ -15,7 +15,7 @@ on [[irc://irc.afternet.org/#gamedev][Afternet.org's #GameDev IRC channel]].
 
 All the code is written and tested on MS Windows OS, version 7 and 10. I do not
 have a Apple MacOS nor do I have access to a GNU/Linux based OS. However, given 
-that non of the code is utilizing Win32 specific functionality, it should be 
+that none of the code is utilizing Win32 specific functionality, it should be 
 relatively easy to build this project on those OSes, given appropriate development
 environment setup.
 
@@ -27,8 +27,9 @@ as well as the variant [[https://tomassedovic.github.io/roguelike-tutorial/index
 The C++ code itself is written in ~ISO Standard C++ 17~, it does not utilize any compiler
 specific extensions. It is formatted in ~Allman~ style, with =snake_case= naming, and =TAB=
 for indent and =SPACE= for alignment. On my machine =TAB Size= is configured to be ~4~, you 
-can change it for your specific preference. Other C++ coding guideline, loosely, being followed
-is [[http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines][C++ Core Guidelines]]. 
+can change it for your specific preference. I prefer to use =Trailing Return Types= for 
+method and function declarations and definitions. Other C++ coding guideline, loosely, 
+being followed is [[http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines][C++ Core Guidelines]]. 
 
 * Log of Code
 0. [@0] [[file:0.Setup.org][Environment and project setup]].

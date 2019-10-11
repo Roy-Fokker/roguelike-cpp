@@ -23,13 +23,13 @@ enum class actions
 // Check which key was pressed, and return a pair object with action requested and additional data.
 auto handle_input() -> std::pair<actions, std::any>
 {
-	using key_code = TCOD_keycode_t;                 // Alias TCOD_keycode_t to key_code
-	auto key = TCODConsole::checkForKeypress();          // check if key was pressed, and if so which
+	using key_code = TCOD_keycode_t;                // Alias TCOD_keycode_t to key_code
+	auto key = TCODConsole::checkForKeypress();     // check if key was pressed, and if so which
 
 	switch (key.vk)
 	{
 		case key_code::TCODK_ESCAPE:                // User pressed ESCAPE, wants to exit game
-			return {actions::exit, 0};
+			return {actions::exit, nullptr};
 		case key_code::TCODK_UP:                    // User pressed UP arrow, wants to move up
 			return {actions::move, position{0, -1}};
 		case key_code::TCODK_DOWN:                  // User pressed DOWN arrow, wants to move down
@@ -42,7 +42,7 @@ auto handle_input() -> std::pair<actions, std::any>
 		{
 			if (key.lalt or key.ralt)               // and ALT key, toggle fullscreen mode
 			{
-				return {actions::fullscreen_toggle, 0};
+				return {actions::fullscreen_toggle, nullptr};
 			}
 			break;
 		}

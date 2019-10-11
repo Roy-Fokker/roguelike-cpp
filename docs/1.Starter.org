@@ -1,3 +1,112 @@
 #+SETUPFILE: theme.org
 #+SUBTITLE: Console and moving around
-#+OPTIONS: H:1 num:nil
+#+OPTIONS: H:3, num:nil
+
+At this time the code compiles, generated an executable which runs AND
+presents a window with =@= in middle of the screen. But that does not 
+a roguelike make. So, onwards we go...
+
+* Goals
+  For this section the goals are:
+  - Refactor code so it's amenable to change.
+  - Load Custom font file.
+  - Handle input.
+    - Move =@= around using arrow keys (~←~, ~↑~, ~→~, and ~↓~).
+	- Exit when ~ESC~ is pressed.
+	- Toggle =fullscreen= mode with ~Alt+Enter~.
+  That list doesn't look too bad, relatively simple goals.
+
+* Refactoring
+  The code renders =@= in a hard coded position directly on what ~tcod~
+  calls the root console. Ideally, it would be rendered on to some
+  offscreen buffer, which would then be merged with root console when its
+  time to display. Additionally, we want =@= to be more 'dynamic'.
+
+  Within the refactored code, offscreen buffer is called =game_console=,
+  it has the same dimensions as root console. Before root console is displayed
+  on to the screen, =game_console= is merged using =blit= method.
+
+  The =@='s position is now determined by value of two variables =player_x= 
+  and =player_y=. Also it's color is explicitly set to be ~white~. It is drawn
+  on =game_console= using =putChar= method.
+
+* Loading Custom Font
+   For this we use =setCustomFont= method of the =TCODConsole= class. Reading
+   the documentation of ~tcod~, we learn that =setCustomFont= must be called
+   before =initRoot= is called.
+
+   Another thing that needs to be done to get font to work, is we need to copy
+   a font file to same directory as executable. Techincally, we could pass any 
+   path to =setCustomFont=, but for simplicity, I am just copying the 
+   ~arial10x10.png~ to same directory as CMake's Build output. The file is 
+   provided by ~tcod~ in it's =data/fonts= directory. Feel free to use a 
+   different font file, if you don't like arial.
+
+   The copying action is done by CMake, by declaring/updating the custom target
+   that was setup for project to consume ~tcod~. CMake target is now updated 
+   to copy 3 files, two ~.dll~ and one ~.png~.
+
+* Handling Input
+   Compared to font loading, this is bit more involved. Basically, this 
+   task can be divided into two smaller concepts.
+   - Action handling.
+   - Key press handling.
+
+** Action handling
+	Player in our game can do set of actions on any given turn/frame.
+	For the moment these are
+	- Do nothing.
+	- Exit the game.
+	- Move one square in X or Y direction.
+	- Toggle fullscreen mode between =windowed= <-> =fullscreen=.
+	Game doesn't really care which key is pressed to perform these actions.
+	We'll get to mapping actions to keypresses in next section.
+	
+	To capture our actions in code we use an enumeration in C++. It has 
+	~four~ actions identified in previous paragraph. At the moment our
+	actions list is very small, so the code to act on any given action is
+	within =main= function. It's a very simple =switch= statement block.
+	In future, we may change this aspect, for now it's good enough.
+
+	The switch expects a =std::pair= with =.first= type being action and
+	=.second= type being data. For the moment, data is only used by ~move~ 
+	case, where =.second= is of =position= type and is used to update
+	player position. 
+
+	=position= type has two members =x= and =y=, representing the offset
+	value to move the player in for respective axis.
+
+** Key press handling
+   The function handling key presses will transform the key pressed into 
+   an action from our actions list.
+	
+   Returned object by our input handler, is going to be a tuple =std::pair=.
+   Tuple will have to things in it, in order
+   1. one action value from within our actions enum.
+   2. one data object held by =std::any= type. Depending on the action, 
+	   data can be either a =position= type, or =nullptr=
+	
+   For our current set of actions, we have to check about 6 different 
+   key presses.
+   - ~ESC~ to =Exit the game= 
+   - ~UP~ to =Move= in ~y~ axis by =-1=
+   - ~DOWN~ to =Move= in ~y~ axis by =+1=
+   - ~LEFT~ to =Move= in ~x~ axis by =-1=
+   - ~RIGHT~ to =Move= in ~x~ axis by =+1=
+   - ~ALT + ENTER~ to =Toggle Fullscreen=
+   When any of the arrows keys are pressed, we populate =.second= member of
+   =std::pair= with position value. In all cases, we populate =.first= member
+   with action value. =std::pair= is then returned to caller, which is =main=,
+   where above described ~Action Handling~ occurs.
+
+Now we have =@= displayed on the screen which can be moved around using arrow 
+keys. The application can exit when =ESC= key is pressed and it'll go fullscreen
+when =ALT= and =ENTER= keys are pressed together.
+
+* Links
+╣ [[https://github.com/Roy-Fokker/roguelike/tree/Part-1b][GitHub Repo]] ╠═══\\
+╣ [[file:index.org][Home]] ╠═══\\
+╣ Prev: [[file:0.Setup.org][Environment and project setup]] ╠═══ \\
+╣ Next: [[file:2.Entity_Map.org][The entity and the map]] ╠═══
+
+-----

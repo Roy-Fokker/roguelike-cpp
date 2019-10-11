@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2019-10-10 Thu 16:39 -->
+<!-- 2019-10-10 Thu 20:00 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Roguelike Game in C++17</title>
@@ -62,10 +62,212 @@ for the JavaScript code in this tag.
 <header>
 <h1 class="title">Roguelike Game in C++17</h1>
 <p class="subtitle">Console and moving around</p>
-</header></div>
+</header><nav id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org1e01b93">Goals</a></li>
+<li><a href="#orgb4600c2">Refactoring</a></li>
+<li><a href="#org7a12c13">Loading Custom Font</a></li>
+<li><a href="#org6af8e28">Handling Input</a></li>
+<li><a href="#orgac3eade">Links</a></li>
+</ul>
+</div>
+</nav>
+<p>
+At this time the code compiles, generated an executable which runs AND
+presents a window with <code>@</code> in middle of the screen. But that does not 
+a roguelike make. So, onwards we go&#x2026;
+</p>
+
+<div id="outline-container-org1e01b93" class="outline-2">
+<h2 id="org1e01b93">Goals</h2>
+<div class="outline-text-2" id="text-org1e01b93">
+<p>
+For this section the goals are:
+</p>
+<ul class="org-ul">
+<li>Refactor code so it's amenable to change.</li>
+<li>Load Custom font file.</li>
+<li>Handle input.
+<ul class="org-ul">
+<li>Move <code>@</code> around using arrow keys (<code>←</code>, <code>↑</code>, <code>→</code>, and <code>↓</code>).</li>
+<li>Exit when <code>ESC</code> is pressed.</li>
+<li>Toggle <code>fullscreen</code> mode with <code>Alt+Enter</code>.</li>
+</ul></li>
+</ul>
+<p>
+That list doesn't look too bad, relatively simple goals.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgb4600c2" class="outline-2">
+<h2 id="orgb4600c2">Refactoring</h2>
+<div class="outline-text-2" id="text-orgb4600c2">
+<p>
+The code renders <code>@</code> in a hard coded position directly on what <code>tcod</code>
+calls the root console. Ideally, it would be rendered on to some
+offscreen buffer, which would then be merged with root console when its
+time to display. Additionally, we want <code>@</code> to be more 'dynamic'.
+</p>
+
+<p>
+Within the refactored code, offscreen buffer is called <code>game_console</code>,
+it has the same dimensions as root console. Before root console is displayed
+on to the screen, <code>game_console</code> is merged using <code>blit</code> method.
+</p>
+
+<p>
+The <code>@</code>'s position is now determined by value of two variables <code>player_x</code> 
+and <code>player_y</code>. Also it's color is explicitly set to be <code>white</code>. It is drawn
+on <code>game_console</code> using <code>putChar</code> method.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org7a12c13" class="outline-2">
+<h2 id="org7a12c13">Loading Custom Font</h2>
+<div class="outline-text-2" id="text-org7a12c13">
+<p>
+For this we use <code>setCustomFont</code> method of the <code>TCODConsole</code> class. Reading
+the documentation of <code>tcod</code>, we learn that <code>setCustomFont</code> must be called
+before <code>initRoot</code> is called.
+</p>
+
+<p>
+Another thing that needs to be done to get font to work, is we need to copy
+a font file to same directory as executable. Techincally, we could pass any 
+path to <code>setCustomFont</code>, but for simplicity, I am just copying the 
+<code>arial10x10.png</code> to same directory as CMake's Build output. The file is 
+provided by <code>tcod</code> in it's <code>data/fonts</code> directory. Feel free to use a 
+different font file, if you don't like arial.
+</p>
+
+<p>
+The copying action is done by CMake, by declaring/updating the custom target
+that was setup for project to consume <code>tcod</code>. CMake target is now updated 
+to copy 3 files, two <code>.dll</code> and one <code>.png</code>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org6af8e28" class="outline-2">
+<h2 id="org6af8e28">Handling Input</h2>
+<div class="outline-text-2" id="text-org6af8e28">
+<p>
+Compared to font loading, this is bit more involved. Basically, this 
+task can be divided into two smaller concepts.
+</p>
+<ul class="org-ul">
+<li>Action handling.</li>
+<li>Key press handling.</li>
+</ul>
+</div>
+
+<div id="outline-container-orgf7e1a80" class="outline-3">
+<h3 id="orgf7e1a80">Action handling</h3>
+<div class="outline-text-3" id="text-orgf7e1a80">
+<p>
+Player in our game can do set of actions on any given turn/frame.
+For the moment these are
+</p>
+<ul class="org-ul">
+<li>Do nothing.</li>
+<li>Exit the game.</li>
+<li>Move one square in X or Y direction.</li>
+<li>Toggle fullscreen mode between <code>windowed</code> &lt;-&gt; <code>fullscreen</code>.</li>
+</ul>
+<p>
+Game doesn't really care which key is pressed to perform these actions.
+We'll get to mapping actions to keypresses in next section.
+</p>
+
+<p>
+To capture our actions in code we use an enumeration in C++. It has 
+<code>four</code> actions identified in previous paragraph. At the moment our
+actions list is very small, so the code to act on any given action is
+within <code>main</code> function. It's a very simple <code>switch</code> statement block.
+In future, we may change this aspect, for now it's good enough.
+</p>
+
+<p>
+The switch expects a <code>std::pair</code> with <code>.first</code> type being action and
+<code>.second</code> type being data. For the moment, data is only used by <code>move</code> 
+case, where <code>.second</code> is of <code>position</code> type and is used to update
+player position. 
+</p>
+
+<p>
+<code>position</code> type has two members <code>x</code> and <code>y</code>, representing the offset
+value to move the player in for respective axis.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgeb79138" class="outline-3">
+<h3 id="orgeb79138">Key press handling</h3>
+<div class="outline-text-3" id="text-orgeb79138">
+<p>
+The function handling key presses will transform the key pressed into 
+an action from our actions list.
+</p>
+
+<p>
+Returned object by our input handler, is going to be a tuple <code>std::pair</code>.
+Tuple will have to things in it, in order
+</p>
+<ol class="org-ol">
+<li>one action value from within our actions enum.</li>
+<li>one data object held by <code>std::any</code> type. Depending on the action, 
+data can be either a <code>position</code> type, or <code>nullptr</code></li>
+</ol>
+
+<p>
+For our current set of actions, we have to check about 6 different 
+key presses.
+</p>
+<ul class="org-ul">
+<li><code>ESC</code> to <code>Exit the game</code></li>
+<li><code>UP</code> to <code>Move</code> in <code>y</code> axis by <code>-1</code></li>
+<li><code>DOWN</code> to <code>Move</code> in <code>y</code> axis by <code>+1</code></li>
+<li><code>LEFT</code> to <code>Move</code> in <code>x</code> axis by <code>-1</code></li>
+<li><code>RIGHT</code> to <code>Move</code> in <code>x</code> axis by <code>+1</code></li>
+<li><code>ALT + ENTER</code> to <code>Toggle Fullscreen</code></li>
+</ul>
+<p>
+When any of the arrows keys are pressed, we populate <code>.second</code> member of
+<code>std::pair</code> with position value. In all cases, we populate <code>.first</code> member
+with action value. <code>std::pair</code> is then returned to caller, which is <code>main</code>,
+where above described <code>Action Handling</code> occurs.
+</p>
+
+<p>
+Now we have <code>@</code> displayed on the screen which can be moved around using arrow 
+keys. The application can exit when <code>ESC</code> key is pressed and it'll go fullscreen
+when <code>ALT</code> and <code>ENTER</code> keys are pressed together.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgac3eade" class="outline-2">
+<h2 id="orgac3eade">Links</h2>
+<div class="outline-text-2" id="text-orgac3eade">
+<p>
+╣ <a href="https://github.com/Roy-Fokker/roguelike/tree/Part-1b">GitHub Repo</a> ╠═══<br>
+╣ <a href="index.html">Home</a> ╠═══<br>
+╣ Prev: <a href="0.Setup.html">Environment and project setup</a> ╠═══ <br>
+╣ Next: <a href="2.Entity_Map.html">The entity and the map</a> ╠═══
+</p>
+
+<hr>
+</div>
+</div>
+</div>
 <div id="postamble" class="status">
 <p class="author">Author: Neel Raiyani [Roy Fokker]</p>
-<p class="date">Created: 2019-10-10 Thu 16:39</p>
+<p class="date">Created: 2019-10-10 Thu 20:00</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

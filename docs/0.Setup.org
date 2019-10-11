@@ -5,21 +5,21 @@
 * Tools
   Below is the listing of software, I have installed to write, version, build and debug.
   In install order:
-  - [[https://visualstudio.microsoft.com/vs/][Visual Studio 2019 Community]]: I am using MSVC compiler, this is easiest way to get that.
+  - [[https://visualstudio.microsoft.com/vs/][Visual Studio 2019 Community]]: I am using MSVC compiler, this is easiest way to get that.\\
     ~Version~: =16.3.2=.
-  - [[https://code.visualstudio.com/][Visual Studio Code]]: Pretty decent code editor, with plenty of extensions and good release cycle.
+  - [[https://code.visualstudio.com/][Visual Studio Code]]: Pretty decent code editor, with plenty of extensions and good release cycle. \\
     ~Version~: =1.38.1=.
-  - [[https://cmake.org/][CMake]]: build generator. Seems to be one of the popular C++ build generators, supports many compilers and OSes.
+  - [[https://cmake.org/][CMake]]: build generator. Seems to be one of the popular C++ build generators, supports many compilers and OSes. \\
     ~Version~: =3.15.1=.
-  - [[https://github.com/Microsoft/vcpkg][VCpkg]]: C++ package manager and installer. Installs and builds packages from source, as such requires compiler already installed.
+  - [[https://github.com/Microsoft/vcpkg][VCpkg]]: C++ package manager and installer. Installs and builds packages from source, as such requires compiler already installed. \\
     ~Version~: =2019.09=.
-  - [[https://git-scm.com/][GIT-SCM]]: Defacto version control system for any new code project. Also since github.com repo only works with git.
+  - [[https://git-scm.com/][GIT-SCM]]: Defacto version control system for any new code project. Also since github.com repo only works with git.\\
     ~Version~: =2.23.0=.
 
 * Configuration
   After having installed the software above, there is a need to do some configuration.
 ** VSCode Extensions
-   While VSCode is quite well featured out of the box, I prefer some extras to make the experince nicer.
+   While VSCode is quite well featured out of the box, I prefer some extras to make the experience nicer.
    - [[https://marketplace.visualstudio.com/items?itemName=CoenraadS.bracket-pair-colorizer-2][Bracket Pair Colorizer 2]]: ~Optional~, Quality of Life improvement. Find the code much easier to read when I can 
 	 spot the bracket pair groups by color.
    - [[https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools][C/C++]]: ~Required~, out of the box VSCode doesn't support building C++ code. This extension by Microsoft fixes that.

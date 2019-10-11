@@ -6,15 +6,6 @@
 #+EXPORT_FILE_NAME: docs\index.html
 #+STARTUP: showall noindent
 
-This file documents my attempts at going through a process of making a Rogue-Like 
-game. \\
-The associated source code lives in [[https://github.com/Roy-Fokker/roguelike][GitHub Repo]]. State of Repository at end of each 
-section is linked-to at bottom of each section.
-
-It's written in sort of literal programming format. Documentation is written in Emacs 
-Org-Mode and exported to html which used by github to display this page. As emacs is 
-not being used for any code related purposes, rest of this document ignores this aspect.
-
 * Setup
 ** Environment Setup
 *** Tools of the trade:
