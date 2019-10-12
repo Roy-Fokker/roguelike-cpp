@@ -86,3 +86,8 @@ void console_layer::draw(const game_entity &entity)
 	              entity.chr,
 	              TCOD_BKGND_NONE);
 }
+
+void console_layer::draw(const position &p, const TCODColor &color)
+{
+	layer->setCharBackground(p.x, p.y, color);
+}

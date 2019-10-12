@@ -8,6 +8,7 @@
 #include <utility>      // for std::pair
 #include <cassert>      // for assert()
 #include <any>          // for std::any and std::any_cast<>
+#include <vector>
 
 using namespace std::literals; // ensure we can use ""sv
 
@@ -51,7 +52,74 @@ auto handle_input() -> std::pair<actions, std::any>
 	return {}; // No key was pressed, return do_nothing.
 }
 
+struct tile
+{
+	position p;
+	bool blocked;
+	bool blocks_sight = blocked;
+};
 
+struct game_map
+{
+	int width, height;
+	std::vector<tile> tiles;
+
+	auto is_blocked(position p) const -> bool
+	{
+		auto [x, y] = p;
+		if (x >= width 
+			or x < 0 
+			or y >= height 
+			or y < 0)
+		{
+			return true;
+		}
+
+		return tiles.at(x + width * y).blocked;
+	}
+};
+
+auto generate_map(int width, int height) -> game_map
+{
+	auto map = game_map{width, height };
+	map.tiles.resize(width * height);
+
+	auto put_blocking_tile = [&](position p)
+	{
+		map.tiles[width * p.x + p.y].p = p;
+		map.tiles[width * p.x + p.y].blocked = true;
+		map.tiles[width * p.x + p.y].blocks_sight = true;
+	};
+
+	put_blocking_tile({30, 22});
+	put_blocking_tile({31, 22});
+	put_blocking_tile({32, 22});
+
+	put_blocking_tile({30, 25});
+	put_blocking_tile({31, 25});
+	put_blocking_tile({32, 25});
+
+	return map;
+}
+
+auto draw_map(console_layer &layer, game_map &map)
+{
+	static const auto ground_color = TCODColor(0, 0, 100);
+	static const auto wall_color = TCODColor(50, 50, 150);
+
+	for(auto &t : map.tiles)
+	{
+		if (t.blocks_sight)
+		{
+			layer.draw(t.p, wall_color);
+		}
+		else
+		{
+			layer.draw(t.p, ground_color);
+		}
+		
+	}
+}
 
 int main()
 {
@@ -75,6 +143,8 @@ int main()
 		'@',                             // player character looks like @
 		TCODColor::white                 // Color of player character
 	};
+
+	auto map = generate_map(window_width, window_height);
 	
 	// Loop while window exists and exit_game is not true
 	while (not (root.is_window_closed() or exit_game))
@@ -88,9 +158,16 @@ int main()
 				exit_game = true;
 				break;
 			case actions::move:
+			{
 				// directions the player want to move in
-				player.move_by(std::any_cast<position>(action.second));
+				auto offset = std::any_cast<position>(action.second);
+
+				if (not map.is_blocked({player.pos.x + offset.x, player.pos.y + offset.y}))
+				{
+					player.move_by(offset);
+				}
 				break;
+			}
 			case actions::fullscreen_toggle:
 				// Toggle between windowed and fullscreen mode.
 				root.toggle_fullscreen();
@@ -101,6 +178,9 @@ int main()
 		}
 
 		game_layer.clear();         // Clear the contents of the layer
+
+		draw_map(game_layer, map);
+
 		game_layer.draw(player);    // Draw the player to game_console layer
 
 		root.blit(game_layer);  // Apply the game_console layer to Root Console
