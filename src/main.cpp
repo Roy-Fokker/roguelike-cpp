@@ -113,9 +113,9 @@ auto generate_map(int width, int height) -> game_map
 	put_blocking_tile({32, 22});
 
 	// Second wall
-	put_blocking_tile({30, 25});
-	put_blocking_tile({31, 25});
-	put_blocking_tile({32, 25});
+	put_blocking_tile({40, 28});
+	put_blocking_tile({41, 28});
+	put_blocking_tile({42, 28});
 
 	return map;
 }
