@@ -52,60 +52,67 @@ auto handle_input() -> std::pair<actions, std::any>
 	return {}; // No key was pressed, return do_nothing.
 }
 
+// Simple Tile structure
+// default values is {0, 0}, false, false
 struct tile
 {
 	position p;
 	bool blocked;
-	bool blocks_sight = blocked;
+	bool blocks_sight;
 };
 
+// Very simple map structure.
+// it has size of the map, and tiles for each
+// cell within the map
 struct game_map
 {
 	int width, height;
 	std::vector<tile> tiles;
 
+	// Check if position provided is blocking tile
 	auto is_blocked(position p) const -> bool
 	{
 		auto [x, y] = p;
-		if (x >= width 
-			or x < 0 
-			or y >= height 
+		if (x >= width       // Make sure we are within the
+			or x < 0         // map boundaries
+			or y >= height
 			or y < 0)
-		{
-			return true;
+		{                    // if not within
+			return true;     // it's a blocked area
 		}
 
-		return tiles.at(x + width * y).blocked;
+		return tiles.at(x + width * y).blocked; // Simply return value in position's index.
 	}
 };
 
+// Make our game_map. 
+// This version is pretty dumb. It put 2 walls on the Map
 auto generate_map(int width, int height) -> game_map
 {
-	auto map = game_map{width, height };
-	map.tiles.resize(width * height);
+	auto map = game_map{width, height };  // Initialize the map
+	map.tiles.resize(width * height);     // Make sure we have enough tiles
 
-	for (auto &t : map.tiles)
+	for (auto i = 0; i < map.tiles.size(); i++)  // For each tile in the map
 	{
-		static int i = 0;
-
-		int x = i % width;
-		int y = i / width;
-
-		t.p = {x, y};
-
-		i++;
+		auto &t = map.tiles[i];           // Get a reference to a Tile at index i
+		t.p = {i % width,                 // Populate x and 
+		       i / width};                // y positions
 	}
 
+	// Make the tile in position provided 
+	// a blocking tile.
 	auto put_blocking_tile = [&](position p)
 	{
 		map.tiles[p.x + width * p.y].blocked = true;
 		map.tiles[p.x + width * p.y].blocks_sight = true;
 	};
 
+	// First of two walls in our map
 	put_blocking_tile({30, 22});
 	put_blocking_tile({31, 22});
 	put_blocking_tile({32, 22});
 
+	// Second wall
 	put_blocking_tile({30, 25});
 	put_blocking_tile({31, 25});
 	put_blocking_tile({32, 25});
@@ -113,20 +120,24 @@ auto generate_map(int width, int height) -> game_map
 	return map;
 }
 
+// Quick and Dirty draw map function.
+// Takes a game_map to draw on console_layer
 auto draw_map(console_layer &layer, game_map &map)
 {
+	// set up some static colors to use for ground and wall
 	static const auto ground_color = TCODColor(0, 0, 100);
 	static const auto wall_color = TCODColor(50, 50, 150);
 
+	// Go through all the tiles
 	for(auto &t : map.tiles)
 	{
-		if (t.blocks_sight)
+		if (t.blocks_sight)                // If it blocks sight
 		{
-			layer.draw(t.p, wall_color);
+			layer.draw(t.p, wall_color);   // Draw tile with wall_color
 		}
 		else
 		{
-			layer.draw(t.p, ground_color);
+			layer.draw(t.p, ground_color); // Draw tile with ground_color
 		}
 		
 	}
@@ -150,11 +161,13 @@ int main()
 	bool exit_game = false;	             // should we exit the game?
 	game_entity player                   // Player Entity object
 	{ 
-		{ window_width / 2, window_height / 2 },  // Initial Position of Player
+		{ window_width / 2,              // Initial Position of Player
+		  window_height / 2 },
 		'@',                             // player character looks like @
 		TCODColor::white                 // Color of player character
 	};
 
+	// Get our map layout from generator
 	auto map = generate_map(window_width, window_height);
 	
 	// Loop while window exists and exit_game is not true
@@ -173,8 +186,10 @@ int main()
 				// directions the player want to move in
 				auto offset = std::any_cast<position>(action.second);
 
+				// Can the player move there?
 				if (not map.is_blocked({player.pos.x + offset.x, player.pos.y + offset.y}))
 				{
+					// Yes
 					player.move_by(offset);
 				}
 				break;
@@ -190,7 +205,7 @@ int main()
 
 		game_layer.clear();         // Clear the contents of the layer
 
-		draw_map(game_layer, map);
+		draw_map(game_layer, map);  // Draw the map to game_console layer
 
 		game_layer.draw(player);    // Draw the player to game_console layer
 

@@ -26,7 +26,7 @@ console_root::console_root(std::string_view title,
                            const std::filesystem::path &font_path) :
 	size{ size_ }
 {
-	if (not font_path.empty())
+	if (not font_path.empty())    // Only call setCustomFont is font_path is not "".
 	{
 		TCODConsole::setCustomFont(font_path.string().c_str(), // string().c_str() is required because on Windows path is wchar, TCOD expects char.
 		                           TCOD_FONT_TYPE_GREYSCALE | TCOD_FONT_LAYOUT_TCOD);
