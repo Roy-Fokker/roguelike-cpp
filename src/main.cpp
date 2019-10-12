@@ -84,11 +84,22 @@ auto generate_map(int width, int height) -> game_map
 	auto map = game_map{width, height };
 	map.tiles.resize(width * height);
 
+	for (auto &t : map.tiles)
+	{
+		static int i = 0;
+
+		int x = i % width;
+		int y = i / width;
+
+		t.p = {x, y};
+
+		i++;
+	}
+
 	auto put_blocking_tile = [&](position p)
 	{
-		map.tiles[width * p.x + p.y].p = p;
-		map.tiles[width * p.x + p.y].blocked = true;
-		map.tiles[width * p.x + p.y].blocks_sight = true;
+		map.tiles[p.x + width * p.y].blocked = true;
+		map.tiles[p.x + width * p.y].blocks_sight = true;
 	};
 
 	put_blocking_tile({30, 22});
