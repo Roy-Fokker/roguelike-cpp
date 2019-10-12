@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2019-10-10 Thu 23:42 -->
+<!-- 2019-10-11 Fri 21:14 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Roguelike Game in C++17</title>
@@ -69,11 +69,11 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orgcf71551">Goals</a></li>
-<li><a href="#org6ad40d7">Entity</a></li>
-<li><a href="#org9cc6287">Refactoring</a></li>
-<li><a href="#orgbcffecb">Map</a></li>
-<li><a href="#org8aec129">Links</a></li>
+<li><a href="#org2e0ae12">Goals</a></li>
+<li><a href="#org4429237">The entity class</a></li>
+<li><a href="#org42534e7">Refactoring for hygene</a></li>
+<li><a href="#org5532e1d">Beginning of a map</a></li>
+<li><a href="#orge314915">Links</a></li>
 </ul>
 </div>
 </nav>
@@ -82,9 +82,9 @@ Moving around in a blank world is not fun. Also, code at present has no concept
 of other things and creatures that could exist. So to fix that further we delve.
 </p>
 
-<div id="outline-container-orgcf71551" class="outline-2">
-<h2 id="orgcf71551">Goals</h2>
-<div class="outline-text-2" id="text-orgcf71551">
+<div id="outline-container-org2e0ae12" class="outline-2">
+<h2 id="org2e0ae12">Goals</h2>
+<div class="outline-text-2" id="text-org2e0ae12">
 <p>
 We have two main goals for this part. 
 </p>
@@ -95,9 +95,9 @@ We have two main goals for this part.
 </div>
 </div>
 
-<div id="outline-container-org6ad40d7" class="outline-2">
-<h2 id="org6ad40d7">Entity</h2>
-<div class="outline-text-2" id="text-org6ad40d7">
+<div id="outline-container-org4429237" class="outline-2">
+<h2 id="org4429237">The entity class</h2>
+<div class="outline-text-2" id="text-org4429237">
 <p>
 First thing we'll do is replace <code>move_dir</code> typedef, with a strongly-typed struct.
 <code>position</code> struct will have 2 members <code>x</code> and <code>y</code>. Anywhere we had <code>move_dir</code> gets
@@ -138,16 +138,15 @@ the two console method calls with one <code>player.draw_entity</code> call.
 <ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-2a/src/main.cpp#L137-L139">
 </ui-code>
 
-
 <p>
 <a href="https://github.com/Roy-Fokker/roguelike/tree/Part-2a">GitHub Repo</a>
 </p>
 </div>
 </div>
 
-<div id="outline-container-org9cc6287" class="outline-2">
-<h2 id="org9cc6287">Refactoring</h2>
-<div class="outline-text-2" id="text-org9cc6287">
+<div id="outline-container-org42534e7" class="outline-2">
+<h2 id="org42534e7">Refactoring for hygene</h2>
+<div class="outline-text-2" id="text-org42534e7">
 <p>
 Before we go any further, we need to reorganize the code a bit. Everything is 
 currently in the <code>main.cpp</code>. It's getting a bit crowded, and difficult to visualize
@@ -190,13 +189,13 @@ entity to move it by a specific offset position.
 </div>
 </div>
 
-<div id="outline-container-orgbcffecb" class="outline-2">
-<h2 id="orgbcffecb">Map</h2>
+<div id="outline-container-org5532e1d" class="outline-2">
+<h2 id="org5532e1d">Beginning of a map</h2>
 </div>
 
-<div id="outline-container-org8aec129" class="outline-2">
-<h2 id="org8aec129">Links</h2>
-<div class="outline-text-2" id="text-org8aec129">
+<div id="outline-container-orge314915" class="outline-2">
+<h2 id="orge314915">Links</h2>
+<div class="outline-text-2" id="text-orge314915">
 <p>
 ╣ <a href="https://github.com/Roy-Fokker/roguelike/tree/Part-2b">GitHub Repo</a> ╠═══<br>
 ╣ <a href="index.html">Home</a> ╠═══<br>
@@ -210,7 +209,7 @@ entity to move it by a specific offset position.
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Neel Raiyani [Roy Fokker]</p>
-<p class="date">Created: 2019-10-10 Thu 23:42</p>
+<p class="date">Created: 2019-10-11 Fri 21:14</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

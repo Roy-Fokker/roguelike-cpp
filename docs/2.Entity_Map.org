@@ -10,7 +10,7 @@ of other things and creatures that could exist. So to fix that further we delve.
   - Use an =Entity= class, to manage information like ~player~'s state and abilities.
   - Use an =Map= class to setup some obstacles.
 
-* Entity
+* The entity class
   First thing we'll do is replace =move_dir= typedef, with a strongly-typed struct.
   =position= struct will have 2 members =x= and =y=. Anywhere we had =move_dir= gets
   replaced by =position=.
@@ -51,10 +51,9 @@ of other things and creatures that could exist. So to fix that further we delve.
 </ui-code>
 #+end_export
 
-
   [[https://github.com/Roy-Fokker/roguelike/tree/Part-2a][GitHub Repo]]
 
-* Refactoring
+* Refactoring for hygene
   Before we go any further, we need to reorganize the code a bit. Everything is 
   currently in the ~main.cpp~. It's getting a bit crowded, and difficult to visualize
   the full flow. So will we break down our program in to multiple files.
@@ -81,7 +80,7 @@ of other things and creatures that could exist. So to fix that further we delve.
 
   [[https://github.com/Roy-Fokker/roguelike/tree/Part-2b][GitHub Repo]]
 
-* Map
+* Beginning of a map
 
 * Links
 ╣ [[https://github.com/Roy-Fokker/roguelike/tree/Part-2b][GitHub Repo]] ╠═══\\
