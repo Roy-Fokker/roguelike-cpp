@@ -15,7 +15,7 @@ of other things and creatures that could exist. So to fix that further we delve.
   =position= struct will have 2 members =x= and =y=. Anywhere we had =move_dir= gets
   replaced by =position=.
 #+begin_export html
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-2a/src/main.cpp#L20-L25" width=300 commentWidth=250>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-2a/src/main.cpp#L20-L25" width=500 commentWidth=500>
 </ui-code>
 #+end_export
   
@@ -26,7 +26,7 @@ of other things and creatures that could exist. So to fix that further we delve.
   and calls console's methods to draw itself. This part we'll change in next section
   as current setup is not ideal.
 #+begin_export html
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-2a/src/main.cpp#L58-L81" width=300 commentWidth=250>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-2a/src/main.cpp#L58-L81" width=500 commentWidth=500>
 </ui-code>
 #+end_export
 
@@ -34,20 +34,20 @@ of other things and creatures that could exist. So to fix that further we delve.
   object, with same position values are before while also adding character and color 
   to be used.
 #+begin_export html
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-2a/src/main.cpp#L104-L110" width=300 commentWidth=250>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-2a/src/main.cpp#L104-L110" width=500 commentWidth=500>
 </ui-code>
 #+end_export
 
   In the ~actions~ switch block, change how the player position is updated.
 #+begin_export html
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-2a/src/main.cpp#L122-L126" width=300 commentWidth=250>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-2a/src/main.cpp#L122-L126" width=500 commentWidth=500>
 </ui-code>
 #+end_export
 
   And further down, below the ~actions~ switch block, where drawing occurs, we change
   the two console method calls with one =player.draw_entity= call.
 #+begin_export html
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-2a/src/main.cpp#L137-L139" width=300 commentWidth=250>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-2a/src/main.cpp#L137-L139" width=500 commentWidth=500>
 </ui-code>
 #+end_export
 
