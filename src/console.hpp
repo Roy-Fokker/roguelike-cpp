@@ -8,8 +8,6 @@
 #include <memory>
 
 class TCODConsole; // Forward declare TCODConsole, so we aren't including the header here.
-class TCODColor;
-struct position;
 
 // Size of the console window and layer
 struct console_size
@@ -55,6 +53,7 @@ private:
 };
 
 struct game_entity;
+struct game_map;
 
 class console_layer
 {
@@ -68,8 +67,8 @@ public:
 	// Draw provided entity to this layer.
 	void draw(const game_entity &entity);
 
-	// Set background color at position
-	void draw(const position &p, const TCODColor &color);
+	// Draw provided map to this layer.
+	void draw(const game_map &map);
 
 private:
 	std::unique_ptr<TCODConsole> layer { nullptr };

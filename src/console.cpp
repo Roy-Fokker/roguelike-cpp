@@ -2,6 +2,7 @@
 
 #include "console.hpp"
 #include "game_entity.hpp"
+#include "game_map.hpp"
 
 #include <libtcod.hpp>
 #include <cassert>
@@ -87,9 +88,12 @@ void console_layer::draw(const game_entity &entity)
 	              TCOD_BKGND_NONE);
 }
 
-// This method will change as well. 
-// It needs more things.
-void console_layer::draw(const position &p, const TCODColor &color)
+// Quick and Dirty draw map function.
+// Takes a game_map to draw on console_layer
+void console_layer::draw(const game_map &map)
 {
-	layer->setCharBackground(p.x, p.y, color);
+	for (auto &t : map.tiles)
+	{
+		layer->setCharBackground(t.p.x, t.p.y, t.color);
+	}
 }

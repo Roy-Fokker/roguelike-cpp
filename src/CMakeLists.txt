@@ -15,7 +15,13 @@ target_sources(rogue
         console.cpp
         console.hpp
         game_entity.cpp
-        game_entity.hpp)
+        game_entity.hpp
+        game_actions.cpp
+        game_actions.hpp
+        game_map.cpp
+        game_map.hpp
+        input_handler.cpp
+        input_handler.hpp)
 
 # Tell the build system we have to use C++17 Standard
 target_compile_features(rogue
