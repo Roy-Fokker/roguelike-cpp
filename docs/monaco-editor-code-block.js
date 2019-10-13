@@ -95,6 +95,8 @@ customElements.define('ui-code', class extends HTMLElement {
     </style>
     <slot></slot>
     <div class="comments"></div>`;
+  }
+  connectedCallback() {
     let colorIndex = 0;
     function getColor()
     {
@@ -113,56 +115,46 @@ customElements.define('ui-code', class extends HTMLElement {
       let start = null;
       let end = null;
       if (lineMatches != null && lineMatches.length >= 2) {
-        start = parseInt(lineMatches[1], 10) - 1;
-      }
-      if (lineMatches != null && lineMatches.length == 3) {
-        end = parseInt(lineMatches[2], 10) - 1;
-      }
-      let code = await (await fetch(url)).text();
-      let codeLines = code.split(/\n/g).map(line => {
-        const matches = line.match(/^(.*?)(?:\s*\/\/.*)?$/);
-        return matches != null && matches.length != 1 ? matches[1] : '';
-      });
-      //console.log(codeLines);
-      let commentLines = code.split(/\n/g).map(line => {
-        const matches = line.match(/^.*?\/\/\s?(.*)$/);
-        return matches != null && matches.length != 1 ? matches[1] : '';
-      });
-      //console.log(commentLines);
-      if (start !== null) {
-        codeLines = codeLines.slice(start, end ? end + 2 : start + 1);
-        commentLines = commentLines.slice(start, end ? end + 2 : start + 1);
-      }
-      const lineMap = {};
-      codeLines.forEach((line, index) => {
-        lineMap[index + 1] = index + 1 + (start ? start : 0);
-      });
-      if (codeLines.length > 2 && /\/\*\s*?SPDX-License-Identifier: MIT\s*?\*\//i.test(codeLines[0])) {
-        const deleteNextLine = codeLines[1] == '';
-        codeLines.splice(0, deleteNextLine ? 2 : 1);
-        commentLines.splice(0, deleteNextLine ? 2 : 1);
-        for (let i = 0; i < codeLines.length; ++i) {
-            lineMap[i + 1] += deleteNextLine ? 2 : 1;
-          }
-      }
-      for (let i = 0; i < codeLines.length - 1; ++i) {
-        if (codeLines[i] == '' && commentLines[i] != '' && commentLines[i + 1] == '') {
-          commentLines[i + 1] = commentLines[i];
-          commentLines[i] = '';
-        }
-        if (/^\s*$/.test(codeLines[i]) && commentLines[i] == '' && /^\s*$/.test(codeLines[i + 1])) {
-          codeLines.splice(i, 1);
-          commentLines.splice(i, 1);
-          for (let j = i; j < codeLines.length; ++j) {
-            lineMap[j + 2]++;
-          }
-          i--;
+        start = parseInt(lineMatches[1], 10);
+        if (lineMatches.length == 3) {
+          end = parseInt(lineMatches[2], 10);
         }
       }
-      while (codeLines.length > 0 && codeLines[codeLines.length - 1] == '' && commentLines[commentLines.length - 1] == '')
-      {
-        codeLines.pop();
-        commentLines.pop();
+      const code = await (await fetch(url)).text();
+      let lines = code.split(/\n/g).map((line, index) => {
+        const codeMatches = line.match(/^(.*?)(?:\s*\/\/.*)?$/);
+        const commentMatches = line.match(/^.*?\/\/\s?(.*)$/);
+        return {
+          number: index + 1,
+          code: codeMatches != null && codeMatches.length != 1 ? codeMatches[1] : '',
+          comment: commentMatches != null && commentMatches.length != 1 ? commentMatches[1] : '',
+          get isCodeEmpty() { return /^\s*$/.test(this.code); },
+          get isCommentEmpty() { return /^\s*$/.test(this.comment); }
+        };
+      });
+      if (lines.length > 2 && /\/\*\s*?SPDX-License-Identifier: MIT\s*?\*\//i.test(lines[0].code)) {
+        lines.splice(0, lines[1].isCodeEmpty && lines[1].isCommentEmpty ? 2 : 1);
+      }
+      for (let i = lines.length - 1; i > 0; --i) {
+        // Move comment only lines to the next line if there isn't a comment there already
+        if (lines[i].isCodeEmpty && !lines[i].isCommentEmpty && lines[i + 1].isCommentEmpty) {
+          lines[i + 1].comment = lines[i].comment;
+          lines[i].comment = '';
+        }
+      }
+      for (let i = 0; i < lines.length - 1; ++i) {
+        if (lines[i].isCodeEmpty && lines[i].isCommentEmpty && lines[i + 1].isCodeEmpty && lines[i + 1].isCommentEmpty) {
+          lines.splice(i--, 1);
+        }
+      }
+      while (lines.length > 0 && lines[lines.length - 1].isCodeEmpty && lines[lines.length - 1].isCommentEmpty) {
+        lines.pop();
+      }
+      while (start != null && lines.length > 0 && lines[0].number < start) {
+        lines.shift();
+      }
+      while (end != null && lines.length > 0 && lines[lines.length - 1].number > end) {
+        lines.pop();
       }
       const $code = document.createElement('div');
       $code.classList.add('code');
@@ -171,7 +163,7 @@ customElements.define('ui-code', class extends HTMLElement {
         $code.style.width = `${this.getAttribute('width')}px`;
       }
       const editor = monaco.editor.create($code, {
-        value: codeLines.join('\n'),
+        value: lines.map(line => line.code).join('\n'),
         language: 'cpp',
         minimap: {
           enabled: false
@@ -189,24 +181,24 @@ customElements.define('ui-code', class extends HTMLElement {
         occurrencesHighlight: false,
         selectionHighlight: false,
         theme: 'vs-dark',
-        lineNumbers: originalLineNumber => lineMap[originalLineNumber]
+        lineNumbers: originalLineNumber => lines[originalLineNumber - 1].number
       });
       const declarations = [];
-      for (let i = 0; i < commentLines.length; ++i) {
-        const comment = commentLines[i];
+      for (let i = 0; i < lines.length; ++i) {
+        const comment = lines[i].comment;
         const [colorClass, lineColorClass, color] = getColor();
         const $comment = document.createElement('div');
-        $comment.textContent = comment ? comment : '';
+        $comment.textContent = comment;
         $comment.style.color = color;
         this.shadowRoot.querySelector('.comments').appendChild($comment);
-        if (commentLines[i] != '') {
+        if (!lines[i].isCommentEmpty) {
           declarations.push({
             range: new monaco.Range(i + 1,1,i + 1,1000), options:
             {
               isWholeLine: true,
               //linesDecorationsClassName: colorClass,
               className: lineColorClass,
-              hoverMessage: commentLines[i]
+              hoverMessage: comment
             }
           });
         }
@@ -215,8 +207,14 @@ customElements.define('ui-code', class extends HTMLElement {
       const updateLines = () => {
         const el = editor.getDomNode();
         const viewOverlays = el.querySelectorAll('.view-overlays > div');
+        let maximumWidth = 0;
+        // editor.getScrollWidth() doesn't return the real scrollWidth, so improvise
+        el.querySelectorAll('.view-line').forEach(node => {
+          maximumWidth = Math.max(maximumWidth, node.querySelector('span').offsetWidth);
+        });
+        maximumWidth = Math.max(maximumWidth, editor.getScrollWidth());
         el.querySelectorAll('.view-line').forEach((node, index) => {
-          viewOverlays[index].style.setProperty('--gradient-distance', `${(node.querySelector('span').offsetWidth / (this.hasAttribute('width') ? this.getAttribute('width') : 800) * 100).toFixed(2)}%`);
+          viewOverlays[index].style.setProperty('--gradient-distance', `${(node.querySelector('span').offsetWidth / maximumWidth * 100).toFixed(2)}%`);
         });
       };
       editor.onDidChangeCursorPosition((e) => {
@@ -224,24 +222,18 @@ customElements.define('ui-code', class extends HTMLElement {
         setTimeout(updateLines, 100);
       });
       editor.onDidChangeCursorSelection(() => {
-        //console.log('here');
         setTimeout(updateLines, 0);
         setTimeout(updateLines, 100);
       });
       
-      setTimeout(() => {
-        const el = editor.getDomNode();
-        el.style.height = 0;
-        editor.layout();
-        let height = editor.getScrollHeight();
-        //console.log(height);
-        el.style.width = el.parentNode.style.width;
-        el.style.height = `${height + 7}px`;
-        editor.layout();
-        setTimeout(() => {
-          updateLines();
-        }, 0);
-      }, 0);
+      const el = editor.getDomNode();
+      el.style.height = 0;
+      editor.layout();
+      let height = editor.getScrollHeight();
+      el.style.width = el.parentNode.style.width;
+      el.style.height = `${height + 7}px`;
+      editor.layout();
+      updateLines();
       })();
     });
   }
