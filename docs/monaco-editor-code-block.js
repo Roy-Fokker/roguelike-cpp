@@ -66,11 +66,11 @@ customElements.define('ui-code', class extends HTMLElement {
       }
       ::slotted(.code) {
         flex: 0 0 auto;
-        width: ${this.hasAttribute('width') ? this.getAttribute('width') : 800}px;
+        width: 800px;
       }
       :host > .comments {
         flex: 0 0 auto;
-        width: ${this.hasAttribute('commentWidth') ? this.getAttribute('commentWidth') : 800}px;
+        width: 800px;
         display: flex;
         flex-flow: column nowrap;
         border-left: 1px solid gray;
@@ -104,6 +104,9 @@ customElements.define('ui-code', class extends HTMLElement {
     
     require(['vs/editor/editor.main'], () => {
       (async () => {
+      if (this.hasAttribute('commentWidth')) {
+        this.shadowRoot.querySelector('.comments').style.width = `${this.getAttribute('commentWidth')}px`;
+      }
       const url = this.getAttribute('url');
       // Find #L1-L2
       const lineMatches = url.match(/^.*?#L([0-9]*)(?:-L([0-9]*))?$/);
@@ -164,6 +167,9 @@ customElements.define('ui-code', class extends HTMLElement {
       const $code = document.createElement('div');
       $code.classList.add('code');
       this.appendChild($code);
+      if (this.hasAttribute('width')) {
+        $code.style.width = `${this.getAttribute('width')}px`;
+      }
       const editor = monaco.editor.create($code, {
         value: codeLines.join('\n'),
         language: 'cpp',
@@ -210,7 +216,7 @@ customElements.define('ui-code', class extends HTMLElement {
         const el = editor.getDomNode();
         const viewOverlays = el.querySelectorAll('.view-overlays > div');
         el.querySelectorAll('.view-line').forEach((node, index) => {
-          viewOverlays[index].style.setProperty('--gradient-distance', `${(node.querySelector('span').offsetWidth / (800 - 30) * 100).toFixed(2)}%`);
+          viewOverlays[index].style.setProperty('--gradient-distance', `${(node.querySelector('span').offsetWidth / (this.hasAttribute('width') ? this.getAttribute('width') : 800) * 100).toFixed(2)}%`);
         });
       };
       editor.onDidChangeCursorPosition((e) => {
