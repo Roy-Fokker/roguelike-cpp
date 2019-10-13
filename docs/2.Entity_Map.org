@@ -15,7 +15,7 @@ of other things and creatures that could exist. So to fix that further we delve.
   =position= struct will have 2 members =x= and =y=. Anywhere we had =move_dir= gets
   replaced by =position=.
 #+begin_export html
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-2a/src/main.cpp#L20-L25">
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-2a/src/main.cpp#L20-L25" width=300 commentWidth=250>
 </ui-code>
 #+end_export
   
@@ -26,7 +26,7 @@ of other things and creatures that could exist. So to fix that further we delve.
   and calls console's methods to draw itself. This part we'll change in next section
   as current setup is not ideal.
 #+begin_export html
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-2a/src/main.cpp#L58-L81">
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-2a/src/main.cpp#L58-L81" width=300 commentWidth=250>
 </ui-code>
 #+end_export
 
@@ -34,20 +34,20 @@ of other things and creatures that could exist. So to fix that further we delve.
   object, with same position values are before while also adding character and color 
   to be used.
 #+begin_export html
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-2a/src/main.cpp#L104-L110">
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-2a/src/main.cpp#L104-L110" width=300 commentWidth=250>
 </ui-code>
 #+end_export
 
   In the ~actions~ switch block, change how the player position is updated.
 #+begin_export html
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-2a/src/main.cpp#L122-L126">
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-2a/src/main.cpp#L122-L126" width=300 commentWidth=250>
 </ui-code>
 #+end_export
 
   And further down, below the ~actions~ switch block, where drawing occurs, we change
   the two console method calls with one =player.draw_entity= call.
 #+begin_export html
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-2a/src/main.cpp#L137-L139">
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-2a/src/main.cpp#L137-L139" width=300 commentWidth=250>
 </ui-code>
 #+end_export
 
@@ -81,11 +81,45 @@ of other things and creatures that could exist. So to fix that further we delve.
   [[https://github.com/Roy-Fokker/roguelike/tree/Part-2b][GitHub Repo]]
 
 * Beginning of a map
+  Refactoring done, time to move on to second goal for this section, creating a map/level
+  structure. This will represent the movement area for the player. As well as, places
+  player can collide with. Collidable area will be colored differently from regular ground
+  area.
+
+  Each ~cell~ in our map will be represented by a =tile= data structure. We'll hold each 
+  =tile= in a =game_map= structure in a =std::vector=. =game_map= knows size of the 
+  movement area via =width= and =height=. =is_blocked= method will take a =position=
+  arguement and return ~true~ if that location has a blocking =tile=.
+
+  We add 2 free functions =generate_map= and =draw_map=. You can probably guess what each
+  of these functions does. Both will get called by =main= function. Before our main game
+  loop, we call =generate_map=, and before drawing the player we call =draw_map=.
+
+  To prevent the player from going on top of blocking =tile=, we add check before
+  =player.move_by= and call =game_map.is_blocked= with potential value of where player 
+  will be. If =is_blocked= return false, player can move to that location.
+
+  [[https://github.com/Roy-Fokker/roguelike/tree/Part-2c][GitHub Repo]]
+
+* Refactor part 2: the refactoring
+  Once again, code has gotten a bit hairy =ಠ╭╮ಠ=. So it's time to clean up again.
+  We have a good idea of how the map is to be generated, and how collisions will
+  work. It is now an exercise to clean up this working code into something that 
+  still works but is manageable. This is circle of programming.
+
+  This time around I am moving the code =input handling= code out, on top of moving 
+  =tile=, =game_map= and =generating= and =drawing= functions as well as pulling out
+  =actions= functionality.
+
+  By the end of this set of refactoring activity, the project will have many files.
+  We need to make sure that CMake is aware of them, which means adding each to 
+  =target_sources= in ~src\CMakeLists.txt~. Over time, this list will get larger
+  but not that much more larger.
 
 * Links
 ╣ [[https://github.com/Roy-Fokker/roguelike/tree/Part-2b][GitHub Repo]] ╠═══\\
 ╣ [[file:index.org][Home]] ╠═══\\
-╣ Prev: [[file:1.Starter.org][Console and moving around]] ╠═══ \\
+╣ Prev: [[file:1.Starter.org][Console and moving around]] ╠═══\\
 ╣ Next: [[file:3.Dungeon.org][Dungeon generation]] ╠═══
 
 -----

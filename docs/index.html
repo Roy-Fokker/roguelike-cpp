@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2019-10-10 Thu 21:11 -->
+<!-- 2019-10-12 Sat 21:03 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Roguelike Game in C++17</title>
@@ -10,6 +10,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="org.css" rel="stylesheet" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.18.0/min/vs/loader.js"></script>
+<script src="monaco-editor-code-block.js"></script>
 <script type="text/javascript">
 /*
 @licstart  The following is the entire license notice for the
@@ -66,18 +69,18 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org724a773">Goal of this project</a></li>
-<li><a href="#orge17e9d4">Influences on the approach</a></li>
-<li><a href="#org1131f99">Log of Code</a></li>
-<li><a href="#org28c5e7a">References</a></li>
-<li><a href="#orga433ac7">Licence</a></li>
+<li><a href="#org2cd90fb">Goal of this project</a></li>
+<li><a href="#org0616675">Influences on the approach</a></li>
+<li><a href="#orgbbddab9">Log of Code</a></li>
+<li><a href="#org1a553fe">References</a></li>
+<li><a href="#orgf3e7b81">Licence</a></li>
 </ul>
 </div>
 </nav>
 
-<div id="outline-container-org724a773" class="outline-2">
-<h2 id="org724a773">Goal of this project</h2>
-<div class="outline-text-2" id="text-org724a773">
+<div id="outline-container-org2cd90fb" class="outline-2">
+<h2 id="org2cd90fb">Goal of this project</h2>
+<div class="outline-text-2" id="text-org2cd90fb">
 <p>
 This project documents my attempts at going through the process of making a 
 Roguelike game in <code>Modern C++</code>. The associated source code lives in 
@@ -102,9 +105,9 @@ environment setup.
 </div>
 </div>
 
-<div id="outline-container-orge17e9d4" class="outline-2">
-<h2 id="orge17e9d4">Influences on the approach</h2>
-<div class="outline-text-2" id="text-orge17e9d4">
+<div id="outline-container-org0616675" class="outline-2">
+<h2 id="org0616675">Influences on the approach</h2>
+<div class="outline-text-2" id="text-org0616675">
 <p>
 The project is based on and follows the approach taken/presented by <a href="http://www.rogueliketutorials.com/tutorials/tcod/">Roguelike Tutorials</a>
 as well as the variant <a href="https://tomassedovic.github.io/roguelike-tutorial/index.html">Roguelike Tutorials in Rust</a>. Project uses the same library 
@@ -126,12 +129,17 @@ that is used in every header file. And that is <code>#pragma once</code>, which 
 defining <code>include guards</code>, not to mention less error prone. Every compiler capable of C++17 
 supports it.
 </p>
+
+<p>
+Another aspect of the approach is how the code is written and refactored. I tended to write
+a functioning implementation and then refactor it to make the code more scalable/safer/usable.
+</p>
 </div>
 </div>
 
-<div id="outline-container-org1131f99" class="outline-2">
-<h2 id="org1131f99">Log of Code</h2>
-<div class="outline-text-2" id="text-org1131f99">
+<div id="outline-container-orgbbddab9" class="outline-2">
+<h2 id="orgbbddab9">Log of Code</h2>
+<div class="outline-text-2" id="text-orgbbddab9">
 <ol class="org-ol">
 <li value="0"><a href="0.Setup.html">Environment and project setup</a>.</li>
 <li><a href="1.Starter.html">Console and moving around</a>.</li>
@@ -141,9 +149,9 @@ supports it.
 </div>
 </div>
 
-<div id="outline-container-org28c5e7a" class="outline-2">
-<h2 id="org28c5e7a">References</h2>
-<div class="outline-text-2" id="text-org28c5e7a">
+<div id="outline-container-org1a553fe" class="outline-2">
+<h2 id="org1a553fe">References</h2>
+<div class="outline-text-2" id="text-org1a553fe">
 <ul class="org-ul">
 <li><a href="http://www.rogueliketutorials.com/tutorials/tcod/">Roguelike Tutorials</a></li>
 <li><a href="https://tomassedovic.github.io/roguelike-tutorial/index.html">Roguelike Tutorials in Rust</a></li>
@@ -153,9 +161,9 @@ supports it.
 </div>
 </div>
 
-<div id="outline-container-orga433ac7" class="outline-2">
-<h2 id="orga433ac7">Licence</h2>
-<div class="outline-text-2" id="text-orga433ac7">
+<div id="outline-container-orgf3e7b81" class="outline-2">
+<h2 id="orgf3e7b81">Licence</h2>
+<div class="outline-text-2" id="text-orgf3e7b81">
 <p>
 All code in this repo is marked as being under <a href="https://spdx.org/licenses/MIT.html">MIT licence</a>. Only the code i.e. <code>*.cpp</code>, <code>*.hpp</code> 
 and <code>CMakeLists.txt</code>.
@@ -166,7 +174,7 @@ and <code>CMakeLists.txt</code>.
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Neel Raiyani [Roy Fokker]</p>
-<p class="date">Created: 2019-10-10 Thu 21:11</p>
+<p class="date">Created: 2019-10-12 Sat 21:03</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

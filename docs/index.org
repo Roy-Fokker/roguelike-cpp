@@ -36,6 +36,9 @@ that is used in every header file. And that is =#pragma once=, which is a short 
 defining ~include guards~, not to mention less error prone. Every compiler capable of C++17 
 supports it.
 
+Another aspect of the approach is how the code is written and refactored. I tended to write
+a functioning implementation and then refactor it to make the code more scalable/safer/usable.
+
 * Log of Code
 0. [@0] [[file:0.Setup.org][Environment and project setup]].
 1. [[file:1.Starter.org][Console and moving around]].

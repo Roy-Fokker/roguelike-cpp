@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2019-10-10 Thu 21:43 -->
+<!-- 2019-10-12 Sat 21:04 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Roguelike Game in C++17</title>
@@ -10,6 +10,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="org.css" rel="stylesheet" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.18.0/min/vs/loader.js"></script>
+<script src="monaco-editor-code-block.js"></script>
 <script type="text/javascript">
 /*
 @licstart  The following is the entire license notice for the
@@ -66,11 +69,11 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orgb680f32">Goals</a></li>
-<li><a href="#orgd0950b4">Refactoring</a></li>
-<li><a href="#orgc6a10e2">Loading Custom Font</a></li>
-<li><a href="#org44e61de">Handling Input</a></li>
-<li><a href="#orgeec8f0b">Links</a></li>
+<li><a href="#orga6350b3">Goals</a></li>
+<li><a href="#orgc612e43">Refactoring</a></li>
+<li><a href="#org59df280">Loading Custom Font</a></li>
+<li><a href="#org8ec50ee">Handling Input</a></li>
+<li><a href="#org50d7713">Links</a></li>
 </ul>
 </div>
 </nav>
@@ -80,9 +83,9 @@ presents a window with <code>@</code> in middle of the screen. But that does not
 a roguelike make. So, onwards we go&#x2026;
 </p>
 
-<div id="outline-container-orgb680f32" class="outline-2">
-<h2 id="orgb680f32">Goals</h2>
-<div class="outline-text-2" id="text-orgb680f32">
+<div id="outline-container-orga6350b3" class="outline-2">
+<h2 id="orga6350b3">Goals</h2>
+<div class="outline-text-2" id="text-orga6350b3">
 <p>
 For this section the goals are:
 </p>
@@ -102,9 +105,9 @@ That list doesn't look too bad, relatively simple goals.
 </div>
 </div>
 
-<div id="outline-container-orgd0950b4" class="outline-2">
-<h2 id="orgd0950b4">Refactoring</h2>
-<div class="outline-text-2" id="text-orgd0950b4">
+<div id="outline-container-orgc612e43" class="outline-2">
+<h2 id="orgc612e43">Refactoring</h2>
+<div class="outline-text-2" id="text-orgc612e43">
 <p>
 The code renders <code>@</code> in a hard coded position directly on what <code>tcod</code>
 calls the root console. Ideally, it would be rendered on to some
@@ -126,9 +129,9 @@ on <code>game_console</code> using <code>putChar</code> method.
 </div>
 </div>
 
-<div id="outline-container-orgc6a10e2" class="outline-2">
-<h2 id="orgc6a10e2">Loading Custom Font</h2>
-<div class="outline-text-2" id="text-orgc6a10e2">
+<div id="outline-container-org59df280" class="outline-2">
+<h2 id="org59df280">Loading Custom Font</h2>
+<div class="outline-text-2" id="text-org59df280">
 <p>
 For this we use <code>setCustomFont</code> method of the <code>TCODConsole</code> class. Reading
 the documentation of <code>tcod</code>, we learn that <code>setCustomFont</code> must be called
@@ -152,9 +155,9 @@ to copy 3 files, two <code>.dll</code> and one <code>.png</code>.
 </div>
 </div>
 
-<div id="outline-container-org44e61de" class="outline-2">
-<h2 id="org44e61de">Handling Input</h2>
-<div class="outline-text-2" id="text-org44e61de">
+<div id="outline-container-org8ec50ee" class="outline-2">
+<h2 id="org8ec50ee">Handling Input</h2>
+<div class="outline-text-2" id="text-org8ec50ee">
 <p>
 Compared to font loading, this is bit more involved. Basically, this 
 task can be divided into two smaller concepts.
@@ -165,9 +168,9 @@ task can be divided into two smaller concepts.
 </ul>
 </div>
 
-<div id="outline-container-org0fbf6f1" class="outline-3">
-<h3 id="org0fbf6f1">Action handling</h3>
-<div class="outline-text-3" id="text-org0fbf6f1">
+<div id="outline-container-orgdf41ca5" class="outline-3">
+<h3 id="orgdf41ca5">Action handling</h3>
+<div class="outline-text-3" id="text-orgdf41ca5">
 <p>
 Player in our game can do set of actions on any given turn/frame.
 For the moment these are
@@ -205,9 +208,9 @@ value to move the player in <code>X</code> and <code>Y</code> axis respectively.
 </div>
 </div>
 
-<div id="outline-container-orge93fbde" class="outline-3">
-<h3 id="orge93fbde">Key press handling</h3>
-<div class="outline-text-3" id="text-orge93fbde">
+<div id="outline-container-org6096a87" class="outline-3">
+<h3 id="org6096a87">Key press handling</h3>
+<div class="outline-text-3" id="text-org6096a87">
 <p>
 The function handling key presses will transform the key pressed into 
 an action from our actions list.
@@ -251,9 +254,9 @@ when <code>ALT</code> and <code>ENTER</code> keys are pressed together.
 </div>
 </div>
 
-<div id="outline-container-orgeec8f0b" class="outline-2">
-<h2 id="orgeec8f0b">Links</h2>
-<div class="outline-text-2" id="text-orgeec8f0b">
+<div id="outline-container-org50d7713" class="outline-2">
+<h2 id="org50d7713">Links</h2>
+<div class="outline-text-2" id="text-org50d7713">
 <p>
 ╣ <a href="https://github.com/Roy-Fokker/roguelike/tree/Part-1b">GitHub Repo</a> ╠═══<br>
 ╣ <a href="index.html">Home</a> ╠═══<br>
@@ -267,7 +270,7 @@ when <code>ALT</code> and <code>ENTER</code> keys are pressed together.
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Neel Raiyani [Roy Fokker]</p>
-<p class="date">Created: 2019-10-10 Thu 21:43</p>
+<p class="date">Created: 2019-10-12 Sat 21:04</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

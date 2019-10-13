@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2019-10-11 Fri 21:14 -->
+<!-- 2019-10-12 Sat 21:03 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Roguelike Game in C++17</title>
@@ -69,11 +69,12 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org2e0ae12">Goals</a></li>
-<li><a href="#org4429237">The entity class</a></li>
-<li><a href="#org42534e7">Refactoring for hygene</a></li>
-<li><a href="#org5532e1d">Beginning of a map</a></li>
-<li><a href="#orge314915">Links</a></li>
+<li><a href="#orgadf416b">Goals</a></li>
+<li><a href="#org3cbffe0">The entity class</a></li>
+<li><a href="#org7764fbb">Refactoring for hygene</a></li>
+<li><a href="#org7ef3d25">Beginning of a map</a></li>
+<li><a href="#orgea3047a">Refactor part 2: the refactoring</a></li>
+<li><a href="#org5bf3614">Links</a></li>
 </ul>
 </div>
 </nav>
@@ -82,9 +83,9 @@ Moving around in a blank world is not fun. Also, code at present has no concept
 of other things and creatures that could exist. So to fix that further we delve.
 </p>
 
-<div id="outline-container-org2e0ae12" class="outline-2">
-<h2 id="org2e0ae12">Goals</h2>
-<div class="outline-text-2" id="text-org2e0ae12">
+<div id="outline-container-orgadf416b" class="outline-2">
+<h2 id="orgadf416b">Goals</h2>
+<div class="outline-text-2" id="text-orgadf416b">
 <p>
 We have two main goals for this part. 
 </p>
@@ -95,15 +96,15 @@ We have two main goals for this part.
 </div>
 </div>
 
-<div id="outline-container-org4429237" class="outline-2">
-<h2 id="org4429237">The entity class</h2>
-<div class="outline-text-2" id="text-org4429237">
+<div id="outline-container-org3cbffe0" class="outline-2">
+<h2 id="org3cbffe0">The entity class</h2>
+<div class="outline-text-2" id="text-org3cbffe0">
 <p>
 First thing we'll do is replace <code>move_dir</code> typedef, with a strongly-typed struct.
 <code>position</code> struct will have 2 members <code>x</code> and <code>y</code>. Anywhere we had <code>move_dir</code> gets
 replaced by <code>position</code>.
 </p>
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-2a/src/main.cpp#L20-L25">
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-2a/src/main.cpp#L20-L25" width=300 commentWidth=250>
 </ui-code>
 
 <p>
@@ -114,7 +115,7 @@ updates entity's <code>position</code>. <code>draw_entity</code> takes a console
 and calls console's methods to draw itself. This part we'll change in next section
 as current setup is not ideal.
 </p>
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-2a/src/main.cpp#L58-L81">
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-2a/src/main.cpp#L58-L81" width=300 commentWidth=250>
 </ui-code>
 
 <p>
@@ -122,20 +123,20 @@ Now we change <code>main</code> function, replace <code>player_x</code> and <cod
 object, with same position values are before while also adding character and color 
 to be used.
 </p>
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-2a/src/main.cpp#L104-L110">
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-2a/src/main.cpp#L104-L110" width=300 commentWidth=250>
 </ui-code>
 
 <p>
 In the <code>actions</code> switch block, change how the player position is updated.
 </p>
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-2a/src/main.cpp#L122-L126">
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-2a/src/main.cpp#L122-L126" width=300 commentWidth=250>
 </ui-code>
 
 <p>
 And further down, below the <code>actions</code> switch block, where drawing occurs, we change
 the two console method calls with one <code>player.draw_entity</code> call.
 </p>
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-2a/src/main.cpp#L137-L139">
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-2a/src/main.cpp#L137-L139" width=300 commentWidth=250>
 </ui-code>
 
 <p>
@@ -144,9 +145,9 @@ the two console method calls with one <code>player.draw_entity</code> call.
 </div>
 </div>
 
-<div id="outline-container-org42534e7" class="outline-2">
-<h2 id="org42534e7">Refactoring for hygene</h2>
-<div class="outline-text-2" id="text-org42534e7">
+<div id="outline-container-org7764fbb" class="outline-2">
+<h2 id="org7764fbb">Refactoring for hygene</h2>
+<div class="outline-text-2" id="text-org7764fbb">
 <p>
 Before we go any further, we need to reorganize the code a bit. Everything is 
 currently in the <code>main.cpp</code>. It's getting a bit crowded, and difficult to visualize
@@ -189,17 +190,73 @@ entity to move it by a specific offset position.
 </div>
 </div>
 
-<div id="outline-container-org5532e1d" class="outline-2">
-<h2 id="org5532e1d">Beginning of a map</h2>
+<div id="outline-container-org7ef3d25" class="outline-2">
+<h2 id="org7ef3d25">Beginning of a map</h2>
+<div class="outline-text-2" id="text-org7ef3d25">
+<p>
+Refactoring done, time to move on to second goal for this section, creating a map/level
+structure. This will represent the movement area for the player. As well as, places
+player can collide with. Collidable area will be colored differently from regular ground
+area.
+</p>
+
+<p>
+Each <code>cell</code> in our map will be represented by a <code>tile</code> data structure. We'll hold each 
+<code>tile</code> in a <code>game_map</code> structure in a <code>std::vector</code>. <code>game_map</code> knows size of the 
+movement area via <code>width</code> and <code>height</code>. <code>is_blocked</code> method will take a <code>position</code>
+arguement and return <code>true</code> if that location has a blocking <code>tile</code>.
+</p>
+
+<p>
+We add 2 free functions <code>generate_map</code> and <code>draw_map</code>. You can probably guess what each
+of these functions does. Both will get called by <code>main</code> function. Before our main game
+loop, we call <code>generate_map</code>, and before drawing the player we call <code>draw_map</code>.
+</p>
+
+<p>
+To prevent the player from going on top of blocking <code>tile</code>, we add check before
+<code>player.move_by</code> and call <code>game_map.is_blocked</code> with potential value of where player 
+will be. If <code>is_blocked</code> return false, player can move to that location.
+</p>
+
+<p>
+<a href="https://github.com/Roy-Fokker/roguelike/tree/Part-2c">GitHub Repo</a>
+</p>
+</div>
 </div>
 
-<div id="outline-container-orge314915" class="outline-2">
-<h2 id="orge314915">Links</h2>
-<div class="outline-text-2" id="text-orge314915">
+<div id="outline-container-orgea3047a" class="outline-2">
+<h2 id="orgea3047a">Refactor part 2: the refactoring</h2>
+<div class="outline-text-2" id="text-orgea3047a">
+<p>
+Once again, code has gotten a bit hairy <code>ಠ╭╮ಠ</code>. So it's time to clean up again.
+We have a good idea of how the map is to be generated, and how collisions will
+work. It is now an exercise to clean up this working code into something that 
+still works but is manageable. This is circle of programming.
+</p>
+
+<p>
+This time around I am moving the code <code>input handling</code> code out, on top of moving 
+<code>tile</code>, <code>game_map</code> and <code>generating</code> and <code>drawing</code> functions as well as pulling out
+<code>actions</code> functionality.
+</p>
+
+<p>
+By the end of this set of refactoring activity, the project will have many files.
+We need to make sure that CMake is aware of them, which means adding each to 
+<code>target_sources</code> in <code>src\CMakeLists.txt</code>. Over time, this list will get larger
+but not that much more larger.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org5bf3614" class="outline-2">
+<h2 id="org5bf3614">Links</h2>
+<div class="outline-text-2" id="text-org5bf3614">
 <p>
 ╣ <a href="https://github.com/Roy-Fokker/roguelike/tree/Part-2b">GitHub Repo</a> ╠═══<br>
 ╣ <a href="index.html">Home</a> ╠═══<br>
-╣ Prev: <a href="1.Starter.html">Console and moving around</a> ╠═══ <br>
+╣ Prev: <a href="1.Starter.html">Console and moving around</a> ╠═══<br>
 ╣ Next: <a href="3.Dungeon.html">Dungeon generation</a> ╠═══
 </p>
 
@@ -209,7 +266,7 @@ entity to move it by a specific offset position.
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Neel Raiyani [Roy Fokker]</p>
-<p class="date">Created: 2019-10-11 Fri 21:14</p>
+<p class="date">Created: 2019-10-12 Sat 21:03</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
