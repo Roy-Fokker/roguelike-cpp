@@ -35,6 +35,27 @@
    - =VCPKG_ROOT= with value of installation directory of VCpkg, which for me is =D:\Projects\CPP\.packages\vcpkg=
    - =VCPKG_DEFAULT_TRIPLET= with value of =x64-Windows= as I want to ensure vcpkg only generates 64-bit packages.
 
+* Project specific editor configuration
+  In order to make the code editing and debugging with VSCode a little bit less frustrating, there is a
+  need to do some project specific setup.
+  1. Intellisense settings.
+	 This is done by press =F1= and typing ~C\C++: Edit Configuration(UI)~.\\
+	 On the window that comes up find =Compiler arguments= and add following two values\\
+	 =/std:c++17= \\
+     =/permissive-=
+  2. Debugger settings.
+	 Next VSCode will need to know how to start the debugger.\\
+	 For this go to ~Debug~ Tab (=Ctrl+Shift+D=), and click on Small Gear icon called "Configure/Fix launch.json".\\
+	 Select "=C++(Windows)=" as environment.\\
+	 This will then create a ~launch.json~ file in =.vscode= directory. Modify this file, by changing following values.
+	 #+name: launch.json
+	 #+begin_src js
+	   "program": "${command:cmake.launchTargetPath}",
+	   "cwd": "${workspaceFolder}\\build\\bin",
+	   "externalConsole": true
+	 #+end_src
+	 After this is done, debugger can be launched using =F5=.
+
 * Project Structure
   The project's files are structured in following manner. 
   I am not listing files and directories not directly created by me. e.g =.git= and =.vscode= folders. \\
@@ -60,32 +81,26 @@
   Each file is well documented, so I won't go over them here. Once files are created, VSCode will automatically
   trigger ~CMake Tools~ which will create a build script. This can be executed using =F7=.
   
-* Project specific editor configuration
-  In order to make the code editing and debugging with VSCode a little bit less frustrating, there is a
-  need to do some project specific setup.
-  1. Intellisense settings.
-	 This is done by press =F1= and typing ~C\C++: Edit Configuration(UI)~.\\
-	 On the window that comes up find =Compiler arguments= and add following two values\\
-	 =/std:c++17= \\
-     =/permissive-=
-  2. Debugger settings.
-	 Next VSCode will need to know how to start the debugger.\\
-	 For this go to ~Debug~ Tab (=Ctrl+Shift+D=), and click on Small Gear icon called "Configure/Fix launch.json".\\
-	 Select "=C++(Windows)=" as environment.\\
-	 This will then create a ~launch.json~ file in =.vscode= directory. Modify this file, by changing following values.
-	 #+name: launch.json
-	 #+begin_src js
-	   "program": "${command:cmake.launchTargetPath}",
-	   "cwd": "${workspaceFolder}\\build\\bin",
-	   "externalConsole": true
-	 #+end_src
-	 After this is done, debugger can be launched using =F5=.
-
 * The Starter Project
 ** Hello World!
    You can view the [[https://github.com/Roy-Fokker/roguelike/tree/Part-0a][setup starter project]] on the github repo. Building it will require that you 
    install ~fmt~ using =vcpkg=. Project up to this point doesn't do much other than print 
-   =Hello World!= followed by current time point.
+   =Hello World!= followed by current time point.\\
+   =\roguelike\src\main.cpp=
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-0a/src/main.cpp" width=500 commentWidth=500>
+</ui-code>
+#+end_export
+   =\roguelike\CMakeLists.txt=
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-0a/CMakeLists.txt" width=500 commentWidth=500>
+</ui-code>
+#+end_export
+   =\roguelike\src\CMakeLists.txt=
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-0a/src/CMakeLists.txt" width=500 commentWidth=500>
+</ui-code>
+#+end_export
 
 ** Using TCOD
    In order to get a character on the screen, we need =libtcod=. We have two options here. 
@@ -101,6 +116,28 @@
 
    You can view the [[https://github.com/Roy-Fokker/roguelike/tree/Part-0b][state of the project as this point in time]]. If you are following along, note 
    the changes made to all the ~CMakeLists.txt~ as well as the ~src\main.cpp~.
+   =\roguelike\src\main.cpp=
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-0b/src/main.cpp" width=500 commentWidth=500>
+</ui-code>
+#+end_export
+
+   =\roguelike\CMakeLists.txt=
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-0b/CMakeLists.txt#L13-L16" width=500 commentWidth=500>
+</ui-code>
+#+end_export
+   =\roguelike\src\CMakeLists.txt=
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-0b/src/CMakeLists.txt#L15-L19" width=500 commentWidth=500>
+</ui-code>
+#+end_export
+   =\roguelike\external\CMakeLists.txt=
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-0b/external/CMakeLists.txt" width=500 commentWidth=500>
+</ui-code>
+#+end_export
+
    
 * Links
 ╣ [[https://github.com/Roy-Fokker/roguelike/tree/Part-0b][GitHub Repo]] ╠═══\\

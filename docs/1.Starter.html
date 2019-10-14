@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2019-10-12 Sat 21:04 -->
+<!-- 2019-10-13 Sun 23:14 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Roguelike Game in C++17</title>
@@ -69,11 +69,11 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orga6350b3">Goals</a></li>
-<li><a href="#orgc612e43">Refactoring</a></li>
-<li><a href="#org59df280">Loading Custom Font</a></li>
-<li><a href="#org8ec50ee">Handling Input</a></li>
-<li><a href="#org50d7713">Links</a></li>
+<li><a href="#org4869ee0">Goals</a></li>
+<li><a href="#org05b4a5c">Refactoring</a></li>
+<li><a href="#org5010ff9">Loading Custom Font</a></li>
+<li><a href="#org4b5f183">Handling Input</a></li>
+<li><a href="#orgdd3a4df">Links</a></li>
 </ul>
 </div>
 </nav>
@@ -83,9 +83,9 @@ presents a window with <code>@</code> in middle of the screen. But that does not
 a roguelike make. So, onwards we go&#x2026;
 </p>
 
-<div id="outline-container-orga6350b3" class="outline-2">
-<h2 id="orga6350b3">Goals</h2>
-<div class="outline-text-2" id="text-orga6350b3">
+<div id="outline-container-org4869ee0" class="outline-2">
+<h2 id="org4869ee0">Goals</h2>
+<div class="outline-text-2" id="text-org4869ee0">
 <p>
 For this section the goals are:
 </p>
@@ -105,9 +105,9 @@ That list doesn't look too bad, relatively simple goals.
 </div>
 </div>
 
-<div id="outline-container-orgc612e43" class="outline-2">
-<h2 id="orgc612e43">Refactoring</h2>
-<div class="outline-text-2" id="text-orgc612e43">
+<div id="outline-container-org05b4a5c" class="outline-2">
+<h2 id="org05b4a5c">Refactoring</h2>
+<div class="outline-text-2" id="text-org05b4a5c">
 <p>
 The code renders <code>@</code> in a hard coded position directly on what <code>tcod</code>
 calls the root console. Ideally, it would be rendered on to some
@@ -120,23 +120,30 @@ Within the refactored code, offscreen buffer is called <code>game_console</code>
 it has the same dimensions as root console. Before root console is displayed
 on to the screen, <code>game_console</code> is merged using <code>blit</code> method.
 </p>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-1b/src/main.cpp#L75-L80" width=500 commentWidth=500>
+</ui-code>
 
 <p>
 The <code>@</code>'s position is now determined by value of two variables <code>player_x</code> 
 and <code>player_y</code>. Also it's color is explicitly set to be <code>white</code>. It is drawn
 on <code>game_console</code> using <code>putChar</code> method.
 </p>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-1b/src/main.cpp#L112-L114" width=500 commentWidth=500>
+</ui-code>
 </div>
 </div>
 
-<div id="outline-container-org59df280" class="outline-2">
-<h2 id="org59df280">Loading Custom Font</h2>
-<div class="outline-text-2" id="text-org59df280">
+
+<div id="outline-container-org5010ff9" class="outline-2">
+<h2 id="org5010ff9">Loading Custom Font</h2>
+<div class="outline-text-2" id="text-org5010ff9">
 <p>
 For this we use <code>setCustomFont</code> method of the <code>TCODConsole</code> class. Reading
 the documentation of <code>tcod</code>, we learn that <code>setCustomFont</code> must be called
 before <code>initRoot</code> is called.
 </p>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-1b/src/main.cpp#L64-L72" width=500 commentWidth=500>
+</ui-code>
 
 <p>
 Another thing that needs to be done to get font to work, is we need to copy
@@ -152,12 +159,14 @@ The copying action is done by CMake, by declaring/updating the custom target
 that was setup for project to consume <code>tcod</code>. CMake target is now updated 
 to copy 3 files, two <code>.dll</code> and one <code>.png</code>.
 </p>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-1b/external/CMakeLists.txt#L11-L17" width=500 commentWidth=500>
+</ui-code>
 </div>
 </div>
 
-<div id="outline-container-org8ec50ee" class="outline-2">
-<h2 id="org8ec50ee">Handling Input</h2>
-<div class="outline-text-2" id="text-org8ec50ee">
+<div id="outline-container-org4b5f183" class="outline-2">
+<h2 id="org4b5f183">Handling Input</h2>
+<div class="outline-text-2" id="text-org4b5f183">
 <p>
 Compared to font loading, this is bit more involved. Basically, this 
 task can be divided into two smaller concepts.
@@ -168,9 +177,9 @@ task can be divided into two smaller concepts.
 </ul>
 </div>
 
-<div id="outline-container-orgdf41ca5" class="outline-3">
-<h3 id="orgdf41ca5">Action handling</h3>
-<div class="outline-text-3" id="text-orgdf41ca5">
+<div id="outline-container-org78ad2a2" class="outline-3">
+<h3 id="org78ad2a2">Action handling</h3>
+<div class="outline-text-3" id="text-org78ad2a2">
 <p>
 Player in our game can do set of actions on any given turn/frame.
 For the moment these are
@@ -185,6 +194,8 @@ For the moment these are
 Game doesn't really care which key is pressed to perform these actions.
 We'll get to mapping actions to keypresses in next section.
 </p>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-1b/src/main.cpp#L11-L18" width=500 commentWidth=500>
+</ui-code>
 
 <p>
 To capture our actions in code we use an enumeration in C++. It has 
@@ -200,17 +211,21 @@ The switch expects a <code>std::pair</code> with <code>.first</code> type being 
 case, where <code>.second</code> is another <code>std::pair</code> type and is used to update
 player position. Second <code>std::pair</code> is typedef'd to <code>move_dir</code>.
 </p>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-1b/src/main.cpp#L85-L110" width=500 commentWidth=500>
+</ui-code>
 
 <p>
 <code>move_dir</code>'s two members <code>first</code> and <code>second</code>, representing the offset
 value to move the player in <code>X</code> and <code>Y</code> axis respectively.
 </p>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-1b/src/main.cpp#L20-L23" width=500 commentWidth=500>
+</ui-code>
 </div>
 </div>
 
-<div id="outline-container-org6096a87" class="outline-3">
-<h3 id="org6096a87">Key press handling</h3>
-<div class="outline-text-3" id="text-org6096a87">
+<div id="outline-container-org5197782" class="outline-3">
+<h3 id="org5197782">Key press handling</h3>
+<div class="outline-text-3" id="text-org5197782">
 <p>
 The function handling key presses will transform the key pressed into 
 an action from our actions list.
@@ -244,6 +259,8 @@ When any of the arrows keys are pressed, we populate <code>.second</code> member
 with action value. <code>std::pair</code> is then returned to caller, which is <code>main</code>,
 where above described <code>Action Handling</code> occurs.
 </p>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-1b/src/main.cpp#L26-L55" width=500 commentWidth=500>
+</ui-code>
 
 <p>
 Now we have <code>@</code> displayed on the screen which can be moved around using arrow 
@@ -254,9 +271,9 @@ when <code>ALT</code> and <code>ENTER</code> keys are pressed together.
 </div>
 </div>
 
-<div id="outline-container-org50d7713" class="outline-2">
-<h2 id="org50d7713">Links</h2>
-<div class="outline-text-2" id="text-org50d7713">
+<div id="outline-container-orgdd3a4df" class="outline-2">
+<h2 id="orgdd3a4df">Links</h2>
+<div class="outline-text-2" id="text-orgdd3a4df">
 <p>
 ╣ <a href="https://github.com/Roy-Fokker/roguelike/tree/Part-1b">GitHub Repo</a> ╠═══<br>
 ╣ <a href="index.html">Home</a> ╠═══<br>
@@ -270,7 +287,7 @@ when <code>ALT</code> and <code>ENTER</code> keys are pressed together.
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Neel Raiyani [Roy Fokker]</p>
-<p class="date">Created: 2019-10-12 Sat 21:04</p>
+<p class="date">Created: 2019-10-13 Sun 23:14</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
