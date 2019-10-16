@@ -33,6 +33,12 @@ target_compile_options(rogue
     PRIVATE 
         $<$<CXX_COMPILER_ID:MSVC>:/W3 /permissive- /Zc:__cplusplus /std:c++17>)
 
+# Provide some extra linker options IF the compiler is MSVC
+# /ENTRY:mainCRTStartup : tell msvc we want to start in main() function.
+target_link_options(rogue
+    PRIVATE
+        $<$<CXX_COMPILER_ID:MSVC>:/ENTRY:mainCRTStartup>)
+
 # Define "DEBUG" if the Build type is Debug
 # Define only for MSVC to silence deprecated header warnings
 target_compile_definitions(rogue
