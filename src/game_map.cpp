@@ -1,8 +1,10 @@
 #include "game_map.hpp"
 
+#include <easy_iterator.h>
 #include <libtcod.hpp>
 #include <random>
 #include <utility>
+#include <algorithm>
 
 namespace
 {
@@ -11,7 +13,7 @@ namespace
 	static const auto tunnel_color = TCODColor(25, 25, 125);
 	static const auto wall_color = TCODColor(50, 50, 150);
 
-	constexpr auto max_rooms = 10;
+	constexpr auto max_rooms = 100;
 	constexpr auto min_room_size = 10;
 	constexpr auto max_room_size = 30;
 
@@ -22,8 +24,8 @@ namespace
 		auto center() const -> std::pair<int, int>
 		{
 			return {
-				(x + (x + w)) / 2,
-				(y + (y + h)) / 2
+				x + (w / 2),
+				y + (h / 2)
 			};
 		}
 
@@ -77,7 +79,7 @@ namespace
 				}
 			}
 
-			return {start_idx, end_idx, idx_run, r};
+			return {(r.x + size.width * r.y), end_idx, idx_run, {r.x, r.y, w - r.x, h - r.y}};
 		};
 
 		auto make_random_rooms = [&]() -> std::vector<room>
@@ -85,14 +87,33 @@ namespace
 			std::random_device rd{};
 			std::mt19937 gen(rd());
 			std::uniform_int_distribution d_rs(min_room_size, max_room_size);
-			std::uniform_int_distribution d_rx(0, size.width);
-			std::uniform_int_distribution d_ry(0, size.height);
+			std::uniform_int_distribution d_rx(0, size.width - 1);
+			std::uniform_int_distribution d_ry(0, size.height - 1);
 
-			int room_count = 0;
-			while (room_count < max_rooms)
+			std::vector<room> rooms{};
+			for (auto i : easy_iterator::range(max_rooms))
 			{
-				
+				// use random number generator to make a 
+				// room rectangle.
+				auto room_rect = rect
+				{
+					d_rx(gen),  // x and y coordinates
+					d_ry(gen),  // of the room.
+					d_rs(gen),  // width and height
+					d_rs(gen)   // of the room.
+				};
+
+				auto exists = std::find_if(std::begin(rooms), std::end(rooms),
+											[&](const auto &arg) {
+												return arg.r.intersects(room_rect);
+											});
+				if (exists == std::end(rooms))
+				{
+					rooms.push_back(create_room(room_rect));
+				}
 			}
+
+			return rooms;
 		};
 
 		return make_random_rooms();
