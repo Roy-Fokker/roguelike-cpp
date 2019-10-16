@@ -40,10 +40,12 @@ target_compile_definitions(rogue
         $<$<CONFIG:Debug>:DEBUG _DEBUG>
         $<$<CXX_COMPILER_ID:MSVC>:_SILENCE_CXX17_C_HEADER_DEPRECATION_WARNING>)
 
-# Add the LIBTCOD include directory to compiler include path for rogue executable.
+# Add the include directory for external dependencies to compiler 
+# include path for rogue executable.
 target_include_directories(rogue 
     PRIVATE 
-        ${LIBTCOD_INCLUDE})
+        ${LIBTCOD_INCLUDE}
+        ${EASYITERATOR_INCLUDE})
 
 # Add the LIBTCOD library to linker lib path for rogue executable.
 target_link_libraries(rogue 
