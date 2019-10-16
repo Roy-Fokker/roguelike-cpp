@@ -29,6 +29,10 @@ target_compile_features(rogue
         cxx_std_17)
 
 # Provide some extra compiler options IF the compiler is MSVC
+# - /W3 : enable all the warnings
+# - /permissive- : tell msvc to work in conformance mode
+# - /Zc:__cpluspluc : tell msvc to report C++ version correctly
+# - /std:c++17 : tell msvc to use Standard C++ 17. CMake passes flag incorrectly
 target_compile_options(rogue
     PRIVATE 
         $<$<CXX_COMPILER_ID:MSVC>:/W3 /permissive- /Zc:__cplusplus /std:c++17>)
