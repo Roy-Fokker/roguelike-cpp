@@ -32,9 +32,9 @@ struct game_map
 	std::vector<tile> tiles;
 
 	// Check if position provided is blocking tile
-	auto is_blocked(position p) const -> bool;
+	auto is_blocked(const position p) const -> bool;
 };
 
 
 
-auto generate_map(map_size size) -> game_map;
+auto generate_map(const map_size size) -> game_map;
