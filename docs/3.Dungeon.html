@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2019-10-10 Thu 16:39 -->
+<!-- 2019-10-17 Thu 17:01 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Roguelike Game in C++17</title>
@@ -10,6 +10,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="org.css" rel="stylesheet" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.18.0/min/vs/loader.js"></script>
+<script src="monaco-editor-code-block.js"></script>
 <script type="text/javascript">
 /*
 @licstart  The following is the entire license notice for the
@@ -62,11 +65,189 @@ for the JavaScript code in this tag.
 <header>
 <h1 class="title">Roguelike Game in C++17</h1>
 <p class="subtitle">Dungeon Generation</p>
-</header>
+</header><nav id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org28dbe00">1. Goals</a></li>
+<li><a href="#orgc7bdf93">2. Brief detour into Refactoing lands</a></li>
+<li><a href="#orga2e087c">3. Simple rooms generator</a></li>
+<li><a href="#org725fd7d">4. Connecting all the rooms</a></li>
+<li><a href="#org5a26f1b">5. Links</a></li>
+</ul>
+</div>
+</nav>
+<p>
+The player can move around, and there are few rooms. But at this time nothing connects
+the rooms, so player cannot go from one room to another. Additionally, room generation
+is very static, it's the same everytime; and that's boring.
+</p>
+
+<div id="outline-container-org28dbe00" class="outline-2">
+<h2 id="org28dbe00"><span class="section-number-2">1</span> Goals</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+So let's fix both these issues.
+</p>
+<ul class="org-ul">
+<li>Simple rooms generator</li>
+<li>Connect all the generated rooms</li>
+</ul>
+<p>
+For this round, neither of these two goals will use a complex algorithm.
+Idea is to get it to be random enough that it feels different. But is simple to 
+implement and understand.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgc7bdf93" class="outline-2">
+<h2 id="orgc7bdf93"><span class="section-number-2">2</span> Brief detour into Refactoing lands</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+As is always the case, one can never be satisfied with how things are. So things must 
+change. For this cycle, we want to do two things:
+</p>
+<ul class="org-ul">
+<li>Change <code>game_map</code> structure so that it has list of rooms.</li>
+<li>Ensure that player always starts in one of these rooms.</li>
+</ul>
+<p>
+All the changes in this refactor are in service of these two items. 
+I've added <code>room</code> structure, and <code>game_map</code> structure has an array of these <code>rooms</code>.
+Additionally, I am changing the <code>tile</code> structure, such that it now has two data
+members and two function members; and everything that use <code>tile</code> was updated to use 
+new members. And lastly, renamed <code>map_size</code> to <code>dimension</code>, since <code>game_map</code> has 
+dimension, and <code>room</code> has dimension. They can use the same type.
+The way we ensure that player always starts in one of the rooms, we get 1st room
+from <code>game_map</code> and put the player in centre of that room.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orga2e087c" class="outline-2">
+<h2 id="orga2e087c"><span class="section-number-2">3</span> Simple rooms generator</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+We start by adding two member functions to <code>room</code>, <code>center</code> and <code>intersects</code>, first 
+just returns centre of the room, while second tells you if this room intersects 
+another room. 
+</p>
+
+<p>
+Most of the changes for this section, will be modifying <code>game_map.cpp</code> file. We will 
+also be using <code>vcpkg</code> to get a library to help with iterating over arrays. The library
+in question is called <code>CppIterTools</code>, there are many librarys for C++ that do similar 
+things as this library. e.g. <code>NanoRanges</code>, <code>Easy Iterator</code>, <code>Range-V3</code>, etc. You could 
+achieve the same with any of them. You can download the library using following command.
+</p>
+<div class="org-src-container">
+<pre class="src src-shell">vcpkg install cppitertools
+</pre>
+</div>
+<p>
+And because it's a header only library, we don't have to change anything in CMakeLists to 
+make use of it. <code>vcpkg</code> automagic!!!.
+</p>
+
+<p>
+We start by changing <code>generate_map</code> function, first we change how tiles array is populated.
+Previously, we populated the <code>tiles</code> member with default wall type of <code>ground</code>, now we make 
+it a <code>wall</code>. Using the <code>CppIterTools</code> the code is much more readable, and simpler to write.
+</p>
+
+<p>
+The idea is each room we make will change the tile type from being <code>wall</code> to <code>ground</code>. 
+Continuing on, our rooms array will be generated by <code>make_rooms</code> function. This function
+will take in size of our map, as well as tiles on the map.
+</p>
+
+<p>
+Now I could have written <code>make_rooms</code> function in many different ways. However, I've choosen
+to compartmentalize each sub-process used to make rooms into their own <code>lambda</code> function.
+So there are two lambda functions within <code>make_rooms</code> function. <code>change_tiles</code> which will
+given a <code>room</code> structure change the <code>tiles</code> array to ground type for that part of the map 
+array. <code>make_random_room</code> simply generates a randomly sized room, keep it constrained 
+with in map size and room size. Randomization is generated using C++'s <code>&lt;random&gt;</code> header.
+</p>
+
+<p>
+Then taking <code>make_random_room</code> lambda functions, make a random room, check if it intersects with any
+other room already in the array, if it intersects we reject that random room and generate a new one.
+If the room does not intersect then we add it to the list of rooms. The intersection test against
+rooms array is done using C++'s <code>find_if</code> algorithm function.
+</p>
+
+<p>
+After I have list of rooms, I loop through them and call <code>change_tiles</code> to make sure room is visually
+and structurally represented. And we return to our <code>generate_map</code> function.
+</p>
+
+<p>
+There are also few file local variables defined to constrain the size of rooms, and how many rooms we 
+want per map generation.
+</p>
+
+<p>
+And that's our "Simple Rooms Generator". There are many better algorithms out there. This one is very 
+much dependent on just simple random number generator. No smarts required/applied.
+</p>
+
+<p>
+<a href="https://github.com/Roy-Fokker/roguelike/tree/Part-3a">GitHub Repo</a>
+</p>
+</div>
+</div>
+
+<div id="outline-container-org725fd7d" class="outline-2">
+<h2 id="org725fd7d"><span class="section-number-2">4</span> Connecting all the rooms</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+Having a billion rooms you can't get to is not fun. A game must be fun. So, next up, <code>connect_rooms</code>
+function. Similar to <code>make_rooms</code>, we have few lambda functions that do the various sub tasks involved
+in connecting two rooms.
+</p>
+
+<p>
+Similar to <code>make_rooms</code>'s <code>change_tiles</code> lambda, here we have <code>make_hallway</code> lambda, which changes <code>1</code> tile
+to <code>tunnel</code> type, if tile is not already <code>ground</code>. I know naming is inconsistent. Might fix that in future.
+For rest of the this article assume hallway and tunnel are used interchangably.
+</p>
+
+<p>
+Next we have two lambda that do same effective job, one makes vertical tunnels/hallways other makes horizontal
+tunnels/hallways. All the connections between rooms will have a 90 degree turn, if required.
+</p>
+
+<p>
+Lastly we loop through all the rooms, and pass to previously mentioned lambdas, there is a random number generator 
+here, to determine which room is primary. Notice we change the flip value between horizontal and vertical hallway 
+calls. This is to ensure, that we don't start both tunnels at primary room.
+</p>
+
+<p>
+Having done all this, we now have a series of rooms, we can walk around in. We can control how many rooms there 
+are on a map, how big or small they can be. Amount of code is not all that much. Just organizing it makes a lot 
+of difference.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org5a26f1b" class="outline-2">
+<h2 id="org5a26f1b"><span class="section-number-2">5</span> Links</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+╣ <a href="https://github.com/Roy-Fokker/roguelike/tree/Part-3b">GitHub Repo</a> ╠═══<br>
+╣ <a href="index.html">Home</a> ╠═══<br>
+╣ Prev: <a href="2.Entity_Map.html">The entity and the map</a> ╠═══<br>
+╣ Next: <a href="4.Field_of_view.html">Player's field of view</a> ╠═══
+</p>
+</div>
+</div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Neel Raiyani [Roy Fokker]</p>
-<p class="date">Created: 2019-10-10 Thu 16:39</p>
+<p class="date">Created: 2019-10-17 Thu 17:01</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
