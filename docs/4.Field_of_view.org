@@ -1,7 +1,4 @@
 #+SETUPFILE: theme.org
 #+SUBTITLE: Player's field of view
 #+OPTIONS: H:2
-<<<<<<< HEAD
 
-=======
->>>>>>> 0a5379a02cf8a5cf66c28e6ebd30b73813dd7b0f
