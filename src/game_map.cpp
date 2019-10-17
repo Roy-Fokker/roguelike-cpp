@@ -15,7 +15,7 @@ namespace
 	static const auto tunnel_color = TCODColor(25, 25, 125);
 	static const auto wall_color = TCODColor(50, 50, 150);
 
-	constexpr auto max_rooms = 20;
+	constexpr auto max_rooms = 10;
 	constexpr auto min_room_size = 5;
 	constexpr auto max_room_size = 20;
 
@@ -108,68 +108,71 @@ namespace
 	// Connect all the rooms in order they got added to the list
 	void connect_rooms(const dimension size, const std::vector<room> &rooms, std::vector<tile> &tiles)
 	{
+		// Turn tile in to a hallway/tunnel tile, if 
+		// it's not already a ground tile.
+		auto make_hallway = [&](int x, int y)
+		{
+			auto idx = x + size.width * y;
+			assert(idx < tiles.size());
 
+			if (tiles[idx].type != tile_type::ground)
+				tiles[idx].type = tile_type::tunnel;
+		};
+
+		// Make Vertical Hallway/Tunnels between two rooms
+		auto vertical_hallway = [&](bool top_bottom, const room &room1, const room &room2)
+		{
+			auto r1 = (top_bottom) ? room1 : room2, // if top is primary make it r1
+			     r2 = (top_bottom) ? room2 : room1; // else make it r2
+			auto [x, y1] = r1.center();
+			auto y2 = r2.center().y;
+			
+			if (y1 > y2)           // iter::range requires starting number 
+			{                      // be lower than ending number
+				std::swap(y1, y2); // so flip them if they aren't
+			}
+
+			// only change the Y axis value to draw the tunnel.
+			for (auto y : iter::range(y1, y2))
+			{
+				make_hallway(x, y);
+			}
+		};
+
+		// Make horizontal Hallway/Tunnels between two rooms
+		// basically a copy of horizontal version.
+		auto horizontal_hallway = [&](bool left_right, const room &room1, const room &room2)
+		{
+			auto r1 = (left_right) ? room1 : room2,
+			     r2 = (left_right) ? room2 : room1;
+			auto [x1, y] = r1.center();
+			auto x2 = r2.center().x;
+			
+			if (x1 > x2)
+			{
+				std::swap(x1, x2);
+			}
+
+			// unlike vertial verison, this one works with only changes x axis
+			for (auto x : iter::range(x1, x2 + 1))
+			{
+				make_hallway(x, y);
+			}
+		};
+
+		// Random rumber to determine where the tunnel will start from
+		std::random_device rd{};
+		std::mt19937 gen(rd());
+		std::bernoulli_distribution d(0.5);
+	
+		for (auto i = 1; i < rooms.size(); i++)
+		{
+			auto flip = d(gen);  // pick which room is primary
+
+			horizontal_hallway(flip, rooms[i - 1], rooms[i]);   // make a hall from primary to secondary
+			vertical_hallway(not flip, rooms[i - 1], rooms[i]); // start vertical hall from where horizontal stopped.
+		}
 	}
-
-
-	// // Connect all the rooms in order they got added to the list
-	// void connect_rooms(const map_size size, const std::vector<room> &rooms, std::vector<tile> &tiles)
-	// {
-	// 	auto create_tunnel = [&](const room &r1, const room &r2)
-	// 	{
-	// 		auto [x1, y1] = r1.r.center();
-	// 		auto [x2, y2] = r2.r.center();
-
-	// 		auto dig_tunnel = [&](int idx)
-	// 		{
-	// 			if (not tiles[idx].blocked)
-	// 				return;
-
-	// 			tiles[idx].blocked = false;         // unblock this tile
-	// 			tiles[idx].blocks_sight = false;
-	// 			tiles[idx].color = tunnel_color;
-	// 		};
-
-	// 		auto horizontal_tunnel = [&](bool min_max)
-	// 		{
-	// 			auto x_start = std::min(x1, x2);
-	// 			auto x_end = std::max(x1, x2);
-	// 			auto y = (min_max) ? std::min(y1, y2) : std::max(y1, y2);
-
-	// 			for (int x = x_start; x < x_end; x++)
-	// 			{
-	// 				auto idx = x + size.width * y;
-	// 				dig_tunnel(idx);
-	// 			}
-	// 		};
-
-	// 		auto vertical_tunnel = [&](bool min_max)
-	// 		{
-	// 			auto y_start = std::min(y1, y2);
-	// 			auto y_end = std::max(y1, y2);
-	// 			auto x = (min_max) ? std::min(x1, x2) : std::max(x1, x2);
-
-	// 			for (int y = y_start; y < y_end; y++)
-	// 			{
-	// 				auto idx = x + size.width * y;
-	// 				dig_tunnel(idx);
-	// 			}
-	// 		};
-			
-	// 		std::random_device rd{};
-	// 		std::mt19937 gen(rd());
-	// 		std::bernoulli_distribution d(0.5);
-			
-	// 		auto min_max = d(gen);
-	// 		horizontal_tunnel(min_max);
-	// 		vertical_tunnel(not min_max);
-	// 	};
-
-	// 	for (int i = 1; i < rooms.size(); i++)
-	// 	{
-	// 		create_tunnel(rooms[i-1], rooms[i]);
-	// 	}
-	// }
 }
 
 auto tile::is_blocked() const -> bool
