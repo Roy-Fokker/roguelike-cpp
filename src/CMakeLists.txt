@@ -2,7 +2,7 @@
 
 # Find the fmtlib package installed by vcpkg.
 # fmtlib can be installed by running following command in shell
-# => vcpkg install fmt
+# => vcpkg install fmt cppitertools
 find_package(fmt REQUIRED)
 
 # Define the executable we want to build.
