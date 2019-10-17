@@ -182,7 +182,48 @@ namespace
 		{
 			create_tunnel(rooms[i-1], rooms[i]);
 		}
+auto tile::is_blocked() const -> bool
+{
+	if (type == tile_type::wall)
+	{
+		return true;
 	}
+
+	return false;
+}
+
+auto tile::color() const -> TCODColor
+{
+	switch (type)
+	{
+		case tile_type::wall:
+			return wall_color;
+		case tile_type::ground:
+			return ground_color;
+		case tile_type::tunnel:
+			return tunnel_color;
+		default:
+			assert(false);
+			break;
+	}
+	assert(false); // how'd you end up here.
+}
+
+auto room::center() const -> position
+{
+	return {
+		p.x + (size.width / 2),
+		p.y + (size.height / 2)
+	};
+}
+
+auto room::intersects(const room &other) const -> bool
+{
+	return not (
+	    p.x + size.width < other.p.x 
+	    or other.p.x + other.size.width < p.x
+	    or p.y + size.height < other.p.y
+	    or other.p.y + other.size.height < p.y);
 }
 
 auto game_map::is_blocked(const position p) const -> bool
@@ -197,27 +238,26 @@ auto game_map::is_blocked(const position p) const -> bool
 		return true; // it's a blocked area
 	}
 
-	return tiles.at(x + w * y).blocked; // Simply return value in position's index.
+	return tiles.at(x + w * y).is_blocked(); // Simply return value in position's index.
 }
 
 // Make our game_map. 
 // Version 2 of our generator. Makes Rooms and Corridors.
-auto generate_map(const map_size size) -> game_map
+auto generate_map(const dimension size) -> game_map
 {
-	auto [w, h] = size;
-	auto tiles = std::vector<tile>{};
-
-	for (auto i=0; i < (w * h); i++)
+	auto [w, h] = size;               // bind size members to they are easier to use.
+	auto tiles = std::vector<tile>{}; // create our tiles array
+	tiles.resize(w * h);              // resize it to match our size
+	for (auto [i, t] : iter::enumerate(tiles)) // enumerate using cppitertools
 	{
-		tiles.push_back({
-			{ i % w, i / w },   // Populate x and y positions
-			true, true,         // Make tile blocking by default
-			wall_color          // Default is wall type
-		});
+		t = { (int)i % w, (int)i / w, // populate x and y values of position
+		      tile_type::wall};       // set default tile type
 	}
 
 	auto rooms = make_rooms(size, tiles);
 	connect_rooms(size, rooms, tiles);
+	// auto rooms = make_rooms(size, tiles);
+	// connect_rooms(size, rooms, tiles);
 
-	return {size, tiles}; // Return a map structure;
+	return {size, tiles, rooms}; // Return a map structure;
 }

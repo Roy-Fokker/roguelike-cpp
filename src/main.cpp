@@ -31,17 +31,17 @@ int main()
 	auto game_layer = console_layer({ window_width, window_height });
 
 	bool exit_game = false;	             // should we exit the game?
+
+	// Get our map layout from generator
+	auto map = generate_map({window_width, window_height});
+
 	game_entity player                   // Player Entity object
 	{ 
-		{ window_width / 2,              // Initial Position of Player
-		  window_height / 2 },
+		map.rooms.at(0).center(),        // Initial Position of Player
 		'@',                             // player character looks like @
 		TCODColor::white                 // Color of player character
 	};
 
-	// Get our map layout from generator
-	auto map = generate_map({window_width, window_height});
-	
 	// Loop while window exists and exit_game is not true
 	while (not (root.is_window_closed() or exit_game))
 	{

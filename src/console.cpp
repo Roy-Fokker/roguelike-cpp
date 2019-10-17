@@ -94,6 +94,6 @@ void console_layer::draw(const game_map &map)
 {
 	for (auto &t : map.tiles)
 	{
-		layer->setCharBackground(t.p.x, t.p.y, t.color);
+		layer->setCharBackground(t.p.x, t.p.y, t.color());
 	}
 }
