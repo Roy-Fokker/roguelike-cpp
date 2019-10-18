@@ -18,15 +18,3 @@ add_custom_target(LIBTCOD_BINS
     COMMAND ${CMAKE_COMMAND} -E copy ${LIBTCOD_DIR}/sdl2.dll ${EXECUTABLE_OUTPUT_PATH}
     COMMAND ${CMAKE_COMMAND} -E copy ${LIBTCOD_DIR}/data/fonts/arial10x10.png ${EXECUTABLE_OUTPUT_PATH}
 )
-
-
-# Easy Iterators
-# This is header only library.
-## Create a FILE-local variable for Easy Iterators directory
-set(EASYITERATOR_DIR "${CMAKE_CURRENT_SOURCE_DIR}/EasyIterator")
-
-## Create EASYITERATOR_INCLUDE variable for Include directory.
-## Ensure it's available to global cmake build (CACHE PATH).
-set(EASYITERATOR_INCLUDE 
-    "${EASYITERATOR_DIR}/include/" 
-    CACHE PATH "Path to Easy Iterator Include")
