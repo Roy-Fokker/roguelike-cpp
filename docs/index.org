@@ -44,6 +44,10 @@ a functioning implementation and then refactor it to make the code more scalable
 1. [[file:1.Starter.org][Console and moving around]].
 2. [[file:2.Entity_Map.org][The entity and the map]].
 3. [[file:3.Dungeon.org][Dungeon generation]].
+4. [[file:4.Field_of_view.org][Player's field of view]].
+5. [[file:5.Placing_enemies.org][Placing enemies]].
+6. [[file:6.Combat.org][Combat]]!
+7. [[file:7.User_interface.org][User interface]].
 
 * References
 - [[http://www.rogueliketutorials.com/tutorials/tcod/][Roguelike Tutorials]]

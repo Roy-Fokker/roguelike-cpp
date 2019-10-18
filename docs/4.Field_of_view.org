@@ -2,3 +2,23 @@
 #+SUBTITLE: Player's field of view
 #+OPTIONS: H:2
 
+Now that we have a map that we can move around in, its time to start
+putting in systems that give some challenge to the player. We'll start
+by making things difficult to see. Lack of sight is something that adds
+the spice of imagined horrors that lurk in the darkness.
+
+* Goals
+Aim for this section is simple, we aim to:
+- Make the player not see good!!!
+~TCOD~ has many algorithms to calculate the field of view.
+For our purposes I am using the simplest one it has.
+
+* subtitle
+:TODO: stuff happens -- TBD
+
+
+* Links
+╣ [[https://github.com/Roy-Fokker/roguelike/tree/Part-3b][GitHub Repo]] ╠═══\\
+╣ [[file:index.org][Home]] ╠═══\\
+╣ Prev: [[file:3.Dungeon.org][Dungeon generation]] ╠═══\\
+╣ Next: [[file:5.Placing_enemies.org][Placing enemies]] ╠═══
