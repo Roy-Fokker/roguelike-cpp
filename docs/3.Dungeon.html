@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2019-10-17 Thu 21:04 -->
+<!-- 2019-10-17 Thu 21:24 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Roguelike Game in C++17</title>
@@ -69,11 +69,11 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org8fca97e">1. Goals</a></li>
-<li><a href="#org98dce91">2. Brief detour into Refactoing lands</a></li>
-<li><a href="#org08bd6f9">3. Simple rooms generator</a></li>
-<li><a href="#org2d9948b">4. Connecting all the rooms</a></li>
-<li><a href="#org063c2a0">5. Links</a></li>
+<li><a href="#org48901ab">Goals</a></li>
+<li><a href="#org9b83f7f">Brief detour into Refactoing lands</a></li>
+<li><a href="#orgc12b569">Simple rooms generator</a></li>
+<li><a href="#org49d7809">Connecting all the rooms</a></li>
+<li><a href="#org9bcfe47">Links</a></li>
 </ul>
 </div>
 </nav>
@@ -83,9 +83,9 @@ the rooms, so player cannot go from one room to another. Additionally, room gene
 is very static, it's the same everytime; and that's boring.
 </p>
 
-<div id="outline-container-org8fca97e" class="outline-2">
-<h2 id="org8fca97e"><span class="section-number-2">1</span> Goals</h2>
-<div class="outline-text-2" id="text-1">
+<div id="outline-container-org48901ab" class="outline-2">
+<h2 id="org48901ab">Goals</h2>
+<div class="outline-text-2" id="text-org48901ab">
 <p>
 So let's fix both these issues.
 </p>
@@ -101,9 +101,9 @@ implement and understand.
 </div>
 </div>
 
-<div id="outline-container-org98dce91" class="outline-2">
-<h2 id="org98dce91"><span class="section-number-2">2</span> Brief detour into Refactoing lands</h2>
-<div class="outline-text-2" id="text-2">
+<div id="outline-container-org9b83f7f" class="outline-2">
+<h2 id="org9b83f7f">Brief detour into Refactoing lands</h2>
+<div class="outline-text-2" id="text-org9b83f7f">
 <p>
 As is always the case, one can never be satisfied with how things are. So things must 
 change. For this cycle, we want to do two things:
@@ -125,9 +125,9 @@ from <code>game_map</code> and put the player in centre of that room.
 </div>
 </div>
 
-<div id="outline-container-org08bd6f9" class="outline-2">
-<h2 id="org08bd6f9"><span class="section-number-2">3</span> Simple rooms generator</h2>
-<div class="outline-text-2" id="text-3">
+<div id="outline-container-orgc12b569" class="outline-2">
+<h2 id="orgc12b569">Simple rooms generator</h2>
+<div class="outline-text-2" id="text-orgc12b569">
 <p>
 We start by adding two member functions to <code>room</code>, <code>center</code> and <code>intersects</code>, first 
 just returns centre of the room, while second tells you if this room intersects 
@@ -199,9 +199,9 @@ much dependent on just simple random number generator. No smarts required/applie
 </div>
 </div>
 
-<div id="outline-container-org2d9948b" class="outline-2">
-<h2 id="org2d9948b"><span class="section-number-2">4</span> Connecting all the rooms</h2>
-<div class="outline-text-2" id="text-4">
+<div id="outline-container-org49d7809" class="outline-2">
+<h2 id="org49d7809">Connecting all the rooms</h2>
+<div class="outline-text-2" id="text-org49d7809">
 <p>
 Having a billion rooms you can't get to is not fun. A game must be fun. So, next up, <code>connect_rooms</code>
 function. Similar to <code>make_rooms</code>, we have few lambda functions that do the various sub tasks involved
@@ -233,9 +233,9 @@ of difference.
 </div>
 </div>
 
-<div id="outline-container-org063c2a0" class="outline-2">
-<h2 id="org063c2a0"><span class="section-number-2">5</span> Links</h2>
-<div class="outline-text-2" id="text-5">
+<div id="outline-container-org9bcfe47" class="outline-2">
+<h2 id="org9bcfe47">Links</h2>
+<div class="outline-text-2" id="text-org9bcfe47">
 <p>
 ╣ <a href="https://github.com/Roy-Fokker/roguelike/tree/Part-3b">GitHub Repo</a> ╠═══<br>
 ╣ <a href="index.html">Home</a> ╠═══<br>
@@ -247,7 +247,7 @@ of difference.
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Neel Raiyani [Roy Fokker]</p>
-<p class="date">Created: 2019-10-17 Thu 21:04</p>
+<p class="date">Created: 2019-10-17 Thu 21:24</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

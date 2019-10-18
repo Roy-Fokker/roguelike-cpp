@@ -1,6 +1,6 @@
 #+SETUPFILE: theme.org
 #+SUBTITLE: Dungeon Generation
-#+OPTIONS: H:2
+#+OPTIONS: H:1 num:nil
 
 
 The player can move around, and there are few rooms. But at this time nothing connects
