@@ -11,8 +11,6 @@
 
 #include <cassert>      // for assert()
 
-#include <vector>
-
 using namespace std::literals; // ensure we can use ""sv
 
 int main()

@@ -93,16 +93,6 @@ namespace
 		}
 
 		return rooms;
-
-		// change_tiles({20, 15, 10, 15});
-		// change_tiles({35, 15, 10, 15});
-		// change_tiles({10, 10, 5, 5});
-		
-		// return {
-		// 	{20, 15, 10, 15},
-		// 	{35, 15, 10, 15},
-		// 	{10, 10, 5, 5},
-		// };
 	}
 
 	// Connect all the rooms in order they got added to the list
@@ -165,6 +155,8 @@ namespace
 		std::mt19937 gen(rd());
 		std::bernoulli_distribution d(0.5);
 	
+		// For every room starting from index 1 call the 
+		// hallways functions.
 		for (auto i = 1; i < rooms.size(); i++)
 		{
 			auto flip = d(gen);  // pick which room is primary
@@ -177,6 +169,8 @@ namespace
 
 auto tile::is_blocked() const -> bool
 {
+	// For the moment we don't have lot of different
+	// ways to block.
 	if (type == tile_type::wall)
 	{
 		return true;
@@ -196,7 +190,7 @@ auto tile::color() const -> TCODColor
 		case tile_type::tunnel:
 			return tunnel_color;
 		default:
-			assert(false);
+			assert(false); // Forgot to handle this type.
 			break;
 	}
 	assert(false); // how'd you end up here.
@@ -249,8 +243,6 @@ auto generate_map(const dimension size) -> game_map
 
 	auto rooms = make_rooms(size, tiles);
 	connect_rooms(size, rooms, tiles);
-	// auto rooms = make_rooms(size, tiles);
-	// connect_rooms(size, rooms, tiles);
 
 	return {size, tiles, rooms}; // Return a map structure;
 }
