@@ -5,6 +5,7 @@
 #include <vector>
 
 class TCODColor;
+class TCODMap;
 
 enum class tile_type
 {
@@ -19,8 +20,8 @@ struct tile
 	position p;        // Location of this tile
 	tile_type type;    // Type of this tile
 
-	// Returns tile color based on type
-	auto color() const -> TCODColor;
+	// Returns tile color based on type and is_lit value
+	auto color(bool is_lit = false) const -> TCODColor;
 
 	// Returns if tile blocks based on type
 	auto is_blocked() const -> bool;
@@ -57,6 +58,28 @@ struct game_map
 
 	// Check if position provided is blocking tile
 	auto is_blocked(const position p) const -> bool;
+};
+
+// Field of view map
+// It a simple wrapper around TCODMap type.
+struct fov_map 
+{
+	// Delete default constructor, we need a game_map
+	fov_map() = delete;
+	// Create Field of View based on game_map
+	fov_map(const game_map &map);
+	~fov_map();
+
+	// Recompute the field of view, using provided 
+	// position as center point
+	void recompute(const position &p);
+
+	// Is the provided position, within 
+	// field of view?
+	auto is_visible(const position &p) const -> bool;
+
+private:
+	std::unique_ptr<TCODMap> fov;
 };
 
 auto generate_map(const dimension size) -> game_map;

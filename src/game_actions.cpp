@@ -9,6 +9,7 @@
 void do_action(const action_data_pair &action_data, 
                game_entity &entity,
                game_map &map,
+               fov_map &fov,
                console_root &root,
                bool &exit_game)
 {
@@ -29,7 +30,11 @@ void do_action(const action_data_pair &action_data,
 			{
 				// Yes
 				entity.move_by(offset);
+
+				// Recompute the FoV because player moved.
+				fov.recompute(entity.pos);
 			}
+
 			break;
 		}
 		case actions::fullscreen_toggle:

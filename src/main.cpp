@@ -32,6 +32,8 @@ int main()
 
 	// Get our map layout from generator
 	auto map = generate_map({window_width, window_height});
+	// Use the map to generate a Field of View
+	auto fov = fov_map(map);
 
 	game_entity player                   // Player Entity object
 	{ 
@@ -39,6 +41,7 @@ int main()
 		'@',                             // player character looks like @
 		TCODColor::white                 // Color of player character
 	};
+	fov.recompute(player.pos);       // Compute the starting Field of View
 
 	// Loop while window exists and exit_game is not true
 	while (not (root.is_window_closed() or exit_game))
@@ -46,12 +49,13 @@ int main()
 		do_action(handle_input(),
 		          player,
 		          map,
+		          fov,
 		          root,
 		          exit_game);
 
 		game_layer.clear();      // Clear the contents of the layer
 
-		game_layer.draw(map);    // Draw the map to game_console layer
+		game_layer.draw(map, fov);    // Draw the map to game_console layer
 
 		game_layer.draw(player); // Draw the player to game_console layer
 

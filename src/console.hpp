@@ -54,6 +54,7 @@ private:
 
 struct game_entity;
 struct game_map;
+struct fov_map;
 
 class console_layer
 {
@@ -68,7 +69,7 @@ public:
 	void draw(const game_entity &entity);
 
 	// Draw provided map to this layer.
-	void draw(const game_map &map);
+	void draw(const game_map &map, const fov_map &fov);
 
 private:
 	std::unique_ptr<TCODConsole> layer { nullptr };

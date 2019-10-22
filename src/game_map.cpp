@@ -11,14 +11,41 @@
 namespace
 {
 	// set up some static colors to use for ground and wall
-	static const auto ground_color = TCODColor(0, 0, 100);
-	static const auto tunnel_color = TCODColor(25, 25, 125);
-	static const auto wall_color = TCODColor(50, 50, 150);
+	static const auto ground_color = TCODColor(50, 50, 150);
+	static const auto tunnel_color = TCODColor(20, 20, 120);
+	static const auto wall_color = TCODColor(0, 0, 100);
 
-	constexpr auto max_rooms = 10;
-	constexpr auto min_room_size = 5;
-	constexpr auto max_room_size = 20;
+	// variable that control how much lightening or darkening
+	// we do to above colors
+	constexpr auto lighten_color_offset = 0.05f;
 
+	// Dumb algorithm to lighten our tile colors.
+	auto lighten_color(const TCODColor &c, float offset) -> TCODColor
+	{
+		// there is no change if offset is 0.
+		if (offset == 0)
+		{
+			return c;
+		}
+
+		// Compute the delta offset, clamped between 0 and 255
+		int delta_c = static_cast<int>(std::clamp(255 * offset, 0.0f, 255.0f));
+
+		// add delta to each channel
+		return {
+			std::min(255, c.r + delta_c),
+			std::min(255, c.g + delta_c),
+			std::min(255, c.b + delta_c),
+		};
+	};
+
+	constexpr auto fov_radius = 10;          // Field of view Radius
+	constexpr auto fov_algorithm = FOV_BASIC;// Algorithm to use for FOV
+	constexpr auto fov_light_walls = true;   // Light Walls?
+
+	constexpr auto max_rooms = 10;     // Total number of rooms we want
+	constexpr auto min_room_size = 5;  // minimum size for each room
+	constexpr auto max_room_size = 20; // maximum size for each room
 
 	// Makes rooms of various sizes in the provided tile
 	// array. Ensures rooms don't overlap. 
@@ -179,16 +206,19 @@ auto tile::is_blocked() const -> bool
 	return false;
 }
 
-auto tile::color() const -> TCODColor
+auto tile::color(bool is_lit) const -> TCODColor
 {
+	// use offset color, only if is_lit is true
+	auto offset = (is_lit) ? lighten_color_offset : 0;
+
 	switch (type)
 	{
 		case tile_type::wall:
-			return wall_color;
+			return lighten_color(wall_color, offset);
 		case tile_type::ground:
-			return ground_color;
+			return lighten_color(ground_color, offset);
 		case tile_type::tunnel:
-			return tunnel_color;
+			return lighten_color(tunnel_color, offset);
 		default:
 			assert(false); // Forgot to handle this type.
 			break;
@@ -245,4 +275,33 @@ auto generate_map(const dimension size) -> game_map
 	connect_rooms(size, rooms, tiles);
 
 	return {size, tiles, rooms}; // Return a map structure;
+}
+
+fov_map::fov_map(const game_map &map)
+{
+	fov = std::make_unique<TCODMap>(map.size.width, map.size.height);
+
+	auto [w, h] = map.size;
+	for (auto [i, t] : iter::enumerate(map.tiles))
+	{
+		auto x = static_cast<int>(i) % w,
+		     y = static_cast<int>(i) / w;
+
+		bool is_transparent = (t.type != tile_type::wall),
+		     is_walkable = t.is_blocked();
+
+		fov->setProperties(x, y, is_transparent, is_walkable);
+	}
+}
+
+fov_map::~fov_map() = default;
+
+void fov_map::recompute(const position &p)
+{
+	fov->computeFov(p.x, p.y, fov_radius, fov_light_walls, FOV_BASIC);
+}
+
+auto fov_map::is_visible(const position &p) const -> bool
+{
+	return fov->isInFov(p.x, p.y);
 }

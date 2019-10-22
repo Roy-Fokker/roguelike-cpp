@@ -18,6 +18,7 @@ using action_data_pair = std::pair<actions, std::any>;
 struct position;
 struct game_entity;
 struct game_map;
+struct fov_map;
 class console_root;
 
 // Take the action_data pair and do appropriate tasks
@@ -27,5 +28,6 @@ class console_root;
 void do_action(const action_data_pair &action_data, 
                game_entity &entity,
                game_map &map,
+               fov_map &fov,
                console_root &root,
                bool &exit_game);

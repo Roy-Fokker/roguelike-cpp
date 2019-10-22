@@ -90,10 +90,13 @@ void console_layer::draw(const game_entity &entity)
 
 // Quick and Dirty draw map function.
 // Takes a game_map to draw on console_layer
-void console_layer::draw(const game_map &map)
+void console_layer::draw(const game_map &map, const fov_map &fov)
 {
 	for (auto &t : map.tiles)
 	{
-		layer->setCharBackground(t.p.x, t.p.y, t.color());
+		// Get the color we should use for this tile
+		auto color = t.color(fov.is_visible(t.p));
+
+		layer->setCharBackground(t.p.x, t.p.y, color);
 	}
 }
