@@ -62,6 +62,8 @@ struct game_map
 	// Check if position provided is blocking tile
 	auto is_blocked(const position p) const -> bool;
 
+	// Using fov_map and position update all the tiles that
+	// are visible
 	void update_explored(const position p, const fov_map &fov);
 };
 

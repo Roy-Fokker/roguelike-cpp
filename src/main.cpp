@@ -42,7 +42,7 @@ int main()
 		TCODColor::white                 // Color of player character
 	};
 	fov.recompute(player.pos);       // Compute the starting Field of View
-	map.update_explored(player.pos, fov);
+	map.update_explored(player.pos, fov); // Update initial exploration state
 
 	// Loop while window exists and exit_game is not true
 	while (not (root.is_window_closed() or exit_game))

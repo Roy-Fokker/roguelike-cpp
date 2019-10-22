@@ -260,20 +260,27 @@ auto game_map::is_blocked(const position p) const -> bool
 
 void game_map::update_explored(const position p, const fov_map &fov)
 {
-	// Check square around the position againt fov.
+	// Coordinates of the square we want to check
 	auto x1 = std::clamp(p.x - fov_radius, 0, size.width),
 	     x2 = std::clamp(p.x + fov_radius, 0, size.width);
 	auto y1 = std::clamp(p.y - fov_radius, 0, size.height),
 	     y2 = std::clamp(p.y + fov_radius, 0, size.height);
 	
+	// Go through all the tiles in the square 
+	// There is way to do this with just single loop.
+	// Will update it in future.
 	for (auto x : iter::range(x1, x2))
 	{
 		for (auto y : iter::range(y1, y2))
 		{
+			// check if this tile was visible
 			if (not fov.is_visible({x, y}))
 				continue;
 			
+			// get the index of the tile
 			auto idx = x + size.width * y;
+
+			// if we've already seen it, don't change anything
 			if (tiles[idx].was_explored)
 				continue;
 			
