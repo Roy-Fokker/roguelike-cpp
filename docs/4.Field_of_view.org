@@ -9,16 +9,31 @@ the spice of imagined horrors that lurk in the darkness.
 
 * Goals
 Aim for this section is simple, we aim to:
-- Make the player not see good!!!
+- Mark areas of the map player can see from present position
+- Hide any un-seen areas. Show only if explored.
 ~TCOD~ has many algorithms to calculate the field of view.
 For our purposes I am using the simplest one it has.
 
-* subtitle
-:TODO: stuff happens -- TBD
+* Field of view System
+To start with in ~game_map[.cpp|.hpp]~ file, add a new
+structure =fov_map=, which will require =game_map= to 
+initialize it. =fov_map= also has two methods, =recompute= 
+and =is_visible=, as well as a private member variable
+=unique_ptr<TCODMap>=. This is being added to.
 
+Next, we change the ~console[.cpp|.hpp]~, map draw method will
+need to now take =fov_map=, so that we can check if tile is 
+part of fov range.
+
+
+[[https://github.com/Roy-Fokker/roguelike/tree/Part-4][GitHub Repo]]
+
+* Marking Explorered Areas
+
+[[https://github.com/Roy-Fokker/roguelike/tree/Part-4b][GitHub Repo]]
 
 * Links
-╣ [[https://github.com/Roy-Fokker/roguelike/tree/Part-3b][GitHub Repo]] ╠═══\\
+╣ [[https://github.com/Roy-Fokker/roguelike/tree/Part-4c][GitHub Repo]] ╠═══\\
 ╣ [[file:index.org][Home]] ╠═══\\
 ╣ Prev: [[file:3.Dungeon.org][Dungeon generation]] ╠═══\\
 ╣ Next: [[file:5.Placing_enemies.org][Placing enemies]] ╠═══
