@@ -258,6 +258,30 @@ auto game_map::is_blocked(const position p) const -> bool
 	return tiles.at(x + w * y).is_blocked(); // Simply return value in position's index.
 }
 
+void game_map::update_explored(const position p, const fov_map &fov)
+{
+	// Check square around the position againt fov.
+	auto x1 = std::clamp(p.x - fov_radius, 0, size.width),
+	     x2 = std::clamp(p.x + fov_radius, 0, size.width);
+	auto y1 = std::clamp(p.y - fov_radius, 0, size.height),
+	     y2 = std::clamp(p.y + fov_radius, 0, size.height);
+	
+	for (auto x : iter::range(x1, x2))
+	{
+		for (auto y : iter::range(y1, y2))
+		{
+			if (not fov.is_visible({x, y}))
+				continue;
+			
+			auto idx = x + size.width * y;
+			if (tiles[idx].was_explored)
+				continue;
+			
+			tiles[idx].was_explored = true;
+		}
+	}
+}
+
 // Make our game_map. 
 // Version 2 of our generator. Makes Rooms and Corridors.
 auto generate_map(const dimension size) -> game_map
@@ -268,7 +292,8 @@ auto generate_map(const dimension size) -> game_map
 	for (auto [i, t] : iter::enumerate(tiles)) // enumerate using cppitertools
 	{
 		t = { (int)i % w, (int)i / w, // populate x and y values of position
-		      tile_type::wall};       // set default tile type
+		      tile_type::wall,        // set default tile type
+		      false};                 // default unexplored
 	}
 
 	auto rooms = make_rooms(size, tiles);

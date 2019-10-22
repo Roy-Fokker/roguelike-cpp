@@ -94,6 +94,10 @@ void console_layer::draw(const game_map &map, const fov_map &fov)
 {
 	for (auto &t : map.tiles)
 	{
+		// if this part wasn't explored don't draw it.
+		if (not t.was_explored)
+			continue;
+		
 		// Get the color we should use for this tile
 		auto color = t.color(fov.is_visible(t.p));
 

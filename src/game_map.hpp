@@ -7,6 +7,8 @@
 class TCODColor;
 class TCODMap;
 
+struct fov_map; // Need to forward declare for game_map to use
+
 enum class tile_type
 {
 	wall,
@@ -19,6 +21,7 @@ struct tile
 {
 	position p;        // Location of this tile
 	tile_type type;    // Type of this tile
+	bool was_explored; // Did player see this tile?
 
 	// Returns tile color based on type and is_lit value
 	auto color(bool is_lit = false) const -> TCODColor;
@@ -58,6 +61,8 @@ struct game_map
 
 	// Check if position provided is blocking tile
 	auto is_blocked(const position p) const -> bool;
+
+	void update_explored(const position p, const fov_map &fov);
 };
 
 // Field of view map

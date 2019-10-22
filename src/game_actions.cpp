@@ -33,6 +33,9 @@ void do_action(const action_data_pair &action_data,
 
 				// Recompute the FoV because player moved.
 				fov.recompute(entity.pos);
+
+				// Update game map with newly explored tiles
+				map.update_explored(entity.pos, fov);
 			}
 
 			break;
