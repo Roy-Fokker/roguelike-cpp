@@ -19,16 +19,63 @@ To start with in ~game_map[.cpp|.hpp]~ file, add a new
 structure =fov_map=, which will require =game_map= to 
 initialize it. =fov_map= also has two methods, =recompute= 
 and =is_visible=, as well as a private member variable
-=unique_ptr<TCODMap>=. This is being added to.
+=unique_ptr<TCODMap>=. Private member variable is our 
+interface with ~tcod~.
 
 Next, we change the ~console[.cpp|.hpp]~, map draw method will
 need to now take =fov_map=, so that we can check if tile is 
-part of fov range.
+part of fov range. Result of this check will be passed on to 
+=tile::color= method. =tile::color= method will use visibility 
+value to give us a slightly different color. Making the color 
+about 5% brighter using =lighten_color= function in ~game_map.cpp~.
+Method used in =lighten_color= is pretty straight forward, and 
+simple. Ideally, you would convert RGB value in to HSV/HSL and then 
+do the necessary math to get new HSV/HSL and back to RGB, this is beyond
+the scope of goals here. For the moment, we define our percentage offset 
+via =lighten_color_offset= variable in file scope.
 
+You'll notice we have a lot of file local variable in ~game_map.cpp~.
+In a future refactor, all of these can be moved into a settings file,
+which can be read during game start. For now it's expedient to leave
+them as they are.
+
+With drawing using =fov_map= done, time to move to actually calculating
+the fov. =fov_map::recompute= simply calls ~tcod~'s =computeFov= method.
+We pass to it, a few parameters and it will update it's own internal state
+with necessary information.
+
+=fov_map::recompute= will only be called when the player moves to a new location.
+For that part we need to change ~game_actions.cpp~, by first making it take on a 
+=fov_map= as a parameter, and then calling the =recompute= method when player 
+moves. We also need to call =recompute= after the player has been created in 
+~main.cpp~, so that initial field of view of player is visible.
+
+After this we should be able to move our player character around the 
+Dungeon and see a light circle around the character.
 
 [[https://github.com/Roy-Fokker/roguelike/tree/Part-4][GitHub Repo]]
 
 * Marking Explorered Areas
+Right now the player sees the whole dungeon map, regardless of whether they've
+been through whole map or not. This doesn't allow for much "Mystery". So in this
+section we will only show parts of the map player has actually explored. An 
+explored tile is a tile player has seen using their field of view.
+
+We add a new =was_explored= member variable to our =tile= structure. By default
+this will have value of =false=. When the tile appears in the Player's field of view
+it becomes =true=.
+
+How does the tile get updated, you might ask? In =game_map= structure, there is now 
+a =update_explored= method. It takes =position= and =fov_map=. The =update_explored= 
+method, will calculate a square with player at it's center, and then call =fov_map::is_visible=
+for each tile with in that square. The square's size is 2x =fov_radius=. 
+
+Lastly, we need to call =update_explored= after =fov_map::recompute= is called. Which is simple
+enough, put the call to =game_map::update_explored= after each instance of call to 
+=fov_map::recompute=.
+
+This gives us a nice, hidden level, that gradually opens up as the player moves
+around. Begining to look like a *Roguelike* already.
 
 [[https://github.com/Roy-Fokker/roguelike/tree/Part-4b][GitHub Repo]]
 
@@ -37,3 +84,4 @@ part of fov range.
 ╣ [[file:index.org][Home]] ╠═══\\
 ╣ Prev: [[file:3.Dungeon.org][Dungeon generation]] ╠═══\\
 ╣ Next: [[file:5.Placing_enemies.org][Placing enemies]] ╠═══
+
