@@ -99,6 +99,8 @@ of other things and creatures that could exist. So to fix that further we delve.
   =player.move_by= and call =game_map.is_blocked= with potential value of where player 
   will be. If =is_blocked= return false, player can move to that location.
 
+[[file:Part-2c.gif]]
+
   [[https://github.com/Roy-Fokker/roguelike/tree/Part-2c][GitHub Repo]]
 
 * Refactor part 2: the refactoring
@@ -115,6 +117,8 @@ of other things and creatures that could exist. So to fix that further we delve.
   We need to make sure that CMake is aware of them, which means adding each to 
   =target_sources= in ~src\CMakeLists.txt~. Over time, this list will get larger
   but not that much more larger.
+
+[[file:Part-2d.gif]]
 
 * Links
 ╣ [[https://github.com/Roy-Fokker/roguelike/tree/Part-2b][GitHub Repo]] ╠═══\\

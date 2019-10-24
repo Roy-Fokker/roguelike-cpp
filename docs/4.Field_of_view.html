@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2019-10-22 Tue 18:19 -->
+<!-- 2019-10-24 Thu 17:26 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Roguelike Game in C++17</title>
@@ -69,10 +69,10 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org6bfc584">Goals</a></li>
-<li><a href="#org1313ed7">Field of view System</a></li>
-<li><a href="#orgd8a90aa">Marking Explorered Areas</a></li>
-<li><a href="#orgcfb070d">Links</a></li>
+<li><a href="#orgbc609d3">Goals</a></li>
+<li><a href="#org1a8c400">Field of view System</a></li>
+<li><a href="#orga4ce4cf">Marking Explorered Areas</a></li>
+<li><a href="#org4ef91f5">Links</a></li>
 </ul>
 </div>
 </nav>
@@ -83,9 +83,9 @@ by making things difficult to see. Lack of sight is something that adds
 the spice of imagined horrors that lurk in the darkness.
 </p>
 
-<div id="outline-container-org6bfc584" class="outline-2">
-<h2 id="org6bfc584">Goals</h2>
-<div class="outline-text-2" id="text-org6bfc584">
+<div id="outline-container-orgbc609d3" class="outline-2">
+<h2 id="orgbc609d3">Goals</h2>
+<div class="outline-text-2" id="text-orgbc609d3">
 <p>
 Aim for this section is simple, we aim to:
 </p>
@@ -100,9 +100,9 @@ For our purposes I am using the simplest one it has.
 </div>
 </div>
 
-<div id="outline-container-org1313ed7" class="outline-2">
-<h2 id="org1313ed7">Field of view System</h2>
-<div class="outline-text-2" id="text-org1313ed7">
+<div id="outline-container-org1a8c400" class="outline-2">
+<h2 id="org1a8c400">Field of view System</h2>
+<div class="outline-text-2" id="text-org1a8c400">
 <p>
 To start with in <code>game_map[.cpp|.hpp]</code> file, add a new
 structure <code>fov_map</code>, which will require <code>game_map</code> to 
@@ -153,15 +153,21 @@ After this we should be able to move our player character around the
 Dungeon and see a light circle around the character.
 </p>
 
+
+<figure>
+<img src="Part-4a.gif" alt="Part-4a.gif">
+
+</figure>
+
 <p>
 <a href="https://github.com/Roy-Fokker/roguelike/tree/Part-4">GitHub Repo</a>
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgd8a90aa" class="outline-2">
-<h2 id="orgd8a90aa">Marking Explorered Areas</h2>
-<div class="outline-text-2" id="text-orgd8a90aa">
+<div id="outline-container-orga4ce4cf" class="outline-2">
+<h2 id="orga4ce4cf">Marking Explorered Areas</h2>
+<div class="outline-text-2" id="text-orga4ce4cf">
 <p>
 Right now the player sees the whole dungeon map, regardless of whether they've
 been through whole map or not. This doesn't allow for much "Mystery". So in this
@@ -193,15 +199,21 @@ This gives us a nice, hidden level, that gradually opens up as the player moves
 around. Begining to look like a <b>Roguelike</b> already.
 </p>
 
+
+<figure>
+<img src="Part-4b.gif" alt="Part-4b.gif">
+
+</figure>
+
 <p>
 <a href="https://github.com/Roy-Fokker/roguelike/tree/Part-4b">GitHub Repo</a>
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgcfb070d" class="outline-2">
-<h2 id="orgcfb070d">Links</h2>
-<div class="outline-text-2" id="text-orgcfb070d">
+<div id="outline-container-org4ef91f5" class="outline-2">
+<h2 id="org4ef91f5">Links</h2>
+<div class="outline-text-2" id="text-org4ef91f5">
 <p>
 ╣ <a href="https://github.com/Roy-Fokker/roguelike/tree/Part-4c">GitHub Repo</a> ╠═══<br>
 ╣ <a href="index.html">Home</a> ╠═══<br>
@@ -213,7 +225,7 @@ around. Begining to look like a <b>Roguelike</b> already.
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Neel Raiyani [Roy Fokker]</p>
-<p class="date">Created: 2019-10-22 Tue 18:19</p>
+<p class="date">Created: 2019-10-24 Thu 17:26</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

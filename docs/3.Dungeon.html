@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2019-10-17 Thu 21:24 -->
+<!-- 2019-10-24 Thu 17:25 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Roguelike Game in C++17</title>
@@ -69,11 +69,11 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org48901ab">Goals</a></li>
-<li><a href="#org9b83f7f">Brief detour into Refactoing lands</a></li>
-<li><a href="#orgc12b569">Simple rooms generator</a></li>
-<li><a href="#org49d7809">Connecting all the rooms</a></li>
-<li><a href="#org9bcfe47">Links</a></li>
+<li><a href="#org7f03562">Goals</a></li>
+<li><a href="#org065463b">Brief detour into Refactoing lands</a></li>
+<li><a href="#orgc16ea4c">Simple rooms generator</a></li>
+<li><a href="#org27b6b42">Connecting all the rooms</a></li>
+<li><a href="#org1e20758">Links</a></li>
 </ul>
 </div>
 </nav>
@@ -83,9 +83,9 @@ the rooms, so player cannot go from one room to another. Additionally, room gene
 is very static, it's the same everytime; and that's boring.
 </p>
 
-<div id="outline-container-org48901ab" class="outline-2">
-<h2 id="org48901ab">Goals</h2>
-<div class="outline-text-2" id="text-org48901ab">
+<div id="outline-container-org7f03562" class="outline-2">
+<h2 id="org7f03562">Goals</h2>
+<div class="outline-text-2" id="text-org7f03562">
 <p>
 So let's fix both these issues.
 </p>
@@ -101,9 +101,9 @@ implement and understand.
 </div>
 </div>
 
-<div id="outline-container-org9b83f7f" class="outline-2">
-<h2 id="org9b83f7f">Brief detour into Refactoing lands</h2>
-<div class="outline-text-2" id="text-org9b83f7f">
+<div id="outline-container-org065463b" class="outline-2">
+<h2 id="org065463b">Brief detour into Refactoing lands</h2>
+<div class="outline-text-2" id="text-org065463b">
 <p>
 As is always the case, one can never be satisfied with how things are. So things must 
 change. For this cycle, we want to do two things:
@@ -125,9 +125,9 @@ from <code>game_map</code> and put the player in centre of that room.
 </div>
 </div>
 
-<div id="outline-container-orgc12b569" class="outline-2">
-<h2 id="orgc12b569">Simple rooms generator</h2>
-<div class="outline-text-2" id="text-orgc12b569">
+<div id="outline-container-orgc16ea4c" class="outline-2">
+<h2 id="orgc16ea4c">Simple rooms generator</h2>
+<div class="outline-text-2" id="text-orgc16ea4c">
 <p>
 We start by adding two member functions to <code>room</code>, <code>center</code> and <code>intersects</code>, first 
 just returns centre of the room, while second tells you if this room intersects 
@@ -193,15 +193,21 @@ And that's our "Simple Rooms Generator". There are many better algorithms out th
 much dependent on just simple random number generator. No smarts required/applied.
 </p>
 
+
+<figure>
+<img src="Part-3a.png" alt="Part-3a.png">
+
+</figure>
+
 <p>
 <a href="https://github.com/Roy-Fokker/roguelike/tree/Part-3a">GitHub Repo</a>
 </p>
 </div>
 </div>
 
-<div id="outline-container-org49d7809" class="outline-2">
-<h2 id="org49d7809">Connecting all the rooms</h2>
-<div class="outline-text-2" id="text-org49d7809">
+<div id="outline-container-org27b6b42" class="outline-2">
+<h2 id="org27b6b42">Connecting all the rooms</h2>
+<div class="outline-text-2" id="text-org27b6b42">
 <p>
 Having a billion rooms you can't get to is not fun. A game must be fun. So, next up, <code>connect_rooms</code>
 function. Similar to <code>make_rooms</code>, we have few lambda functions that do the various sub tasks involved
@@ -230,12 +236,18 @@ Having done all this, we now have a series of rooms, we can walk around in. We c
 are on a map, how big or small they can be. Amount of code is not all that much. Just organizing it makes a lot 
 of difference.
 </p>
+
+
+<figure>
+<img src="Part-3b.png" alt="Part-3b.png">
+
+</figure>
 </div>
 </div>
 
-<div id="outline-container-org9bcfe47" class="outline-2">
-<h2 id="org9bcfe47">Links</h2>
-<div class="outline-text-2" id="text-org9bcfe47">
+<div id="outline-container-org1e20758" class="outline-2">
+<h2 id="org1e20758">Links</h2>
+<div class="outline-text-2" id="text-org1e20758">
 <p>
 ╣ <a href="https://github.com/Roy-Fokker/roguelike/tree/Part-3b">GitHub Repo</a> ╠═══<br>
 ╣ <a href="index.html">Home</a> ╠═══<br>
@@ -247,7 +259,7 @@ of difference.
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Neel Raiyani [Roy Fokker]</p>
-<p class="date">Created: 2019-10-17 Thu 21:24</p>
+<p class="date">Created: 2019-10-24 Thu 17:25</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

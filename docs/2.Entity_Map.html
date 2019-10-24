@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2019-10-12 Sat 21:08 -->
+<!-- 2019-10-24 Thu 17:24 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Roguelike Game in C++17</title>
@@ -69,12 +69,12 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orgd678396">Goals</a></li>
-<li><a href="#orge44d924">The entity class</a></li>
-<li><a href="#orged3bb7b">Refactoring for hygene</a></li>
-<li><a href="#orgf26d449">Beginning of a map</a></li>
-<li><a href="#org314d876">Refactor part 2: the refactoring</a></li>
-<li><a href="#org9a93041">Links</a></li>
+<li><a href="#org392578f">Goals</a></li>
+<li><a href="#orgc38f687">The entity class</a></li>
+<li><a href="#org418bcf8">Refactoring for hygene</a></li>
+<li><a href="#orga5e8422">Beginning of a map</a></li>
+<li><a href="#org3a151b5">Refactor part 2: the refactoring</a></li>
+<li><a href="#orgb5bb415">Links</a></li>
 </ul>
 </div>
 </nav>
@@ -83,9 +83,9 @@ Moving around in a blank world is not fun. Also, code at present has no concept
 of other things and creatures that could exist. So to fix that further we delve.
 </p>
 
-<div id="outline-container-orgd678396" class="outline-2">
-<h2 id="orgd678396">Goals</h2>
-<div class="outline-text-2" id="text-orgd678396">
+<div id="outline-container-org392578f" class="outline-2">
+<h2 id="org392578f">Goals</h2>
+<div class="outline-text-2" id="text-org392578f">
 <p>
 We have two main goals for this part. 
 </p>
@@ -96,9 +96,9 @@ We have two main goals for this part.
 </div>
 </div>
 
-<div id="outline-container-orge44d924" class="outline-2">
-<h2 id="orge44d924">The entity class</h2>
-<div class="outline-text-2" id="text-orge44d924">
+<div id="outline-container-orgc38f687" class="outline-2">
+<h2 id="orgc38f687">The entity class</h2>
+<div class="outline-text-2" id="text-orgc38f687">
 <p>
 First thing we'll do is replace <code>move_dir</code> typedef, with a strongly-typed struct.
 <code>position</code> struct will have 2 members <code>x</code> and <code>y</code>. Anywhere we had <code>move_dir</code> gets
@@ -145,9 +145,9 @@ the two console method calls with one <code>player.draw_entity</code> call.
 </div>
 </div>
 
-<div id="outline-container-orged3bb7b" class="outline-2">
-<h2 id="orged3bb7b">Refactoring for hygene</h2>
-<div class="outline-text-2" id="text-orged3bb7b">
+<div id="outline-container-org418bcf8" class="outline-2">
+<h2 id="org418bcf8">Refactoring for hygene</h2>
+<div class="outline-text-2" id="text-org418bcf8">
 <p>
 Before we go any further, we need to reorganize the code a bit. Everything is 
 currently in the <code>main.cpp</code>. It's getting a bit crowded, and difficult to visualize
@@ -190,9 +190,9 @@ entity to move it by a specific offset position.
 </div>
 </div>
 
-<div id="outline-container-orgf26d449" class="outline-2">
-<h2 id="orgf26d449">Beginning of a map</h2>
-<div class="outline-text-2" id="text-orgf26d449">
+<div id="outline-container-orga5e8422" class="outline-2">
+<h2 id="orga5e8422">Beginning of a map</h2>
+<div class="outline-text-2" id="text-orga5e8422">
 <p>
 Refactoring done, time to move on to second goal for this section, creating a map/level
 structure. This will represent the movement area for the player. As well as, places
@@ -219,15 +219,21 @@ To prevent the player from going on top of blocking <code>tile</code>, we add ch
 will be. If <code>is_blocked</code> return false, player can move to that location.
 </p>
 
+
+<figure>
+<img src="Part-2c.gif" alt="Part-2c.gif">
+
+</figure>
+
 <p>
 <a href="https://github.com/Roy-Fokker/roguelike/tree/Part-2c">GitHub Repo</a>
 </p>
 </div>
 </div>
 
-<div id="outline-container-org314d876" class="outline-2">
-<h2 id="org314d876">Refactor part 2: the refactoring</h2>
-<div class="outline-text-2" id="text-org314d876">
+<div id="outline-container-org3a151b5" class="outline-2">
+<h2 id="org3a151b5">Refactor part 2: the refactoring</h2>
+<div class="outline-text-2" id="text-org3a151b5">
 <p>
 Once again, code has gotten a bit hairy <code>ಠ╭╮ಠ</code>. So it's time to clean up again.
 We have a good idea of how the map is to be generated, and how collisions will
@@ -250,9 +256,9 @@ but not that much more larger.
 </div>
 </div>
 
-<div id="outline-container-org9a93041" class="outline-2">
-<h2 id="org9a93041">Links</h2>
-<div class="outline-text-2" id="text-org9a93041">
+<div id="outline-container-orgb5bb415" class="outline-2">
+<h2 id="orgb5bb415">Links</h2>
+<div class="outline-text-2" id="text-orgb5bb415">
 <p>
 ╣ <a href="https://github.com/Roy-Fokker/roguelike/tree/Part-2b">GitHub Repo</a> ╠═══<br>
 ╣ <a href="index.html">Home</a> ╠═══<br>
@@ -266,7 +272,7 @@ but not that much more larger.
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Neel Raiyani [Roy Fokker]</p>
-<p class="date">Created: 2019-10-12 Sat 21:08</p>
+<p class="date">Created: 2019-10-24 Thu 17:24</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

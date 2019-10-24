@@ -38,7 +38,6 @@ a roguelike make. So, onwards we go...
 </ui-code>
 #+end_export
 
-
 * Loading Custom Font
    For this we use =setCustomFont= method of the =TCODConsole= class. Reading
    the documentation of ~tcod~, we learn that =setCustomFont= must be called
@@ -135,6 +134,8 @@ a roguelike make. So, onwards we go...
 Now we have =@= displayed on the screen which can be moved around using arrow 
 keys. The application can exit when =ESC= key is pressed and it'll go fullscreen
 when =ALT= and =ENTER= keys are pressed together.
+
+[[file:Part-1a.gif]]
 
 * Links
 ╣ [[https://github.com/Roy-Fokker/roguelike/tree/Part-1b][GitHub Repo]] ╠═══\\

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2019-10-13 Sun 22:26 -->
+<!-- 2019-10-24 Thu 17:13 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Roguelike Game in C++17</title>
@@ -69,20 +69,20 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org5ebdb41">Tools</a></li>
-<li><a href="#org223d993">Configuration</a></li>
-<li><a href="#orga572abb">Project specific editor configuration</a></li>
-<li><a href="#orgeada4f9">Project Structure</a></li>
-<li><a href="#orgcb5be33">Build configuration</a></li>
-<li><a href="#orgaaac871">The Starter Project</a></li>
-<li><a href="#orgbbb9979">Links</a></li>
+<li><a href="#orgadaa97f">Tools</a></li>
+<li><a href="#org2bdf6db">Configuration</a></li>
+<li><a href="#org00f8790">Project specific editor configuration</a></li>
+<li><a href="#org058e745">Project Structure</a></li>
+<li><a href="#org9ccfc0d">Build configuration</a></li>
+<li><a href="#org3129d83">The Starter Project</a></li>
+<li><a href="#orgd55f734">Links</a></li>
 </ul>
 </div>
 </nav>
 
-<div id="outline-container-org5ebdb41" class="outline-2">
-<h2 id="org5ebdb41">Tools</h2>
-<div class="outline-text-2" id="text-org5ebdb41">
+<div id="outline-container-orgadaa97f" class="outline-2">
+<h2 id="orgadaa97f">Tools</h2>
+<div class="outline-text-2" id="text-orgadaa97f">
 <p>
 Below is the listing of software, I have installed to write, version, build and debug.
 In install order:
@@ -102,16 +102,16 @@ In install order:
 </div>
 </div>
 
-<div id="outline-container-org223d993" class="outline-2">
-<h2 id="org223d993">Configuration</h2>
-<div class="outline-text-2" id="text-org223d993">
+<div id="outline-container-org2bdf6db" class="outline-2">
+<h2 id="org2bdf6db">Configuration</h2>
+<div class="outline-text-2" id="text-org2bdf6db">
 <p>
 After having installed the software above, there is a need to do some configuration.
 </p>
 </div>
-<div id="outline-container-org5c1bf2f" class="outline-3">
-<h3 id="org5c1bf2f">VSCode Extensions</h3>
-<div class="outline-text-3" id="text-org5c1bf2f">
+<div id="outline-container-org2151a8e" class="outline-3">
+<h3 id="org2151a8e">VSCode Extensions</h3>
+<div class="outline-text-3" id="text-org2151a8e">
 <p>
 While VSCode is quite well featured out of the box, I prefer some extras to make the experience nicer.
 </p>
@@ -130,9 +130,9 @@ This will installed 2 other extensions
 </div>
 </div>
 
-<div id="outline-container-orgf99a583" class="outline-3">
-<h3 id="orgf99a583">VCpkg Configuration</h3>
-<div class="outline-text-3" id="text-orgf99a583">
+<div id="outline-container-org773232b" class="outline-3">
+<h3 id="org773232b">VCpkg Configuration</h3>
+<div class="outline-text-3" id="text-org773232b">
 <p>
 Installation instructions for VCpkg are pretty good. There was no need to deviate from it. <br>
 I did add following two User Environment variables.
@@ -145,9 +145,9 @@ I did add following two User Environment variables.
 </div>
 </div>
 
-<div id="outline-container-orga572abb" class="outline-2">
-<h2 id="orga572abb">Project specific editor configuration</h2>
-<div class="outline-text-2" id="text-orga572abb">
+<div id="outline-container-org00f8790" class="outline-2">
+<h2 id="org00f8790">Project specific editor configuration</h2>
+<div class="outline-text-2" id="text-org00f8790">
 <p>
 In order to make the code editing and debugging with VSCode a little bit less frustrating, there is a
 need to do some project specific setup.
@@ -166,7 +166,7 @@ Select "<code>C++(Windows)</code>" as environment.<br>
 This will then create a <code>launch.json</code> file in <code>.vscode</code> directory. Modify this file, by changing following values.
 </p>
 <div class="org-src-container">
-<pre class="src src-js" id="org2500e3a"><span style="color: #f1fa8c;">"program"</span>: <span style="color: #f1fa8c;">"${command:cmake.launchTargetPath}"</span>,
+<pre class="src src-js" id="orgda8ccf1"><span style="color: #f1fa8c;">"program"</span>: <span style="color: #f1fa8c;">"${command:cmake.launchTargetPath}"</span>,
 <span style="color: #f1fa8c;">"cwd"</span>: <span style="color: #f1fa8c;">"${workspaceFolder}\\build\\bin"</span>,
 <span style="color: #f1fa8c;">"externalConsole"</span>: <span style="color: #8be9fd;">true</span>
 </pre>
@@ -178,15 +178,15 @@ After this is done, debugger can be launched using <code>F5</code>.
 </div>
 </div>
 
-<div id="outline-container-orgeada4f9" class="outline-2">
-<h2 id="orgeada4f9">Project Structure</h2>
-<div class="outline-text-2" id="text-orgeada4f9">
+<div id="outline-container-org058e745" class="outline-2">
+<h2 id="org058e745">Project Structure</h2>
+<div class="outline-text-2" id="text-org058e745">
 <p>
 The project's files are structured in following manner. 
 I am not listing files and directories not directly created by me. e.g <code>.git</code> and <code>.vscode</code> folders. <br>
 </p>
 <div class="org-src-container">
-<pre class="src src-shell" id="orgcaeb38d">\roguelike<span style="color: #f1fa8c;">\ </span>                <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Project's Root Folder</span>
+<pre class="src src-shell" id="orgc8e23fc">\roguelike<span style="color: #f1fa8c;">\ </span>                <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Project's Root Folder</span>
 \roguelike\build<span style="color: #f1fa8c;">\ </span>          <span style="color: #6272a4;"># </span><span style="color: #6272a4;">CMake build output will go here</span>
 \roguelike\docs<span style="color: #f1fa8c;">\ </span>           <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Github will use this as website folder</span>
 \roguelike\src<span style="color: #f1fa8c;">\ </span>            <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Project's source code lives here</span>
@@ -196,16 +196,16 @@ I am not listing files and directories not directly created by me. e.g <code>.gi
 </div>
 </div>
 
-<div id="outline-container-orgcb5be33" class="outline-2">
-<h2 id="orgcb5be33">Build configuration</h2>
-<div class="outline-text-2" id="text-orgcb5be33">
+<div id="outline-container-org9ccfc0d" class="outline-2">
+<h2 id="org9ccfc0d">Build configuration</h2>
+<div class="outline-text-2" id="text-org9ccfc0d">
 <p>
 CMake requires that every folder that participates in our build have a <code>CMakeLists.txt</code> file.
 For this project, those folders are <code>src</code> and <code>external</code>. So we have total of 3 <code>CMakeLists.txt</code> files.
 Located as such:
 </p>
 <div class="org-src-container">
-<pre class="src src-shell" id="org3f84411">\roguelike\CMakeLists.txt           <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Primary/Root CMake file</span>
+<pre class="src src-shell" id="org85f732f">\roguelike\CMakeLists.txt           <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Primary/Root CMake file</span>
 \roguelike\src\CMakeLists.txt       <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Tell CMake how to build source for project</span>
 \roguelike\external\CMakeLists.txt  <span style="color: #6272a4;"># </span><span style="color: #6272a4;">Tell CMake how to consume dependencies</span>
 </pre>
@@ -217,13 +217,13 @@ trigger <code>CMake Tools</code> which will create a build script. This can be e
 </div>
 </div>
 
-<div id="outline-container-orgaaac871" class="outline-2">
-<h2 id="orgaaac871">The Starter Project</h2>
-<div class="outline-text-2" id="text-orgaaac871">
+<div id="outline-container-org3129d83" class="outline-2">
+<h2 id="org3129d83">The Starter Project</h2>
+<div class="outline-text-2" id="text-org3129d83">
 </div>
-<div id="outline-container-org236c52d" class="outline-3">
-<h3 id="org236c52d">Hello World!</h3>
-<div class="outline-text-3" id="text-org236c52d">
+<div id="outline-container-org46751b9" class="outline-3">
+<h3 id="org46751b9">Hello World!</h3>
+<div class="outline-text-3" id="text-org46751b9">
 <p>
 You can view the <a href="https://github.com/Roy-Fokker/roguelike/tree/Part-0a">setup starter project</a> on the github repo. Building it will require that you 
 install <code>fmt</code> using <code>vcpkg</code>. Project up to this point doesn't do much other than print 
@@ -242,12 +242,17 @@ install <code>fmt</code> using <code>vcpkg</code>. Project up to this point does
 </p>
 <ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-0a/src/CMakeLists.txt" width=500 commentWidth=500>
 </ui-code>
+
+<figure>
+<img src="Part-0a.png" alt="Part-0a.png">
+
+</figure>
 </div>
 </div>
 
-<div id="outline-container-org8087f8b" class="outline-3">
-<h3 id="org8087f8b">Using TCOD</h3>
-<div class="outline-text-3" id="text-org8087f8b">
+<div id="outline-container-org111fe84" class="outline-3">
+<h3 id="org111fe84">Using TCOD</h3>
+<div class="outline-text-3" id="text-org111fe84">
 <p>
 In order to get a character on the screen, we need <code>libtcod</code>. We have two options here. 
 </p>
@@ -290,27 +295,29 @@ the changes made to all the <code>CMakeLists.txt</code> as well as the <code>src
 </p>
 <ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-0b/external/CMakeLists.txt" width=500 commentWidth=500>
 </ui-code>
+
+<figure>
+<img src="Part-0b.png" alt="Part-0b.png">
+
+</figure>
 </div>
 </div>
 </div>
 
-
-<div id="outline-container-orgbbb9979" class="outline-2">
-<h2 id="orgbbb9979">Links</h2>
-<div class="outline-text-2" id="text-orgbbb9979">
+<div id="outline-container-orgd55f734" class="outline-2">
+<h2 id="orgd55f734">Links</h2>
+<div class="outline-text-2" id="text-orgd55f734">
 <p>
 ╣ <a href="https://github.com/Roy-Fokker/roguelike/tree/Part-0b">GitHub Repo</a> ╠═══<br>
 ╣ <a href="index.html">Home</a> ╠═══<br>
 ╣ Next: <a href="1.Starter.html">Console and moving around</a> ╠═══
 </p>
-
-<hr>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Neel Raiyani [Roy Fokker]</p>
-<p class="date">Created: 2019-10-13 Sun 22:26</p>
+<p class="date">Created: 2019-10-24 Thu 17:13</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

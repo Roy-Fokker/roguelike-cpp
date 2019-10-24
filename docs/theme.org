@@ -3,7 +3,7 @@
 #+EMAIL: nraiyani@gmail.com
 #+LANGUAGE: en
 
-#+STARTUP: showall noindent entitiespretty
+#+STARTUP: showall noindent entitiespretty inlineimages
 
 # Theme for Roguelike Tutorials in C++17
 # Turn off default internal styles

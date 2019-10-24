@@ -53,6 +53,8 @@ moves. We also need to call =recompute= after the player has been created in
 After this we should be able to move our player character around the 
 Dungeon and see a light circle around the character.
 
+[[file:Part-4a.gif]]
+
 [[https://github.com/Roy-Fokker/roguelike/tree/Part-4][GitHub Repo]]
 
 * Marking Explorered Areas
@@ -76,6 +78,8 @@ enough, put the call to =game_map::update_explored= after each instance of call 
 
 This gives us a nice, hidden level, that gradually opens up as the player moves
 around. Begining to look like a *Roguelike* already.
+
+[[file:Part-4b.gif]]
 
 [[https://github.com/Roy-Fokker/roguelike/tree/Part-4b][GitHub Repo]]
 

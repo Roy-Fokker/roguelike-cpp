@@ -74,6 +74,8 @@ want per map generation.
 And that's our "Simple Rooms Generator". There are many better algorithms out there. This one is very 
 much dependent on just simple random number generator. No smarts required/applied.
 
+[[file:Part-3a.png]]
+
 [[https://github.com/Roy-Fokker/roguelike/tree/Part-3a][GitHub Repo]]
 
 * Connecting all the rooms
@@ -95,6 +97,8 @@ calls. This is to ensure, that we don't start both tunnels at primary room.
 Having done all this, we now have a series of rooms, we can walk around in. We can control how many rooms there 
 are on a map, how big or small they can be. Amount of code is not all that much. Just organizing it makes a lot 
 of difference.
+
+[[file:Part-3b.png]]
 
 * Links
 ╣ [[https://github.com/Roy-Fokker/roguelike/tree/Part-3b][GitHub Repo]] ╠═══\\

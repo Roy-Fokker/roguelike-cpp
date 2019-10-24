@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2019-10-13 Sun 23:14 -->
+<!-- 2019-10-24 Thu 17:24 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Roguelike Game in C++17</title>
@@ -69,11 +69,11 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org4869ee0">Goals</a></li>
-<li><a href="#org05b4a5c">Refactoring</a></li>
-<li><a href="#org5010ff9">Loading Custom Font</a></li>
-<li><a href="#org4b5f183">Handling Input</a></li>
-<li><a href="#orgdd3a4df">Links</a></li>
+<li><a href="#org1885993">Goals</a></li>
+<li><a href="#org4ea6d7e">Refactoring</a></li>
+<li><a href="#orgb853e92">Loading Custom Font</a></li>
+<li><a href="#org94b9cef">Handling Input</a></li>
+<li><a href="#org506e308">Links</a></li>
 </ul>
 </div>
 </nav>
@@ -83,9 +83,9 @@ presents a window with <code>@</code> in middle of the screen. But that does not
 a roguelike make. So, onwards we go&#x2026;
 </p>
 
-<div id="outline-container-org4869ee0" class="outline-2">
-<h2 id="org4869ee0">Goals</h2>
-<div class="outline-text-2" id="text-org4869ee0">
+<div id="outline-container-org1885993" class="outline-2">
+<h2 id="org1885993">Goals</h2>
+<div class="outline-text-2" id="text-org1885993">
 <p>
 For this section the goals are:
 </p>
@@ -105,9 +105,9 @@ That list doesn't look too bad, relatively simple goals.
 </div>
 </div>
 
-<div id="outline-container-org05b4a5c" class="outline-2">
-<h2 id="org05b4a5c">Refactoring</h2>
-<div class="outline-text-2" id="text-org05b4a5c">
+<div id="outline-container-org4ea6d7e" class="outline-2">
+<h2 id="org4ea6d7e">Refactoring</h2>
+<div class="outline-text-2" id="text-org4ea6d7e">
 <p>
 The code renders <code>@</code> in a hard coded position directly on what <code>tcod</code>
 calls the root console. Ideally, it would be rendered on to some
@@ -133,10 +133,9 @@ on <code>game_console</code> using <code>putChar</code> method.
 </div>
 </div>
 
-
-<div id="outline-container-org5010ff9" class="outline-2">
-<h2 id="org5010ff9">Loading Custom Font</h2>
-<div class="outline-text-2" id="text-org5010ff9">
+<div id="outline-container-orgb853e92" class="outline-2">
+<h2 id="orgb853e92">Loading Custom Font</h2>
+<div class="outline-text-2" id="text-orgb853e92">
 <p>
 For this we use <code>setCustomFont</code> method of the <code>TCODConsole</code> class. Reading
 the documentation of <code>tcod</code>, we learn that <code>setCustomFont</code> must be called
@@ -164,9 +163,9 @@ to copy 3 files, two <code>.dll</code> and one <code>.png</code>.
 </div>
 </div>
 
-<div id="outline-container-org4b5f183" class="outline-2">
-<h2 id="org4b5f183">Handling Input</h2>
-<div class="outline-text-2" id="text-org4b5f183">
+<div id="outline-container-org94b9cef" class="outline-2">
+<h2 id="org94b9cef">Handling Input</h2>
+<div class="outline-text-2" id="text-org94b9cef">
 <p>
 Compared to font loading, this is bit more involved. Basically, this 
 task can be divided into two smaller concepts.
@@ -177,9 +176,9 @@ task can be divided into two smaller concepts.
 </ul>
 </div>
 
-<div id="outline-container-org78ad2a2" class="outline-3">
-<h3 id="org78ad2a2">Action handling</h3>
-<div class="outline-text-3" id="text-org78ad2a2">
+<div id="outline-container-orgaeed6ae" class="outline-3">
+<h3 id="orgaeed6ae">Action handling</h3>
+<div class="outline-text-3" id="text-orgaeed6ae">
 <p>
 Player in our game can do set of actions on any given turn/frame.
 For the moment these are
@@ -223,9 +222,9 @@ value to move the player in <code>X</code> and <code>Y</code> axis respectively.
 </div>
 </div>
 
-<div id="outline-container-org5197782" class="outline-3">
-<h3 id="org5197782">Key press handling</h3>
-<div class="outline-text-3" id="text-org5197782">
+<div id="outline-container-org5ce19d9" class="outline-3">
+<h3 id="org5ce19d9">Key press handling</h3>
+<div class="outline-text-3" id="text-org5ce19d9">
 <p>
 The function handling key presses will transform the key pressed into 
 an action from our actions list.
@@ -267,13 +266,19 @@ Now we have <code>@</code> displayed on the screen which can be moved around usi
 keys. The application can exit when <code>ESC</code> key is pressed and it'll go fullscreen
 when <code>ALT</code> and <code>ENTER</code> keys are pressed together.
 </p>
+
+
+<figure>
+<img src="Part-1a.gif" alt="Part-1a.gif">
+
+</figure>
 </div>
 </div>
 </div>
 
-<div id="outline-container-orgdd3a4df" class="outline-2">
-<h2 id="orgdd3a4df">Links</h2>
-<div class="outline-text-2" id="text-orgdd3a4df">
+<div id="outline-container-org506e308" class="outline-2">
+<h2 id="org506e308">Links</h2>
+<div class="outline-text-2" id="text-org506e308">
 <p>
 ╣ <a href="https://github.com/Roy-Fokker/roguelike/tree/Part-1b">GitHub Repo</a> ╠═══<br>
 ╣ <a href="index.html">Home</a> ╠═══<br>
@@ -287,7 +292,7 @@ when <code>ALT</code> and <code>ENTER</code> keys are pressed together.
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Neel Raiyani [Roy Fokker]</p>
-<p class="date">Created: 2019-10-13 Sun 23:14</p>
+<p class="date">Created: 2019-10-24 Thu 17:24</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
