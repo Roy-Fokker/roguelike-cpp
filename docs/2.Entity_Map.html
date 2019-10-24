@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2019-10-24 Thu 17:24 -->
+<!-- 2019-10-24 Thu 17:38 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Roguelike Game in C++17</title>
@@ -69,12 +69,12 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org392578f">Goals</a></li>
-<li><a href="#orgc38f687">The entity class</a></li>
-<li><a href="#org418bcf8">Refactoring for hygene</a></li>
-<li><a href="#orga5e8422">Beginning of a map</a></li>
-<li><a href="#org3a151b5">Refactor part 2: the refactoring</a></li>
-<li><a href="#orgb5bb415">Links</a></li>
+<li><a href="#org62f527d">Goals</a></li>
+<li><a href="#org6e7459d">The entity class</a></li>
+<li><a href="#org96bf4e6">Refactoring for hygene</a></li>
+<li><a href="#org8c8b0c6">Beginning of a map</a></li>
+<li><a href="#org59d609d">Refactor part 2: the refactoring</a></li>
+<li><a href="#org24398ca">Links</a></li>
 </ul>
 </div>
 </nav>
@@ -83,9 +83,9 @@ Moving around in a blank world is not fun. Also, code at present has no concept
 of other things and creatures that could exist. So to fix that further we delve.
 </p>
 
-<div id="outline-container-org392578f" class="outline-2">
-<h2 id="org392578f">Goals</h2>
-<div class="outline-text-2" id="text-org392578f">
+<div id="outline-container-org62f527d" class="outline-2">
+<h2 id="org62f527d">Goals</h2>
+<div class="outline-text-2" id="text-org62f527d">
 <p>
 We have two main goals for this part. 
 </p>
@@ -96,9 +96,9 @@ We have two main goals for this part.
 </div>
 </div>
 
-<div id="outline-container-orgc38f687" class="outline-2">
-<h2 id="orgc38f687">The entity class</h2>
-<div class="outline-text-2" id="text-orgc38f687">
+<div id="outline-container-org6e7459d" class="outline-2">
+<h2 id="org6e7459d">The entity class</h2>
+<div class="outline-text-2" id="text-org6e7459d">
 <p>
 First thing we'll do is replace <code>move_dir</code> typedef, with a strongly-typed struct.
 <code>position</code> struct will have 2 members <code>x</code> and <code>y</code>. Anywhere we had <code>move_dir</code> gets
@@ -145,9 +145,9 @@ the two console method calls with one <code>player.draw_entity</code> call.
 </div>
 </div>
 
-<div id="outline-container-org418bcf8" class="outline-2">
-<h2 id="org418bcf8">Refactoring for hygene</h2>
-<div class="outline-text-2" id="text-org418bcf8">
+<div id="outline-container-org96bf4e6" class="outline-2">
+<h2 id="org96bf4e6">Refactoring for hygene</h2>
+<div class="outline-text-2" id="text-org96bf4e6">
 <p>
 Before we go any further, we need to reorganize the code a bit. Everything is 
 currently in the <code>main.cpp</code>. It's getting a bit crowded, and difficult to visualize
@@ -190,9 +190,9 @@ entity to move it by a specific offset position.
 </div>
 </div>
 
-<div id="outline-container-orga5e8422" class="outline-2">
-<h2 id="orga5e8422">Beginning of a map</h2>
-<div class="outline-text-2" id="text-orga5e8422">
+<div id="outline-container-org8c8b0c6" class="outline-2">
+<h2 id="org8c8b0c6">Beginning of a map</h2>
+<div class="outline-text-2" id="text-org8c8b0c6">
 <p>
 Refactoring done, time to move on to second goal for this section, creating a map/level
 structure. This will represent the movement area for the player. As well as, places
@@ -231,9 +231,9 @@ will be. If <code>is_blocked</code> return false, player can move to that locati
 </div>
 </div>
 
-<div id="outline-container-org3a151b5" class="outline-2">
-<h2 id="org3a151b5">Refactor part 2: the refactoring</h2>
-<div class="outline-text-2" id="text-org3a151b5">
+<div id="outline-container-org59d609d" class="outline-2">
+<h2 id="org59d609d">Refactor part 2: the refactoring</h2>
+<div class="outline-text-2" id="text-org59d609d">
 <p>
 Once again, code has gotten a bit hairy <code>ಠ╭╮ಠ</code>. So it's time to clean up again.
 We have a good idea of how the map is to be generated, and how collisions will
@@ -253,12 +253,18 @@ We need to make sure that CMake is aware of them, which means adding each to
 <code>target_sources</code> in <code>src\CMakeLists.txt</code>. Over time, this list will get larger
 but not that much more larger.
 </p>
+
+
+<figure>
+<img src="Part-2d.gif" alt="Part-2d.gif">
+
+</figure>
 </div>
 </div>
 
-<div id="outline-container-orgb5bb415" class="outline-2">
-<h2 id="orgb5bb415">Links</h2>
-<div class="outline-text-2" id="text-orgb5bb415">
+<div id="outline-container-org24398ca" class="outline-2">
+<h2 id="org24398ca">Links</h2>
+<div class="outline-text-2" id="text-org24398ca">
 <p>
 ╣ <a href="https://github.com/Roy-Fokker/roguelike/tree/Part-2b">GitHub Repo</a> ╠═══<br>
 ╣ <a href="index.html">Home</a> ╠═══<br>
@@ -272,7 +278,7 @@ but not that much more larger.
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Neel Raiyani [Roy Fokker]</p>
-<p class="date">Created: 2019-10-24 Thu 17:24</p>
+<p class="date">Created: 2019-10-24 Thu 17:38</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
