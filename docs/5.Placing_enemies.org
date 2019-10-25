@@ -1,0 +1,22 @@
+#+SETUPFILE: theme.org
+#+SUBTITLE: Placing enemies.
+#+OPTIONS: H:2 num:nil
+
+
+Slowly we get closer to something resembling a game. Player
+can move around, they don't see the whole map. There are random
+rooms, tunnels/hallways. But there is nothing else to do. This 
+section solve that last problem, by adding entities to direct
+player's RAGEEEEEEEEEEE! 
+
+* Goals
+
+
+[[https://github.com/Roy-Fokker/roguelike/tree/Part-5a][GitHub Repo]]
+
+* Links
+╣ [[https://github.com/Roy-Fokker/roguelike/tree/Part-4c][GitHub Repo]] ╠═══\\
+╣ [[file:index.org][Home]] ╠═══\\
+╣ Prev: [[file:4.Field_of_view.org][Player's field of view]] ╠═══\\
+╣ Next: [[file:6.Combat.org][Combat]] ╠═══
+
