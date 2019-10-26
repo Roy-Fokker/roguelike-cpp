@@ -17,7 +17,7 @@ int main()
 {
 	constexpr auto window_width = 80, 
 	               window_height = 50;
-	constexpr auto title = "Roguelike Tutorials - Part 2"sv,
+	constexpr auto title = "Roguelike Tutorials - Part 5"sv,
 	               font_path = "arial10x10.png"sv;
 	
 	// Root Console, this is the thing that controls the window.
@@ -35,12 +35,16 @@ int main()
 	// Use the map to generate a Field of View
 	auto fov = fov_map(map);
 
-	game_entity player                   // Player Entity object
-	{ 
+	// Get location and types of all the enemies
+	auto entities = generate_enemies(map.rooms);
+
+	// Add a player entity to end of our entities list
+	entities.push_back({
 		map.rooms.at(0).center(),        // Initial Position of Player
-		'@',                             // player character looks like @
-		TCODColor::white                 // Color of player character
-	};
+		entity_type::player              // type of entity
+	});
+	auto &player = entities.back();     // Reference to Player Entity object
+
 	fov.recompute(player.pos);       // Compute the starting Field of View
 	map.update_explored(player.pos, fov); // Update initial exploration state
 
@@ -58,7 +62,10 @@ int main()
 
 		game_layer.draw(map, fov);    // Draw the map to game_console layer
 
-		game_layer.draw(player); // Draw the player to game_console layer
+		for (auto &e : entities)
+		{
+			game_layer.draw(e); // Draw the player to game_console layer
+		}
 
 		root.blit(game_layer);  // Apply the game_console layer to Root Console
 		root.present();         // Flush the root console to display to screen

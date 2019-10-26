@@ -86,6 +86,11 @@ void console_layer::draw(const game_entity &entity)
 	layer->putChar(entity.pos.x, entity.pos.y,
 	              entity.chr,
 	              TCOD_BKGND_NONE);
+		auto [chr, col] = entity.face();
+		layer->setDefaultForeground(col);
+		layer->putChar(entity.pos.x, entity.pos.y,
+		               chr,
+		               TCOD_BKGND_NONE);
 }
 
 // Quick and Dirty draw map function.
