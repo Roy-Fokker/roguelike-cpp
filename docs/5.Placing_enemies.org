@@ -2,7 +2,6 @@
 #+SUBTITLE: Placing enemies.
 #+OPTIONS: H:2 num:nil
 
-
 Slowly we get closer to something resembling a game. Player
 can move around, they don't see the whole map. There are random
 rooms, tunnels/hallways. But there is nothing else to do. This 
@@ -10,12 +9,83 @@ section solve that last problem, by adding entities to direct
 player's RAGEEEEEEEEEEE! 
 
 * Goals
+So breaking down the tasks for this section, we get
+- Add randomized number of enemies in each room.
+- Draw them only if Player can see them.
+- Collision detection with enemies.
 
+* Demons of the world
+To generate all the enemies, we will modify the =game_entity= structure.
+Gone are =char= and =TCODColor= member variables, and in comes =entity_type=
+member variable. =entity_type= is an enum class with 3 values for the moment.
+- player
+- ogre
+- goblin
+Logically speaking, there is nothing really special about the player. So I'll
+be treating them same as any other character in the game. 
+
+Additionally, there is now =face= method within =game_entity= structure. This method 
+will return a =std::pair= of =char= and =TCODColor= from a file local =std::array= 
+object. Values in this array are placed in same order as =entity_type= values, so 
+it can be indexed into. We have to also change =console_layer::draw= method for entities 
+to use =face= method to get info about how to draw a =game_entity=, done via structured 
+binding.
+
+Another new function being added is =generate_enemies=, which will return a list of 
+=game_entity= objects with =type= member begin either ~ogre~ or ~goblin~. It will take
+in list of all the rooms in the map, and place these =game_entity= objects within those
+rooms. We are again use C++17 random header for random number generation. =place_enemies_in_room=
+lambda will place between =0= and =max_enemies_per_room= enemies in the room provided.
+The distribution between =goblins= and =ogres= is 80/20, meaning 80% of the time it's goblins
+rest is ogres.
+
+Lastly, for this section, we modify the =main= function. Removed the player specific =game_entity=
+object, and added a call to =generate_enemies=. After getting a list of enemies, we add a player 
+specific =game_entity= object to the list of all entities, along with creating a reference to 
+the same player object in the all entities list. To draw all of them, there is simple for loop
+that just goes over all entities and calls =console_layer::draw=.
 
 [[https://github.com/Roy-Fokker/roguelike/tree/Part-5a][GitHub Repo]]
 
+* In the darkness hides
+We have all the entities in the world rendering, but it sort of gives away their position
+to the player, removing all the suspense. 
+
+So for this section, we will change how =console_layer::draw= works with entities, by removing
+draw method for a singular entity, and adding draw method to take whole entities list at once. 
+In order to hide any entity not in player's view, we will also pass in the =fov_map=.
+
+Then is a matter of simply looping through the entities list, and check if they are in player's 
+field of view. If they are, then draw them, else continue to next. Also removed is the for loop
+in =main= function that did the looping, instead it's just a single line call to our new =draw= 
+method.
+
+[[https://github.com/Roy-Fokker/roguelike/tree/Part-5b][GitHub Repo]]
+
+* Don't tread on my personal space
+We now have enemies appearing only if they are in player's field of view, but they are bit
+ethreal. Player can simple walk over them, surely demons would object to such attitude.
+
+In order to stop the player from doing this we'll change the =do_action= function, it will
+now also take in list of all the entities. In the =move= switch case block, we now attempt 
+to find out if the position the player will move into is already occupied or not. If it's not
+occupied, then player can continue to that point. However, if it is occupied then, we will 
+print a flavour text message to the console. 
+
+To support checking if point on the map is occupied, =get_entity_at= function has been added
+to ~game_entity[.cpp|.hpp]~. Also to support printing of flavour text =to_string= function also
+now exists in the same file.
+
+Now when player attempts to walk over ogres and goblins, they won't be able to. And they'll
+also annoy the creature they bumped into.
+
+[[file:Part-5c.png]]
+
+[[https://github.com/Roy-Fokker/roguelike/tree/Part-5c][GitHub Repo]]
+
+
 * Links
-╣ [[https://github.com/Roy-Fokker/roguelike/tree/Part-4c][GitHub Repo]] ╠═══\\
+╣ [[https://github.com/Roy-Fokker/roguelike/tree/Part-5c][GitHub Repo]] ╠═══\\
 ╣ [[file:index.org][Home]] ╠═══\\
 ╣ Prev: [[file:4.Field_of_view.org][Player's field of view]] ╠═══\\
 ╣ Next: [[file:6.Combat.org][Combat]] ╠═══

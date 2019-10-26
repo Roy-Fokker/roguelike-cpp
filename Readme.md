@@ -7,17 +7,5 @@
   - CMake
   - CMake Tools
 
-### Project Configuration
-- In `.vscode/c_cpp_properties.json` add
-  ```json 
-  "compilerArgs": [
-                "/std:c++17",
-                "/permissive-"
-            ]
-  ```
-- In `launch.json` change 
-  ```json
-  "program": "${command:cmake.launchTargetPath}",
-  "cwd": "${workspaceFolder}\\build\\bin",
-  "externalConsole": true
-  ```
+### Details at
+### [Roguelike in C++ 17 - Github Site](https://roy-fokker.github.io/roguelike/)

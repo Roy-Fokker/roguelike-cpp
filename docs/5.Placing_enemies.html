@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2019-10-24 Thu 23:06 -->
+<!-- 2019-10-25 Fri 23:59 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Roguelike Game in C++17</title>
@@ -69,8 +69,11 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org345f0e8">Goals</a></li>
-<li><a href="#orgf18dd08">Links</a></li>
+<li><a href="#orgd623640">Goals</a></li>
+<li><a href="#org1ec71d4">Demons of the world</a></li>
+<li><a href="#org5bec50c">In the darkness hides</a></li>
+<li><a href="#org97d2b15">Don't tread on my personal space</a></li>
+<li><a href="#orgb44a5aa">Links</a></li>
 </ul>
 </div>
 </nav>
@@ -82,20 +85,143 @@ section solve that last problem, by adding entities to direct
 player's RAGEEEEEEEEEEE! 
 </p>
 
-<div id="outline-container-org345f0e8" class="outline-2">
-<h2 id="org345f0e8">Goals</h2>
-<div class="outline-text-2" id="text-org345f0e8">
+<div id="outline-container-orgd623640" class="outline-2">
+<h2 id="orgd623640">Goals</h2>
+<div class="outline-text-2" id="text-orgd623640">
+<p>
+So breaking down the tasks for this section, we get
+</p>
+<ul class="org-ul">
+<li>Add randomized number of enemies in each room.</li>
+<li>Draw them only if Player can see them.</li>
+<li>Collision detection with enemies.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org1ec71d4" class="outline-2">
+<h2 id="org1ec71d4">Demons of the world</h2>
+<div class="outline-text-2" id="text-org1ec71d4">
+<p>
+To generate all the enemies, we will modify the <code>game_entity</code> structure.
+Gone are <code>char</code> and <code>TCODColor</code> member variables, and in comes <code>entity_type</code>
+member variable. <code>entity_type</code> is an enum class with 3 values for the moment.
+</p>
+<ul class="org-ul">
+<li>player</li>
+<li>ogre</li>
+<li>goblin</li>
+</ul>
+<p>
+Logically speaking, there is nothing really special about the player. So I'll
+be treating them same as any other character in the game. 
+</p>
+
+<p>
+Additionally, there is now <code>face</code> method within <code>game_entity</code> structure. This method 
+will return a <code>std::pair</code> of <code>char</code> and <code>TCODColor</code> from a file local <code>std::array</code> 
+object. Values in this array are placed in same order as <code>entity_type</code> values, so 
+it can be indexed into. We have to also change <code>console_layer::draw</code> method for entities 
+to use <code>face</code> method to get info about how to draw a <code>game_entity</code>, done via structured 
+binding.
+</p>
+
+<p>
+Another new function being added is <code>generate_enemies</code>, which will return a list of 
+<code>game_entity</code> objects with <code>type</code> member begin either <code>ogre</code> or <code>goblin</code>. It will take
+in list of all the rooms in the map, and place these <code>game_entity</code> objects within those
+rooms. We are again use C++17 random header for random number generation. <code>place_enemies_in_room</code>
+lambda will place between <code>0</code> and <code>max_enemies_per_room</code> enemies in the room provided.
+The distribution between <code>goblins</code> and <code>ogres</code> is 80/20, meaning 80% of the time it's goblins
+rest is ogres.
+</p>
+
+<p>
+Lastly, for this section, we modify the <code>main</code> function. Removed the player specific <code>game_entity</code>
+object, and added a call to <code>generate_enemies</code>. After getting a list of enemies, we add a player 
+specific <code>game_entity</code> object to the list of all entities, along with creating a reference to 
+the same player object in the all entities list. To draw all of them, there is simple for loop
+that just goes over all entities and calls <code>console_layer::draw</code>.
+</p>
+
 <p>
 <a href="https://github.com/Roy-Fokker/roguelike/tree/Part-5a">GitHub Repo</a>
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgf18dd08" class="outline-2">
-<h2 id="orgf18dd08">Links</h2>
-<div class="outline-text-2" id="text-orgf18dd08">
+<div id="outline-container-org5bec50c" class="outline-2">
+<h2 id="org5bec50c">In the darkness hides</h2>
+<div class="outline-text-2" id="text-org5bec50c">
 <p>
-╣ <a href="https://github.com/Roy-Fokker/roguelike/tree/Part-4c">GitHub Repo</a> ╠═══<br>
+We have all the entities in the world rendering, but it sort of gives away their position
+to the player, removing all the suspense. 
+</p>
+
+<p>
+So for this section, we will change how <code>console_layer::draw</code> works with entities, by removing
+draw method for a singular entity, and adding draw method to take whole entities list at once. 
+In order to hide any entity not in player's view, we will also pass in the <code>fov_map</code>.
+</p>
+
+<p>
+Then is a matter of simply looping through the entities list, and check if they are in player's 
+field of view. If they are, then draw them, else continue to next. Also removed is the for loop
+in <code>main</code> function that did the looping, instead it's just a single line call to our new <code>draw</code> 
+method.
+</p>
+
+<p>
+<a href="https://github.com/Roy-Fokker/roguelike/tree/Part-5b">GitHub Repo</a>
+</p>
+</div>
+</div>
+
+<div id="outline-container-org97d2b15" class="outline-2">
+<h2 id="org97d2b15">Don't tread on my personal space</h2>
+<div class="outline-text-2" id="text-org97d2b15">
+<p>
+We now have enemies appearing only if they are in player's field of view, but they are bit
+ethreal. Player can simple walk over them, surely demons would object to such attitude.
+</p>
+
+<p>
+In order to stop the player from doing this we'll change the <code>do_action</code> function, it will
+now also take in list of all the entities. In the <code>move</code> switch case block, we now attempt 
+to find out if the position the player will move into is already occupied or not. If it's not
+occupied, then player can continue to that point. However, if it is occupied then, we will 
+print a flavour text message to the console. 
+</p>
+
+<p>
+To support checking if point on the map is occupied, <code>get_entity_at</code> function has been added
+to <code>game_entity[.cpp|.hpp]</code>. Also to support printing of flavour text <code>to_string</code> function also
+now exists in the same file.
+</p>
+
+<p>
+Now when player attempts to walk over ogres and goblins, they won't be able to. And they'll
+also annoy the creature they bumped into.
+</p>
+
+
+<figure>
+<img src="Part-5c.png" alt="Part-5c.png">
+
+</figure>
+
+<p>
+<a href="https://github.com/Roy-Fokker/roguelike/tree/Part-5c">GitHub Repo</a>
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-orgb44a5aa" class="outline-2">
+<h2 id="orgb44a5aa">Links</h2>
+<div class="outline-text-2" id="text-orgb44a5aa">
+<p>
+╣ <a href="https://github.com/Roy-Fokker/roguelike/tree/Part-5c">GitHub Repo</a> ╠═══<br>
 ╣ <a href="index.html">Home</a> ╠═══<br>
 ╣ Prev: <a href="4.Field_of_view.html">Player's field of view</a> ╠═══<br>
 ╣ Next: <a href="6.Combat.html">Combat</a> ╠═══
@@ -105,7 +231,7 @@ player's RAGEEEEEEEEEEE!
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Neel Raiyani [Roy Fokker]</p>
-<p class="date">Created: 2019-10-24 Thu 23:06</p>
+<p class="date">Created: 2019-10-25 Fri 23:59</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
