@@ -65,8 +65,8 @@ public:
 
 	void clear();
 
-	// Draw provided entity to this layer.
-	void draw(const game_entity &entity);
+	// Draw provided entities to this layer.
+	void draw(const std::vector<game_entity> &entities, const fov_map &fov);
 
 	// Draw provided map to this layer.
 	void draw(const game_map &map, const fov_map &fov);

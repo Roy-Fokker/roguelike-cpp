@@ -62,10 +62,7 @@ int main()
 
 		game_layer.draw(map, fov);    // Draw the map to game_console layer
 
-		for (auto &e : entities)
-		{
-			game_layer.draw(e); // Draw the player to game_console layer
-		}
+		game_layer.draw(entities, fov); // Draw all the entities 
 
 		root.blit(game_layer);  // Apply the game_console layer to Root Console
 		root.present();         // Flush the root console to display to screen

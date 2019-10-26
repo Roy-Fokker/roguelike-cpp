@@ -80,17 +80,22 @@ void console_layer::clear()
 	layer->clear();
 }
 
-void console_layer::draw(const game_entity &entity)
+void console_layer::draw(const std::vector<game_entity> &entities, const fov_map &fov)
 {
-	layer->setDefaultForeground(entity.color);
-	layer->putChar(entity.pos.x, entity.pos.y,
-	              entity.chr,
-	              TCOD_BKGND_NONE);
+	// For each entity in list
+	for (auto &entity : entities)
+	{
+		// Check if player can see them
+		if (not fov.is_visible(entity.pos))
+			continue;
+
+		// Draw them if visible
 		auto [chr, col] = entity.face();
 		layer->setDefaultForeground(col);
 		layer->putChar(entity.pos.x, entity.pos.y,
 		               chr,
 		               TCOD_BKGND_NONE);
+	}
 }
 
 // Quick and Dirty draw map function.
