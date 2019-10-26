@@ -75,8 +75,8 @@ auto generate_enemies(const std::vector<room> &rooms) -> std::vector<game_entity
 		std::uniform_int_distribution d_x(x1, x2), // X and Y distribution
 		                              d_y(y1, y2); // for enemies
 		
-		for (auto i = enemies.size();        // Take enemy count till now
-		     enemies.size() < (i + count); ) // loop till it's increased by count.
+		for (auto start_cnt = enemies.size();        // Take enemy count till now
+		     enemies.size() < (start_cnt + count); ) // loop till it's increased by count.
 		{
 			int x = d_x(gen), // x and y coordinates
 			    y = d_y(gen); // to put the enemy at.
