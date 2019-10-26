@@ -62,14 +62,9 @@ auto generate_enemies(const std::vector<room> &rooms) -> std::vector<game_entity
 			int x = d_x(gen), // x and y coordinates
 			    y = d_y(gen); // to put the enemy at.
 			
-			// Make sure no other enemies are in the same spot.
-			auto exists = std::find_if(std::begin(enemies), std::end(enemies), [&](const auto &e)
-			{
-				return (x == e.pos.x) and (x == e.pos.y);
-			});
-
-			// If there are no others add to the list.
-			if (exists == std::end(enemies))
+			// If there are no others other enemies are in the same spot
+			// then add to the list.
+			if (not is_blocked({x, y}, enemies))
 			{
 				// Figure out what's the type of this enemy.
 				auto type = d_et(gen) ? entity_type::ogre : entity_type::goblin;
@@ -89,4 +84,14 @@ auto generate_enemies(const std::vector<room> &rooms) -> std::vector<game_entity
 	}
 
 	return enemies;
+}
+
+auto is_blocked(const position &p, const std::vector<game_entity> &entities) -> bool
+{
+	auto exists = std::find_if(std::begin(entities), std::end(entities), [&](const auto &e)
+	{
+		return (p.x == e.pos.x) and (p.y == e.pos.y);
+	});
+
+	return exists != std::end(entities);
 }

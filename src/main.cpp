@@ -53,6 +53,7 @@ int main()
 	{
 		do_action(handle_input(),
 		          player,
+		          entities,
 		          map,
 		          fov,
 		          root,

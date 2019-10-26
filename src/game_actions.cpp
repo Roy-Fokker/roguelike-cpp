@@ -8,6 +8,7 @@
 
 void do_action(const action_data_pair &action_data, 
                game_entity &entity,
+               const std::vector<game_entity> &all_entities,
                game_map &map,
                fov_map &fov,
                console_root &root,
@@ -25,8 +26,10 @@ void do_action(const action_data_pair &action_data,
 			// directions the entity want to move in
 			auto offset = std::any_cast<position>(action_data.second);
 
+			auto new_pos = position{entity.pos.x + offset.x, entity.pos.y + offset.y};
 			// Can the entity move there?
-			if (not map.is_blocked({entity.pos.x + offset.x, entity.pos.y + offset.y}))
+			if (not map.is_blocked(new_pos)
+				and not is_blocked(new_pos, all_entities))
 			{
 				// Yes
 				entity.move_by(offset);

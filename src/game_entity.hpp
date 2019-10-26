@@ -42,3 +42,7 @@ struct room;
 
 // Free function that will generate all the enemies in each of the rooms on random
 auto generate_enemies(const std::vector<room> &rooms) -> std::vector<game_entity>;
+
+// check the entities list to see if any of them are in 
+// position provided.
+auto is_blocked(const position &p, const std::vector<game_entity> &entities) -> bool;

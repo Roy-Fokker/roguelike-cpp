@@ -2,6 +2,7 @@
 
 #include <utility>      // for std::pair
 #include <any>          // for std::any and std::any_cast<>
+#include <vector>       // for std::vector
 
 // Actions user/player can do within context of the game
 enum class actions
@@ -27,6 +28,7 @@ class console_root;
 // We will refactor this again in future.
 void do_action(const action_data_pair &action_data, 
                game_entity &entity,
+               const std::vector<game_entity> &all_entities,
                game_map &map,
                fov_map &fov,
                console_root &root,
