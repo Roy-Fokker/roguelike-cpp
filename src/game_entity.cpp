@@ -6,6 +6,10 @@
 #include <random>
 #include <array>
 #include <algorithm>
+#include <string_view>
+#include <cassert>
+
+using namespace std::literals;
 
 namespace
 {
@@ -19,6 +23,21 @@ namespace
 		std::pair{ 'o', TCODColor{ 255, 197,   0 } },
 		std::pair{ 'g', TCODColor{  18, 102,   0 } },
 	};
+}
+
+auto to_string(entity_type type) -> std::string_view
+{
+	switch (type)
+	{
+	case entity_type::ogre:
+		return "ogre"sv;
+	case entity_type::goblin:
+		return "goblin"sv;
+	default:
+		assert(false); // missed an character type?
+	}
+
+	assert(false); // how'd you get here
 }
 
 void game_entity::move_by(const position &offset)
@@ -64,10 +83,10 @@ auto generate_enemies(const std::vector<room> &rooms) -> std::vector<game_entity
 			
 			// If there are no others other enemies are in the same spot
 			// then add to the list.
-			if (not is_blocked({x, y}, enemies))
+			if (get_entity_at({x, y}, enemies) == std::end(enemies))
 			{
 				// Figure out what's the type of this enemy.
-				auto type = d_et(gen) ? entity_type::ogre : entity_type::goblin;
+				auto type = d_et(gen) ? entity_type::goblin : entity_type::ogre;
 				enemies.push_back({
 					{x, y},
 					type
@@ -86,12 +105,10 @@ auto generate_enemies(const std::vector<room> &rooms) -> std::vector<game_entity
 	return enemies;
 }
 
-auto is_blocked(const position &p, const std::vector<game_entity> &entities) -> bool
+auto get_entity_at(const position &p, const game_entities_list &entities) -> game_entities_list::const_iterator
 {
-	auto exists = std::find_if(std::begin(entities), std::end(entities), [&](const auto &e)
+	return std::find_if(std::begin(entities), std::end(entities), [&](const auto &e)
 	{
 		return (p.x == e.pos.x) and (p.y == e.pos.y);
 	});
-
-	return exists != std::end(entities);
 }

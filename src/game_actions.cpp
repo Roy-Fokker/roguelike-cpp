@@ -4,6 +4,7 @@
 #include "game_entity.hpp"
 #include "game_map.hpp"
 
+#include <fmt/core.h>
 #include <cassert>
 
 void do_action(const action_data_pair &action_data, 
@@ -26,10 +27,15 @@ void do_action(const action_data_pair &action_data,
 			// directions the entity want to move in
 			auto offset = std::any_cast<position>(action_data.second);
 
+			// Position entity want to be at.
 			auto new_pos = position{entity.pos.x + offset.x, entity.pos.y + offset.y};
+
+			// Is there any other entity there?
+			auto ent_itr = get_entity_at(new_pos, all_entities);
+
 			// Can the entity move there?
 			if (not map.is_blocked(new_pos)
-				and not is_blocked(new_pos, all_entities))
+				and ent_itr == std::end(all_entities))
 			{
 				// Yes
 				entity.move_by(offset);
@@ -39,6 +45,12 @@ void do_action(const action_data_pair &action_data,
 
 				// Update game map with newly explored tiles
 				map.update_explored(entity.pos, fov);
+			}
+			// is another character there?
+			else if (ent_itr != std::end(all_entities))
+			{
+				// Print flavour text
+				fmt::print("You kicked {} in the shins, much to its annoyance!.\n", to_string(ent_itr->type));
 			}
 
 			break;

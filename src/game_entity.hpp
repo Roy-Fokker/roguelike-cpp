@@ -24,6 +24,8 @@ enum class entity_type
 	goblin
 };
 
+auto to_string(entity_type type) -> std::string_view;
+
 // Entity structure represent any object in game world
 // It fully describes the object and how to move it.
 struct game_entity
@@ -38,11 +40,14 @@ struct game_entity
 	auto face() const -> std::pair<char, TCODColor>;
 };
 
+// Create an alias to type less angle brackets
+using game_entities_list = std::vector<game_entity>;
+
 struct room;
 
 // Free function that will generate all the enemies in each of the rooms on random
 auto generate_enemies(const std::vector<room> &rooms) -> std::vector<game_entity>;
 
 // check the entities list to see if any of them are in 
-// position provided.
-auto is_blocked(const position &p, const std::vector<game_entity> &entities) -> bool;
+// position provided, if so return it's iterator idx.
+auto get_entity_at(const position &p, const game_entities_list &entities) -> game_entities_list::const_iterator;
