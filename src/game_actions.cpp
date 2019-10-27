@@ -8,6 +8,8 @@
 #include <reversed.hpp>
 #include <fmt/core.h>
 #include <cassert>
+#include <cmath>
+#include <random>
 
 namespace 
 {
@@ -17,8 +19,24 @@ namespace
 		     dy = end.y - start.y;
 		auto distance = std::hypot(dx, dy);
 
-		dx = (int)std::round(dx / distance);
-		dy = (int)std::round(dy / distance);
+		dx = (int)std::clamp(std::round(dx / distance), -1.0, 1.0);
+		dy = (int)std::clamp(std::round(dy / distance), -1.0, 1.0);
+
+		if (dx != 0 and dy != 0)
+		{
+			static std::random_device rd{};      // Random number generator
+			static std::mt19937 gen(rd());       // generation algorithm we want to use
+			static std::bernoulli_distribution d_xy(0.5); // move in x or y
+
+			if (d_xy(gen))
+			{
+				dx = 0;
+			}
+			else 
+			{
+				dy = 0;
+			}
+		}
 
 		return {dx, dy};
 	}
