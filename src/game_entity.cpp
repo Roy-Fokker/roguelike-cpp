@@ -39,6 +39,8 @@ auto to_string(species type) -> std::string_view
 		return "ogre"sv;
 	case species::goblin:
 		return "goblin"sv;
+	case species::player:
+		return "you"sv;
 	default:
 		assert(false); // missed an character type?
 	}
