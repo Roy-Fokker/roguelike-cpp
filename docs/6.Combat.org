@@ -1,0 +1,12 @@
+#+SETUPFILE: theme.org
+#+SUBTITLE: Placing enemies.
+#+OPTIONS: H:2 num:nil
+
+
+
+* Links
+╣ [[https://github.com/Roy-Fokker/roguelike/tree/Part-5c][GitHub Repo]] ╠═══\\
+╣ [[file:index.org][Home]] ╠═══\\
+╣ Prev: [[file:5.Placing_enemies.org][Placing enemies]] ╠═══\\
+╣ Next: [[file:7.User_interface.org][User interface]] ╠═══
+

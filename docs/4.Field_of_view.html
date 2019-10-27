@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2019-10-24 Thu 17:26 -->
+<!-- 2019-10-26 Sat 20:51 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Roguelike Game in C++17</title>
@@ -69,10 +69,10 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orgbc609d3">Goals</a></li>
-<li><a href="#org1a8c400">Field of view System</a></li>
-<li><a href="#orga4ce4cf">Marking Explorered Areas</a></li>
-<li><a href="#org4ef91f5">Links</a></li>
+<li><a href="#orged5eb75">Goals</a></li>
+<li><a href="#orgc2ac6eb">Field of view System</a></li>
+<li><a href="#org4cd57c7">Marking Explorered Areas</a></li>
+<li><a href="#org17137b2">Links</a></li>
 </ul>
 </div>
 </nav>
@@ -83,9 +83,9 @@ by making things difficult to see. Lack of sight is something that adds
 the spice of imagined horrors that lurk in the darkness.
 </p>
 
-<div id="outline-container-orgbc609d3" class="outline-2">
-<h2 id="orgbc609d3">Goals</h2>
-<div class="outline-text-2" id="text-orgbc609d3">
+<div id="outline-container-orged5eb75" class="outline-2">
+<h2 id="orged5eb75">Goals</h2>
+<div class="outline-text-2" id="text-orged5eb75">
 <p>
 Aim for this section is simple, we aim to:
 </p>
@@ -100,9 +100,9 @@ For our purposes I am using the simplest one it has.
 </div>
 </div>
 
-<div id="outline-container-org1a8c400" class="outline-2">
-<h2 id="org1a8c400">Field of view System</h2>
-<div class="outline-text-2" id="text-org1a8c400">
+<div id="outline-container-orgc2ac6eb" class="outline-2">
+<h2 id="orgc2ac6eb">Field of view System</h2>
+<div class="outline-text-2" id="text-orgc2ac6eb">
 <p>
 To start with in <code>game_map[.cpp|.hpp]</code> file, add a new
 structure <code>fov_map</code>, which will require <code>game_map</code> to 
@@ -112,19 +112,35 @@ and <code>is_visible</code>, as well as a private member variable
 interface with <code>tcod</code>.
 </p>
 
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-4/src/game_map.hpp#L63-L83" width=500 commentWidth=500>
+</ui-code>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-4/src/game_map.cpp#L280-L297" width=500 commentWidth=500>
+</ui-code>
+
 <p>
 Next, we change the <code>console[.cpp|.hpp]</code>, map draw method will
 need to now take <code>fov_map</code>, so that we can check if tile is 
 part of fov range. Result of this check will be passed on to 
 <code>tile::color</code> method. <code>tile::color</code> method will use visibility 
-value to give us a slightly different color. Making the color 
+value to give us a slightly different color. Making the color
 about 5% brighter using <code>lighten_color</code> function in <code>game_map.cpp</code>.
-Method used in <code>lighten_color</code> is pretty straight forward, and 
-simple. Ideally, you would convert RGB value in to HSV/HSL and then 
-do the necessary math to get new HSV/HSL and back to RGB, this is beyond
-the scope of goals here. For the moment, we define our percentage offset 
-via <code>lighten_color_offset</code> variable in file scope.
 </p>
+
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-4/src/game_map.cpp#L209-L227" width=500 commentWidth=500>
+</ui-code>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-4/src/console.cpp#L91-L102" width=500 commentWidth=500>
+</ui-code>
+
+<p>
+ Method used in <code>lighten_color</code> is pretty straight 
+forward, and simple. Ideally, you would convert RGB value in to
+HSV/HSL and then do the necessary math to get new HSV/HSL and back to
+RGB, this is beyond the scope of goals here. For the moment, we define 
+our percentage offset via <code>lighten_color_offset</code> variable in file scope.
+</p>
+
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-4/src/game_map.cpp#L22-L40" width=500 commentWidth=500>
+</ui-code>
 
 <p>
 You'll notice we have a lot of file local variable in <code>game_map.cpp</code>.
@@ -140,6 +156,9 @@ We pass to it, a few parameters and it will update it's own internal state
 with necessary information.
 </p>
 
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-4/src/game_map.cpp#L299-L302" width=500 commentWidth=500>
+</ui-code>
+
 <p>
 <code>fov_map::recompute</code> will only be called when the player moves to a new location.
 For that part we need to change <code>game_actions.cpp</code>, by first making it take on a 
@@ -147,6 +166,9 @@ For that part we need to change <code>game_actions.cpp</code>, by first making i
 moves. We also need to call <code>recompute</code> after the player has been created in 
 <code>main.cpp</code>, so that initial field of view of player is visible.
 </p>
+
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-4/src/game_actions.cpp#L28-L36" width=500 commentWidth=500>
+</ui-code>
 
 <p>
 After this we should be able to move our player character around the 
@@ -165,9 +187,9 @@ Dungeon and see a light circle around the character.
 </div>
 </div>
 
-<div id="outline-container-orga4ce4cf" class="outline-2">
-<h2 id="orga4ce4cf">Marking Explorered Areas</h2>
-<div class="outline-text-2" id="text-orga4ce4cf">
+<div id="outline-container-org4cd57c7" class="outline-2">
+<h2 id="org4cd57c7">Marking Explorered Areas</h2>
+<div class="outline-text-2" id="text-org4cd57c7">
 <p>
 Right now the player sees the whole dungeon map, regardless of whether they've
 been through whole map or not. This doesn't allow for much "Mystery". So in this
@@ -181,6 +203,9 @@ this will have value of <code>false</code>. When the tile appears in the Player'
 it becomes <code>true</code>.
 </p>
 
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-4c/src/game_map.hpp#L19-L31" width=500 commentWidth=500>
+</ui-code>
+
 <p>
 How does the tile get updated, you might ask? In <code>game_map</code> structure, there is now 
 a <code>update_explored</code> method. It takes <code>position</code> and <code>fov_map</code>. The <code>update_explored</code> 
@@ -188,11 +213,24 @@ method, will calculate a square with player at it's center, and then call <code>
 for each tile with in that square. The square's size is 2x <code>fov_radius</code>. 
 </p>
 
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-4c/src/game_map.cpp#L261-L290" width=500 commentWidth=500>
+</ui-code>
+
 <p>
-Lastly, we need to call <code>update_explored</code> after <code>fov_map::recompute</code> is called. Which is simple
+We need to call <code>update_explored</code> after <code>fov_map::recompute</code> is called. Which is simple
 enough, put the call to <code>game_map::update_explored</code> after each instance of call to 
 <code>fov_map::recompute</code>.
 </p>
+
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-4c/src/game_actions.cpp#L28-L39" width=500 commentWidth=500>
+</ui-code>
+
+<p>
+Lastly, we need to tell <code>console_layer::draw</code> to not draw anything that is not visible.
+</p>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-4c/src/console.cpp#L91-L106" width=500 commentWidth=500>
+</ui-code>
+
 
 <p>
 This gives us a nice, hidden level, that gradually opens up as the player moves
@@ -211,9 +249,9 @@ around. Begining to look like a <b>Roguelike</b> already.
 </div>
 </div>
 
-<div id="outline-container-org4ef91f5" class="outline-2">
-<h2 id="org4ef91f5">Links</h2>
-<div class="outline-text-2" id="text-org4ef91f5">
+<div id="outline-container-org17137b2" class="outline-2">
+<h2 id="org17137b2">Links</h2>
+<div class="outline-text-2" id="text-org17137b2">
 <p>
 ╣ <a href="https://github.com/Roy-Fokker/roguelike/tree/Part-4c">GitHub Repo</a> ╠═══<br>
 ╣ <a href="index.html">Home</a> ╠═══<br>
@@ -225,7 +263,7 @@ around. Begining to look like a <b>Roguelike</b> already.
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Neel Raiyani [Roy Fokker]</p>
-<p class="date">Created: 2019-10-24 Thu 17:26</p>
+<p class="date">Created: 2019-10-26 Sat 20:51</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

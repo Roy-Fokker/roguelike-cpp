@@ -22,17 +22,41 @@ and =is_visible=, as well as a private member variable
 =unique_ptr<TCODMap>=. Private member variable is our 
 interface with ~tcod~.
 
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-4/src/game_map.hpp#L63-L83" width=500 commentWidth=500>
+</ui-code>
+#+end_export
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-4/src/game_map.cpp#L280-L297" width=500 commentWidth=500>
+</ui-code>
+#+end_export
+
 Next, we change the ~console[.cpp|.hpp]~, map draw method will
 need to now take =fov_map=, so that we can check if tile is 
 part of fov range. Result of this check will be passed on to 
 =tile::color= method. =tile::color= method will use visibility 
-value to give us a slightly different color. Making the color 
+value to give us a slightly different color. Making the color
 about 5% brighter using =lighten_color= function in ~game_map.cpp~.
-Method used in =lighten_color= is pretty straight forward, and 
-simple. Ideally, you would convert RGB value in to HSV/HSL and then 
-do the necessary math to get new HSV/HSL and back to RGB, this is beyond
-the scope of goals here. For the moment, we define our percentage offset 
-via =lighten_color_offset= variable in file scope.
+
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-4/src/game_map.cpp#L209-L227" width=500 commentWidth=500>
+</ui-code>
+#+end_export
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-4/src/console.cpp#L91-L102" width=500 commentWidth=500>
+</ui-code>
+#+end_export
+
+ Method used in =lighten_color= is pretty straight 
+forward, and simple. Ideally, you would convert RGB value in to
+HSV/HSL and then do the necessary math to get new HSV/HSL and back to
+RGB, this is beyond the scope of goals here. For the moment, we define 
+our percentage offset via =lighten_color_offset= variable in file scope.
+
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-4/src/game_map.cpp#L22-L40" width=500 commentWidth=500>
+</ui-code>
+#+end_export
 
 You'll notice we have a lot of file local variable in ~game_map.cpp~.
 In a future refactor, all of these can be moved into a settings file,
@@ -44,11 +68,21 @@ the fov. =fov_map::recompute= simply calls ~tcod~'s =computeFov= method.
 We pass to it, a few parameters and it will update it's own internal state
 with necessary information.
 
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-4/src/game_map.cpp#L299-L302" width=500 commentWidth=500>
+</ui-code>
+#+end_export
+
 =fov_map::recompute= will only be called when the player moves to a new location.
 For that part we need to change ~game_actions.cpp~, by first making it take on a 
 =fov_map= as a parameter, and then calling the =recompute= method when player 
 moves. We also need to call =recompute= after the player has been created in 
 ~main.cpp~, so that initial field of view of player is visible.
+
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-4/src/game_actions.cpp#L28-L36" width=500 commentWidth=500>
+</ui-code>
+#+end_export
 
 After this we should be able to move our player character around the 
 Dungeon and see a light circle around the character.
@@ -67,14 +101,36 @@ We add a new =was_explored= member variable to our =tile= structure. By default
 this will have value of =false=. When the tile appears in the Player's field of view
 it becomes =true=.
 
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-4c/src/game_map.hpp#L19-L31" width=500 commentWidth=500>
+</ui-code>
+#+end_export
+
 How does the tile get updated, you might ask? In =game_map= structure, there is now 
 a =update_explored= method. It takes =position= and =fov_map=. The =update_explored= 
 method, will calculate a square with player at it's center, and then call =fov_map::is_visible=
 for each tile with in that square. The square's size is 2x =fov_radius=. 
 
-Lastly, we need to call =update_explored= after =fov_map::recompute= is called. Which is simple
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-4c/src/game_map.cpp#L261-L290" width=500 commentWidth=500>
+</ui-code>
+#+end_export
+
+We need to call =update_explored= after =fov_map::recompute= is called. Which is simple
 enough, put the call to =game_map::update_explored= after each instance of call to 
 =fov_map::recompute=.
+
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-4c/src/game_actions.cpp#L28-L39" width=500 commentWidth=500>
+</ui-code>
+#+end_export
+
+Lastly, we need to tell =console_layer::draw= to not draw anything that is not visible.
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-4c/src/console.cpp#L91-L106" width=500 commentWidth=500>
+</ui-code>
+#+end_export
+
 
 This gives us a nice, hidden level, that gradually opens up as the player moves
 around. Begining to look like a *Roguelike* already.
