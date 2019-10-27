@@ -3,24 +3,47 @@
 #include "console.hpp"
 #include "game_entity.hpp"
 #include "game_map.hpp"
+#include "input_handler.hpp"
 
+#include <reversed.hpp>
 #include <fmt/core.h>
 #include <cassert>
 
-void do_action(const action_data_pair &action_data, 
+void do_system_action(const action_data_pair &action_data,
+                       console_root &root,
+                       bool &exit_game)
+{
+	if (action_data.first.index() != 1)
+		return;
+
+	auto act = std::get<1>(action_data.first);
+	switch (act)
+	{
+	case system_actions::exit:
+		exit_game = true;
+		break;
+	case system_actions::fullscreen_toggle:
+		// Toggle between windowed and fullscreen mode.
+		root.toggle_fullscreen();
+		break;
+	default:
+		assert(false); // unhandled system action;
+	}
+}
+
+void do_entity_action(const action_data_pair &action_data, 
                game_entity &entity,
                const std::vector<game_entity> &all_entities,
                game_map &map,
-               fov_map &fov,
-               console_root &root,
-               bool &exit_game)
+               fov_map &fov)
 {
-	switch (action_data.first)
+	if (action_data.first.index() != 0)
+		return;
+	
+	auto act = std::get<0>(action_data.first);
+	switch (act)
 	{
 		case actions::do_nothing:
-			break;
-		case actions::exit:
-			exit_game = true;
 			break;
 		case actions::move:
 		{
@@ -55,12 +78,40 @@ void do_action(const action_data_pair &action_data,
 
 			break;
 		}
-		case actions::fullscreen_toggle:
-			// Toggle between windowed and fullscreen mode.
-			root.toggle_fullscreen();
-			break;
 		default:
 			// We forgot to handle some action. DEBUG!
 			assert(false);
+	}
+}
+
+void take_turns(const action_data_pair &player_action_data,
+                std::vector<game_entity> &all_entities,
+                game_map &map,
+                fov_map &fov)
+{
+	// don't do anything if it's system_action
+	if (player_action_data.first.index() != 0)
+		return;
+
+	// if the player doesn't act, then turn doesn't advance.
+	if(std::get<0>(player_action_data.first) == actions::do_nothing)
+	{
+		return;
+	}
+
+	// we know player is alway last item in the entities list.
+	for(auto &e : iter::reversed(all_entities))
+	{
+		action_data_pair action_data{};
+		if (e.type == species::player)
+		{
+			action_data = player_action_data;
+		}
+		
+		do_entity_action(action_data, 
+		          e,
+		          all_entities,
+		          map,
+		          fov);
 	}
 }

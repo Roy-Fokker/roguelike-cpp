@@ -41,7 +41,7 @@ int main()
 	// Add a player entity to end of our entities list
 	entities.push_back({
 		map.rooms.at(0).center(),        // Initial Position of Player
-		entity_type::player              // type of entity
+		species::player              // type of entity
 	});
 	auto &player = entities.back();     // Reference to Player Entity object
 
@@ -51,13 +51,16 @@ int main()
 	// Loop while window exists and exit_game is not true
 	while (not (root.is_window_closed() or exit_game))
 	{
-		do_action(handle_input(),
-		          player,
-		          entities,
-		          map,
-		          fov,
-		          root,
-		          exit_game);
+		auto action_data = handle_input();
+
+		do_system_action(action_data,
+		                  root,
+		                  exit_game);
+
+		take_turns(action_data, 
+		           entities,
+		           map,
+		           fov);
 
 		game_layer.clear();      // Clear the contents of the layer
 

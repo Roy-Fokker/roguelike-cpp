@@ -11,7 +11,7 @@ auto handle_input() -> action_data_pair const
 	switch (key.vk)
 	{
 		case key_code::TCODK_ESCAPE:                // User pressed ESCAPE, wants to exit game
-			return {actions::exit, nullptr};
+			return {system_actions::exit, nullptr};
 		case key_code::TCODK_UP:                    // User pressed UP arrow, wants to move up
 			return {actions::move, position{0, -1}};
 		case key_code::TCODK_DOWN:                  // User pressed DOWN arrow, wants to move down
@@ -24,7 +24,7 @@ auto handle_input() -> action_data_pair const
 		{
 			if (key.lalt or key.ralt)               // and ALT key, toggle fullscreen mode
 			{
-				return {actions::fullscreen_toggle, nullptr};
+				return {system_actions::fullscreen_toggle, nullptr};
 			}
 			break;
 		}

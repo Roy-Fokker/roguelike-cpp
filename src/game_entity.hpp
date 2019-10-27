@@ -17,27 +17,31 @@ struct position
 
 // List of different types of characters that can exists 
 // in the game.
-enum class entity_type
+enum class species
 {
 	player,
 	ogre,
 	goblin
 };
 
-auto to_string(entity_type type) -> std::string_view;
+// Translate enum into string
+auto to_string(species type) -> std::string_view;
 
 // Entity structure represent any object in game world
 // It fully describes the object and how to move it.
 struct game_entity
 {
 	position pos;
-	entity_type type;
+	species type;
 
 	// Move the entity by offset value
 	void move_by(const position &offset);
 
 	// Face is color and visual of this entity
 	auto face() const -> std::pair<char, TCODColor>;
+
+	// Field of view range
+	auto fov_radius() const -> int;
 };
 
 // Create an alias to type less angle brackets

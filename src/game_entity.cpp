@@ -23,15 +23,21 @@ namespace
 		std::pair{ 'o', TCODColor{ 255, 197,   0 } },
 		std::pair{ 'g', TCODColor{  18, 102,   0 } },
 	};
+
+	const auto entity_fov = std::array{
+		10,
+		10,
+		10
+	};
 }
 
-auto to_string(entity_type type) -> std::string_view
+auto to_string(species type) -> std::string_view
 {
 	switch (type)
 	{
-	case entity_type::ogre:
+	case species::ogre:
 		return "ogre"sv;
-	case entity_type::goblin:
+	case species::goblin:
 		return "goblin"sv;
 	default:
 		assert(false); // missed an character type?
@@ -50,6 +56,11 @@ auto game_entity::face() const -> std::pair<char, TCODColor>
 {
 	// Just return the face from our list of faces at index
 	return entity_faces.at(static_cast<int>(type));
+}
+
+auto game_entity::fov_radius() const -> int
+{
+	return entity_fov.at(static_cast<int>(type));
 }
 
 auto generate_enemies(const std::vector<room> &rooms) -> std::vector<game_entity>
@@ -86,7 +97,7 @@ auto generate_enemies(const std::vector<room> &rooms) -> std::vector<game_entity
 			if (get_entity_at({x, y}, enemies) == std::end(enemies))
 			{
 				// Figure out what's the type of this enemy.
-				auto type = d_et(gen) ? entity_type::goblin : entity_type::ogre;
+				auto type = d_et(gen) ? species::goblin : species::ogre;
 				enemies.push_back({
 					{x, y},
 					type
