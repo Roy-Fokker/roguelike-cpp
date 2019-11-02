@@ -94,17 +94,16 @@ auto generate_enemies(const std::vector<room> &rooms) -> std::vector<game_entity
 			int x = d_x(gen), // x and y coordinates
 			    y = d_y(gen); // to put the enemy at.
 			
-			// If there are no others other enemies are in the same spot
-			// then add to the list.
-			if (get_entity_at({x, y}, enemies) == std::end(enemies))
-			{
-				// Figure out what's the type of this enemy.
-				auto type = d_et(gen) ? species::goblin : species::ogre;
-				enemies.push_back({
-					{x, y},
-					type
-				});
-			}
+			// Found another enemy at same spot?
+			if (get_entity_at({x, y}, enemies) != std::end(enemies))
+				continue;	// go back and get another position
+			
+			// Figure out what's the type of this enemy.
+			auto type = d_et(gen) ? species::goblin : species::ogre;
+			enemies.push_back({
+				{x, y},
+				type
+			});
 		}
 	};
 

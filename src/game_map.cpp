@@ -3,6 +3,8 @@
 #include <libtcod.hpp>
 #include <enumerate.hpp>
 #include <range.hpp>
+#include <filter.hpp>
+#include <sliding_window.hpp>
 
 #include <random>
 #include <algorithm>
@@ -61,15 +63,17 @@ namespace
 			auto x2 = r.p.x + r.size.width - 1,  // figure out x2, and y2 position
 			     y2 = r.p.y + r.size.height - 1; // range is 0 to (dimension - 1)
 			
-			for (auto y : iter::range(y1, y2))
+			// predicate to filter the tiles.
+			auto is_tile_in_room = [&](const tile &t) -> bool
 			{
-				auto start_idx = x1 + size.width * y,
-				     end_idx = x2 + size.width * y;
-			
-				for (auto i : iter::range(start_idx, end_idx))
-				{
-					tiles[i].type = tile_type::ground;
-				}
+				return t.p.x >= x1 and t.p.x <= x2
+				   and t.p.y >= y1 and t.p.y <= y2;
+			};
+
+			// using pipe operator to filter the tiles using above predicate
+			for (auto &tile : tiles | iter::filter(is_tile_in_room))
+			{
+				tile.type = tile_type::ground;
 			}
 		};
 
@@ -182,14 +186,16 @@ namespace
 		std::mt19937 gen(rd());
 		std::bernoulli_distribution d(0.5);
 	
-		// For every room starting from index 1 call the 
-		// hallways functions.
-		for (auto i = 1; i < rooms.size(); i++)
+		// Loop through all the pairs of rooms 
+		// sliding_window will give us two rooms each time
+		for (auto &section : rooms | iter::sliding_window(2))
 		{
 			auto flip = d(gen);  // pick which room is primary
+			auto &prev_room = section.at(0);
+			auto &curr_room = section.at(1);
 
-			horizontal_hallway(flip, rooms[i - 1], rooms[i]);   // make a hall from primary to secondary
-			vertical_hallway(not flip, rooms[i - 1], rooms[i]); // start vertical hall from where horizontal stopped.
+			horizontal_hallway(flip, prev_room, curr_room);   // make a hall from primary to secondary
+			vertical_hallway(not flip, prev_room, curr_room); // start vertical hall from where horizontal stopped.
 		}
 	}
 }
@@ -266,26 +272,19 @@ void game_map::update_explored(const position p, const fov_map &fov)
 	auto y1 = std::clamp(p.y - fov_radius, 0, size.height),
 	     y2 = std::clamp(p.y + fov_radius, 0, size.height);
 	
-	// Go through all the tiles in the square 
-	// There is way to do this with just single loop.
-	// Will update it in future.
-	for (auto x : iter::range(x1, x2))
+	// is this an explored tile?
+	auto is_tile_in_fov = [&](const tile &t) -> bool
 	{
-		for (auto y : iter::range(y1, y2))
-		{
-			// check if this tile was visible
-			if (not fov.is_visible({x, y}))
-				continue;
-			
-			// get the index of the tile
-			auto idx = x + size.width * y;
+		return not t.was_explored            // did we see it before
+		   and (t.p.x >= x1 and t.p.x <= x2) // is it within our 
+		   and (t.p.y >= y1 and t.p.y <= y2) // view rect
+		   and fov.is_visible(t.p);          // can we actually see it
+	};
 
-			// if we've already seen it, don't change anything
-			if (tiles[idx].was_explored)
-				continue;
-			
-			tiles[idx].was_explored = true;
-		}
+	// Filter only unexplorered tiles, and update
+	for (auto &t : tiles | iter::filter(is_tile_in_fov))
+	{
+		t.was_explored = true;
 	}
 }
 
@@ -296,7 +295,7 @@ auto generate_map(const dimension size) -> game_map
 	auto [w, h] = size;               // bind size members to they are easier to use.
 	auto tiles = std::vector<tile>{}; // create our tiles array
 	tiles.resize(w * h);              // resize it to match our size
-	for (auto [i, t] : iter::enumerate(tiles)) // enumerate using cppitertools
+	for (auto [i, t] : tiles | iter::enumerate) // enumerate using cppitertools
 	{
 		t = { (int)i % w, (int)i / w, // populate x and y values of position
 		      tile_type::wall,        // set default tile type
@@ -314,7 +313,7 @@ fov_map::fov_map(const game_map &map)
 	fov = std::make_unique<TCODMap>(map.size.width, map.size.height);
 
 	auto [w, h] = map.size;
-	for (auto [i, t] : iter::enumerate(map.tiles))
+	for (auto [i, t] : map.tiles | iter::enumerate)
 	{
 		auto x = static_cast<int>(i) % w,
 		     y = static_cast<int>(i) / w;

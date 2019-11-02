@@ -176,7 +176,7 @@ void take_turns(const action_data_pair &player_action_data,
 	}
 
 	// Loop though all the entities, player 1st
-	for(auto &e : iter::reversed(all_entities))
+	for(auto &e : all_entities | iter::reversed)
 	{
 		action_data_pair action_data{actions::move, {}};
 		if (e.type == species::player)
