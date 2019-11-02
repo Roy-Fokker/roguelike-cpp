@@ -47,6 +47,7 @@ target_link_options(rogue
 # Define only for MSVC to silence deprecated header warnings
 target_compile_definitions(rogue
     PRIVATE
+        UNICODE _UNICODE
         $<$<CONFIG:Debug>:DEBUG _DEBUG>
         $<$<CXX_COMPILER_ID:MSVC>:_SILENCE_CXX17_C_HEADER_DEPRECATION_WARNING>)
 

@@ -89,4 +89,6 @@ private:
 	std::unique_ptr<TCODMap> fov;
 };
 
+// Make a random game_map with room and corridors
+// maximum extent of which is specified by size arg.
 auto generate_map(const dimension size) -> game_map;

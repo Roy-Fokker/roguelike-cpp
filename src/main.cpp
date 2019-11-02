@@ -28,7 +28,7 @@ int main()
 	// Console game layer, all game rendering will be done on layers
 	auto game_layer = console_layer({ window_width, window_height });
 
-	bool exit_game = false;	             // should we exit the game?
+	bool exit_game = false;	        // should we exit the game?
 
 	// Get our map layout from generator
 	auto map = generate_map({window_width, window_height});
@@ -40,12 +40,12 @@ int main()
 
 	// Add a player entity to end of our entities list
 	entities.push_back({
-		map.rooms.at(0).center(),        // Initial Position of Player
+		map.rooms.at(0).center(),    // Initial Position of Player
 		species::player              // type of entity
 	});
-	auto &player = entities.back();     // Reference to Player Entity object
+	auto &player = entities.back();  // Reference to Player Entity object
 
-	fov.recompute(player.pos);       // Compute the starting Field of View
+	fov.recompute(player.pos);            // Compute the starting Field of View
 	map.update_explored(player.pos, fov); // Update initial exploration state
 
 	// Loop while window exists and exit_game is not true
@@ -54,8 +54,8 @@ int main()
 		auto action_data = handle_input();
 
 		do_system_action(action_data,
-		                  root,
-		                  exit_game);
+		                 root,
+		                 exit_game);
 
 		take_turns(action_data, 
 		           entities,

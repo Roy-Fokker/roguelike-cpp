@@ -24,7 +24,7 @@ enum class species
 	goblin
 };
 
-// Translate enum into string
+// Translate species enum into string
 auto to_string(species type) -> std::string_view;
 
 // Entity structure represent any object in game world
@@ -47,6 +47,7 @@ struct game_entity
 // Create an alias to type less angle brackets
 using game_entities_list = std::vector<game_entity>;
 
+// Forward declare room, defined in game_map[.cpp|.hpp]
 struct room;
 
 // Free function that will generate all the enemies in each of the rooms on random

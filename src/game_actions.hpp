@@ -23,10 +23,10 @@ enum class system_actions
 using action_data_pair = std::pair<std::variant<actions, system_actions>, std::any>;
 
 // We will forward declare thise classes and structures
-struct game_entity;
-struct game_map;
-struct fov_map;
-class console_root;
+struct game_entity;  // in game_entity[.cpp|.hpp]
+struct game_map;     // in game_map[.cpp|.hpp]
+struct fov_map;      // in game_map[.cpp|.hpp]
+class console_root;  // in console[.cpp|.hpp]
 
 // Do system actions related tasks
 void do_system_action(const action_data_pair &action,
