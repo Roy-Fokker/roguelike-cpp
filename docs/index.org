@@ -51,7 +51,9 @@ a functioning implementation and then refactor it to make the code more scalable
 
 * References
 - [[http://www.rogueliketutorials.com/tutorials/tcod/][Roguelike Tutorials]]
+- [[http://www.roguebasin.com/index.php?title=Complete_roguelike_tutorial_using_C%2B%2B_and_libtcod_-_part_1:_setting_up][Complete Roguelike tutorial using C++]]
 - [[https://tomassedovic.github.io/roguelike-tutorial/index.html][Roguelike Tutorials in Rust]]
+- [[http://bfnightly.bracketproductions.com/rustbook/][Roguelike Tutorials in Rust - using RLTK]]
 - [[http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines][C++ Core Guidelines]]
 - [[https://en.cppreference.com/w/][C++ Reference]]
 

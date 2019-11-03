@@ -2,6 +2,91 @@
 #+SUBTITLE: Placing enemies.
 #+OPTIONS: H:2 num:nil
 
+Time to make player suffer some consequences for their actions. The creatures in
+our map are too ambivalent to player's aggression. This section is pretty large
+as lot of different things have to be put into place for combat to actually work.
+Given the number of things we need to do, lot of the code in this section might be
+very hacky, that will have to be reworked later.
+
+* Goals
+Things to accomplish for this section.
+- Giving each entity a turn to think and act.
+- Making it so each entity can move similar to how player can move.
+- Rule set and behaviour states for non player characters. i.e. AI
+- Taking and giving 'damage'.
+
+* Creatures take turns
+First thing we are going to do is rename =entity_type= to =species=. In VSCode you can press ~F2~ 
+on =entity_type=, type in =species= into dialog box, and accept changes in the side bar. It will
+update all references across the whole project.
+
+We need to change how our actions are handled in ~game_actions[.cpp|.hpp]~. At the moment only 
+player is able to have actions. In order for other creatures in the world to move, they need 
+a similar agency. So we'll first split =do_action= into two functions =do_system_action= 
+and =do_entity_actions=. 
+
+=do_system_action= will take care of things not related to gameplay. Like toggling fullscreen state
+and exiting the game.
+
+=do_entity_action= will take care of things entities can do. Like move, attack, heal, taunt, etc.
+For the moment our entities have no way to do these actions, that will come in next. Right now 
+we are just setting things up so they can act. 
+
+In ~main.cpp~, we change how we pass along =handle_input=, and make an explict call to
+=do_system_action=. Then we call =take_turns=. 
+
+=take_turns= will loop through all the entities, and call =do_entity_action= for each.
+And for player, it will also pass along the input translated data. If the player doesn't
+do anything, then the turn hasn't ended, so none of the entities will take their turn.
+
+* Creature learns to walk
+Now immediately after player takes some action, all the entities on the map will take
+action. But they don't have any actions to take, so nothing interesting happens.
+To change that we will add some "AI" logic. Not really, but it sounds nice.
+
+In =take_turns=, for all entities we'll force the default action to be =move=. Then
+in =do_entity_action=, if the entity a player, then we call =player_move_attack=, else
+we call =ai_move_attack=.
+
+=player_move_attack= is basically moving all the logic from within =action::move= switch-case that
+we had before into it's own function. Nothing to else to change there.
+
+=ai_move_attack= is very similar to =player_move_attack=, with few changes. First we call
+=fov::recompute= for this entity. So that we know what it can see. If it can see the player
+then it will try to move in player's direction, else it does nothing. 
+
+When moving in player's direction, we ensure it can only move one tile at a time, using
+=unit_offset= function.
+
+As well as making sure it can't phase through walls and other entities. When it 
+manages to reach the player, it will kick player in the shins. 
+
+Oh how the tables have turned!!
+
+* Refactor and reiterate
+At this point, I am going to go through the files we have and refactor some bits.
+For one thing, I am going to update most of the loops to use ~CppIterTools~ library.
+This basically means using =iter::enumerate=, =iter::filter=, etc. This
+greatly simplifies the code, making it easier to understand what each section does.
+Additionally, I am using the =|= (pipe) operator, to call =iter::= functions. 
+
+This refactor has effectively touched almost every .cpp file we have so far. Since 
+all except ~input_handler~ have some loops. The next iteration of C++ (C++20) is 
+supposed to get a ranges library that is conceptually similar, C++20 version is 
+based on =Range-V3= library. I suppose we could have just used =Range-V3= from 
+vcpkg, to be closer to what standard will have. =¯\_(ツ)_/¯=
+
+One advantage of using this library, and in-general the range-concept, is that it 
+helps us remove =continue= statements in most places. Additionally it reduces our 
+code depth. Code-depth being how many *={brackets}=* in we are when look at the 
+code structure. Shallower the depth, easier it is to read, for me. Bracket Colorizer
+extension of VSCode also helps with this.
+
+There are still, several aspects of the code as it is currently that aren't ideal.
+But as they say 'perfect is enemy of good', so I am going to leave them be, until
+they become a hassle. /=┬─┬ノ( º _ ºノ)=/
+
+* Art of defense and attack
 
 
 * Links

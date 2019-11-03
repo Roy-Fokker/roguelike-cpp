@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2019-10-26 Sat 20:58 -->
+<!-- 2019-11-03 Sun 17:03 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Roguelike Game in C++17</title>
@@ -69,16 +69,163 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org38e34fe">Links</a></li>
+<li><a href="#orga926201">Goals</a></li>
+<li><a href="#org710b813">Creatures take turns</a></li>
+<li><a href="#orga1afc0b">Creature learns to walk</a></li>
+<li><a href="#org7ac88d7">Refactor and reiterate</a></li>
+<li><a href="#org031bd24">Art of defense and attack</a></li>
+<li><a href="#org7887d60">Links</a></li>
 </ul>
 </div>
 </nav>
+<p>
+Time to make player suffer some consequences for their actions. The creatures in
+our map are too ambivalent to player's aggression. This section is pretty large
+as lot of different things have to be put into place for combat to actually work.
+Given the number of things we need to do, lot of the code in this section might be
+very hacky, that will have to be reworked later.
+</p>
+
+<div id="outline-container-orga926201" class="outline-2">
+<h2 id="orga926201">Goals</h2>
+<div class="outline-text-2" id="text-orga926201">
+<p>
+Things to accomplish for this section.
+</p>
+<ul class="org-ul">
+<li>Giving each entity a turn to think and act.</li>
+<li>Making it so each entity can move similar to how player can move.</li>
+<li>Rule set and behaviour states for non player characters. i.e. AI</li>
+<li>Taking and giving 'damage'.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org710b813" class="outline-2">
+<h2 id="org710b813">Creatures take turns</h2>
+<div class="outline-text-2" id="text-org710b813">
+<p>
+First thing we are going to do is rename <code>entity_type</code> to <code>species</code>. In VSCode you can press <code>F2</code> 
+on <code>entity_type</code>, type in <code>species</code> into dialog box, and accept changes in the side bar. It will
+update all references across the whole project.
+</p>
+
+<p>
+We need to change how our actions are handled in <code>game_actions[.cpp|.hpp]</code>. At the moment only 
+player is able to have actions. In order for other creatures in the world to move, they need 
+a similar agency. So we'll first split <code>do_action</code> into two functions <code>do_system_action</code> 
+and <code>do_entity_actions</code>. 
+</p>
+
+<p>
+<code>do_system_action</code> will take care of things not related to gameplay. Like toggling fullscreen state
+and exiting the game.
+</p>
+
+<p>
+<code>do_entity_action</code> will take care of things entities can do. Like move, attack, heal, taunt, etc.
+For the moment our entities have no way to do these actions, that will come in next. Right now 
+we are just setting things up so they can act. 
+</p>
+
+<p>
+In <code>main.cpp</code>, we change how we pass along <code>handle_input</code>, and make an explict call to
+<code>do_system_action</code>. Then we call <code>take_turns</code>. 
+</p>
+
+<p>
+<code>take_turns</code> will loop through all the entities, and call <code>do_entity_action</code> for each.
+And for player, it will also pass along the input translated data. If the player doesn't
+do anything, then the turn hasn't ended, so none of the entities will take their turn.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orga1afc0b" class="outline-2">
+<h2 id="orga1afc0b">Creature learns to walk</h2>
+<div class="outline-text-2" id="text-orga1afc0b">
+<p>
+Now immediately after player takes some action, all the entities on the map will take
+action. But they don't have any actions to take, so nothing interesting happens.
+To change that we will add some "AI" logic. Not really, but it sounds nice.
+</p>
+
+<p>
+In <code>take_turns</code>, for all entities we'll force the default action to be <code>move</code>. Then
+in <code>do_entity_action</code>, if the entity a player, then we call <code>player_move_attack</code>, else
+we call <code>ai_move_attack</code>.
+</p>
+
+<p>
+<code>player_move_attack</code> is basically moving all the logic from within <code>action::move</code> switch-case that
+we had before into it's own function. Nothing to else to change there.
+</p>
+
+<p>
+<code>ai_move_attack</code> is very similar to <code>player_move_attack</code>, with few changes. First we call
+<code>fov::recompute</code> for this entity. So that we know what it can see. If it can see the player
+then it will try to move in player's direction, else it does nothing. 
+</p>
+
+<p>
+When moving in player's direction, we ensure it can only move one tile at a time, using
+<code>unit_offset</code> function.
+</p>
+
+<p>
+As well as making sure it can't phase through walls and other entities. When it 
+manages to reach the player, it will kick player in the shins. 
+</p>
+
+<p>
+Oh how the tables have turned!!
+</p>
+</div>
+</div>
+
+<div id="outline-container-org7ac88d7" class="outline-2">
+<h2 id="org7ac88d7">Refactor and reiterate</h2>
+<div class="outline-text-2" id="text-org7ac88d7">
+<p>
+At this point, I am going to go through the files we have and refactor some bits.
+For one thing, I am going to update most of the loops to use <code>CppIterTools</code> library.
+This basically means using <code>iter::enumerate</code>, <code>iter::filter</code>, etc. This
+greatly simplifies the code, making it easier to understand what each section does.
+Additionally, I am using the <code>|</code> (pipe) operator, to call <code>iter::</code> functions. 
+</p>
+
+<p>
+This refactor has effectively touched almost every .cpp file we have so far. Since 
+all except <code>input_handler</code> have some loops. The next iteration of C++ (C++20) is 
+supposed to get a ranges library that is conceptually similar, C++20 version is 
+based on <code>Range-V3</code> library. I suppose we could have just used <code>Range-V3</code> from 
+vcpkg, to be closer to what standard will have. <code>¯\_(ツ)_/¯</code>
+</p>
+
+<p>
+One advantage of using this library, and in-general the range-concept, is that it 
+helps us remove <code>continue</code> statements in most places. Additionally it reduces our 
+code depth. Code-depth being how many <b><code>{brackets}</code></b> in we are when look at the 
+code structure. Shallower the depth, easier it is to read, for me. Bracket Colorizer
+extension of VSCode also helps with this.
+</p>
+
+<p>
+There are still, several aspects of the code as it is currently that aren't ideal.
+But as they say 'perfect is enemy of good', so I am going to leave them be, until
+they become a hassle. <i><code>┬─┬ノ( º _ ºノ)</code></i>
+</p>
+</div>
+</div>
+
+<div id="outline-container-org031bd24" class="outline-2">
+<h2 id="org031bd24">Art of defense and attack</h2>
+</div>
 
 
-
-<div id="outline-container-org38e34fe" class="outline-2">
-<h2 id="org38e34fe">Links</h2>
-<div class="outline-text-2" id="text-org38e34fe">
+<div id="outline-container-org7887d60" class="outline-2">
+<h2 id="org7887d60">Links</h2>
+<div class="outline-text-2" id="text-org7887d60">
 <p>
 ╣ <a href="https://github.com/Roy-Fokker/roguelike/tree/Part-5c">GitHub Repo</a> ╠═══<br>
 ╣ <a href="index.html">Home</a> ╠═══<br>
@@ -90,7 +237,7 @@ for the JavaScript code in this tag.
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Neel Raiyani [Roy Fokker]</p>
-<p class="date">Created: 2019-10-26 Sat 20:58</p>
+<p class="date">Created: 2019-11-03 Sun 17:03</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
