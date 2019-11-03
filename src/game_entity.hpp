@@ -6,6 +6,7 @@
 #include <cstdint>
 #include <vector>
 #include <utility>
+#include <string>
 
 // Simple Position structure to hold x and y values.
 // It will represent positions of various objects in game world.
@@ -27,12 +28,24 @@ enum class species
 // Translate species enum into string
 auto to_string(species type) -> std::string_view;
 
+// each entity will have some stats, like hp, attack etc
+// this structure will hold those values
+struct vitals
+{
+	int max_hitpoints;
+	mutable int hitpoints_remaining;
+	int defense;
+	int power;
+};
+
 // Entity structure represent any object in game world
 // It fully describes the object and how to move it.
 struct game_entity
 {
 	position pos;
 	species type;
+	vitals stats;
+	std::string name;
 
 	// Move the entity by offset value
 	void move_by(const position &offset);

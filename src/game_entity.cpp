@@ -3,6 +3,9 @@
 #include "game_entity.hpp"
 #include "game_map.hpp"
 
+#include <enumerate.hpp>
+#include <fmt/format.h>
+
 #include <random>
 #include <array>
 #include <algorithm>
@@ -56,8 +59,15 @@ void game_entity::move_by(const position &offset)
 
 auto game_entity::face() const -> std::pair<char, TCODColor>
 {
-	// Just return the face from our list of faces at index
-	return entity_faces.at(static_cast<int>(type));
+	// The face from our list of faces at index
+	auto ent_face = entity_faces.at(static_cast<int>(type));
+
+	if (stats.hitpoints_remaining <= 0)
+	{
+		ent_face.second = TCODColor{ 255, 0, 0 };
+	}
+	
+	return ent_face;
 }
 
 auto game_entity::fov_radius() const -> int
@@ -79,10 +89,11 @@ auto generate_enemies(const std::vector<room> &rooms) -> std::vector<game_entity
 	auto place_enemies_in_room = [&](const room &r, const int count)
 	{
 		// thing to keep in mind, for a given room
-		// ######  the enemies can only exist in the
-		// #    #  blank spaces inside. But the room's
-		// #    #  dimensions include the walls.
-		// ######  Hence why x1 and y1 are +1, and x2 and y2 are -2.
+		// +#####w the enemies can only exist in the
+		// #*   #| blank spaces inside. But the room's
+		// #   ~#| dimensions include the walls.
+		// ######| Hence why x1 and y1 are +1 (*),
+		// ------h and x2 and y2 are -2 (~).
 		auto x1 = r.p.x + 1, x2 = r.p.x + r.size.width - 2;
 		auto y1 = r.p.y + 1, y2 = r.p.y + r.size.height - 2;
 		std::uniform_int_distribution d_x(x1, x2), // X and Y distribution
@@ -114,6 +125,20 @@ auto generate_enemies(const std::vector<room> &rooms) -> std::vector<game_entity
 		place_enemies_in_room(r, d_en(gen));
 	}
 
+	// For each enemy generate some random
+	// vitals 
+	std::uniform_int_distribution d_mhp(1, 10);
+	std::uniform_int_distribution d_pow(2, 6);
+	std::uniform_int_distribution d_def(1, 5);
+	for (auto [i, e] : enemies | iter::enumerate)
+	{
+		using namespace fmt::literals;
+
+		auto hp = d_mhp(gen);
+		e.stats = { hp, hp, d_def(gen), d_pow(gen) };
+		e.name = "{} {}"_format(to_string(e.type), i+1);
+	}
+
 	return enemies;
 }
 
@@ -121,6 +146,7 @@ auto get_entity_at(const position &p, const game_entities_list &entities) -> gam
 {
 	return std::find_if(std::begin(entities), std::end(entities), [&](const auto &e)
 	{
-		return (p.x == e.pos.x) and (p.y == e.pos.y);
+		return (e.stats.hitpoints_remaining > 0) 
+		   and (p.x == e.pos.x) and (p.y == e.pos.y);
 	});
 }

@@ -41,10 +41,42 @@ namespace
 		return {dx, dy};
 	}
 
+	void do_attack(const game_entity &attacker, const game_entity &defender)
+	{
+		auto &def_hp = defender.stats.hitpoints_remaining;
+
+		auto dmg = std::max(attacker.stats.power - defender.stats.defense, 0);
+		def_hp = std::max(def_hp - dmg, 0);
+
+		fmt::print("=> [{0}] kicked [{1}] in the shins.\n", attacker.name, defender.name);
+		if (dmg > 0)
+		{
+			fmt::print("   [{0}] did {1} points of damage.\n", attacker.name, dmg);
+		}
+		else 
+		{
+			fmt::print("   [{0}] missed.\n", attacker.name);
+		}
+		
+		if (def_hp > 0)
+		{
+			fmt::print("   [{0}] has {1} points of health remaining.\n", defender.name, def_hp);
+		}
+		else 
+		{
+			fmt::print("   [{0}] has died.\n", defender.name);
+		}
+	}
+
 	void ai_move_attack(game_entity &entity,
 	                    const std::vector<game_entity> &all_entities,
 	                    game_map &map, fov_map &fov)
 	{
+		if (entity.stats.hitpoints_remaining <= 0)
+		{
+			return;
+		}
+
 		fov.recompute(entity.pos);
 		auto &player_pos = all_entities.back().pos;
 
@@ -66,7 +98,7 @@ namespace
 		else if (ent_itr != std::end(all_entities) 
 				 and ent_itr->type == species::player)
 		{
-			fmt::print("{} kicked you in the shins, much to your annoyance!.\n", to_string(entity.type));
+			do_attack(entity, *ent_itr);
 		}
 		
 	}
@@ -76,6 +108,12 @@ namespace
 	                        const std::vector<game_entity> &all_entities,
 	                        game_map &map, fov_map &fov)
 	{
+		if (player.stats.hitpoints_remaining <= 0)
+		{
+			fmt::print("=> You are dead and cannot move.\n");
+			return;
+		}
+
 		// Position entity want to be at.
 		auto new_pos = position{player.pos.x + offset.x, player.pos.y + offset.y};
 
@@ -98,8 +136,7 @@ namespace
 		// is another character there?
 		else if (ent_itr != std::end(all_entities))
 		{
-			// Print flavour text
-			fmt::print("You kicked {} in the shins, much to its annoyance!.\n", to_string(ent_itr->type));
+			do_attack(player, *ent_itr);
 		}
 	}
 }
@@ -126,6 +163,8 @@ void do_system_action(const action_data_pair &action_data,
 	}
 }
 
+// Take the action_data pair and do appropriate tasks
+// on objects provided
 void do_entity_action(const action_data_pair &action_data, 
                       game_entity &entity,
                       const std::vector<game_entity> &all_entities,
@@ -167,8 +206,10 @@ void take_turns(const action_data_pair &player_action_data,
 {
 	// don't do anything if it's system_action
 	if (player_action_data.first.index() != 0)
+	{
 		return;
-
+	}
+	
 	// if the player doesn't act, then turn doesn't advance.
 	if(std::get<0>(player_action_data.first) == actions::do_nothing)
 	{

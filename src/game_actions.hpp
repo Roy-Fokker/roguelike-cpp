@@ -5,11 +5,13 @@
 #include <vector>       // for std::vector
 #include <variant>      // for std::variant
 
-// Actions user/player can do within context of the game
+// Actions entity can do within context of the game
 enum class actions
 {
-	do_nothing,        // user doesn't do anything
-	move,              // user wants to move
+	do_nothing,        // entity doesn't do anything
+	move,              // entity wants to move
+	taunt,             // entity taunts
+	attack,            // entity attacks
 };
 
 // System Actions are things that change 
@@ -32,14 +34,6 @@ class console_root;  // in console[.cpp|.hpp]
 void do_system_action(const action_data_pair &action,
                        console_root &root,
                        bool &exit_game);
-
-// Take the action_data pair and do appropriate tasks
-// on objects provided
-void do_entity_action(const action_data_pair &action_data, 
-               game_entity &entity,
-               const std::vector<game_entity> &all_entities,
-               game_map &map,
-               fov_map &fov);
 
 // Loops through all the entities, and 
 // give them their turn to act

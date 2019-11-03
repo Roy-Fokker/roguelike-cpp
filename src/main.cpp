@@ -40,8 +40,10 @@ int main()
 
 	// Add a player entity to end of our entities list
 	entities.push_back({
-		map.rooms.at(0).center(),    // Initial Position of Player
-		species::player              // type of entity
+		map.rooms.at(0).center(),     // Initial Position of Player
+		species::player,              // type of entity
+		{ 10, 10, 5, 6 },             // some basic stats
+		"Player"                      // name of the player
 	});
 	auto &player = entities.back();  // Reference to Player Entity object
 
@@ -63,9 +65,7 @@ int main()
 		           fov);
 
 		game_layer.clear();      // Clear the contents of the layer
-
 		game_layer.draw(map, fov);    // Draw the map to game_console layer
-
 		game_layer.draw(entities, fov); // Draw all the entities 
 
 		root.blit(game_layer);  // Apply the game_console layer to Root Console
