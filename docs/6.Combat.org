@@ -28,16 +28,33 @@ and =do_entity_actions=.
 =do_system_action= will take care of things not related to gameplay. Like toggling fullscreen state
 and exiting the game.
 
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6a/src/main.cpp#L75-L80" width=500 commentWidth=500>
+</ui-code>
+#+end_export
+
 =do_entity_action= will take care of things entities can do. Like move, attack, heal, taunt, etc.
 For the moment our entities have no way to do these actions, that will come in next. Right now 
 we are just setting things up so they can act. 
 
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6a/src/main.cpp#L75-L80" width=500 commentWidth=500>
+</ui-code>
+#+end_export
+
 In ~main.cpp~, we change how we pass along =handle_input=, and make an explict call to
 =do_system_action=. Then we call =take_turns=. 
+
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6a/src/main.cpp#L75-L80" width=500 commentWidth=500>
+</ui-code>
+#+end_export
 
 =take_turns= will loop through all the entities, and call =do_entity_action= for each.
 And for player, it will also pass along the input translated data. If the player doesn't
 do anything, then the turn hasn't ended, so none of the entities will take their turn.
+
+[[https://github.com/Roy-Fokker/roguelike/tree/Part-6a][GitHub Repo]]
 
 * Creature learns to walk
 Now immediately after player takes some action, all the entities on the map will take
@@ -48,20 +65,42 @@ In =take_turns=, for all entities we'll force the default action to be =move=. T
 in =do_entity_action=, if the entity a player, then we call =player_move_attack=, else
 we call =ai_move_attack=.
 
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6b/src/main.cpp#L75-L80" width=500 commentWidth=500>
+</ui-code>
+#+end_export
+
 =player_move_attack= is basically moving all the logic from within =action::move= switch-case that
 we had before into it's own function. Nothing to else to change there.
+
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6b/src/main.cpp#L75-L80" width=500 commentWidth=500>
+</ui-code>
+#+end_export
 
 =ai_move_attack= is very similar to =player_move_attack=, with few changes. First we call
 =fov::recompute= for this entity. So that we know what it can see. If it can see the player
 then it will try to move in player's direction, else it does nothing. 
 
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6b/src/main.cpp#L75-L80" width=500 commentWidth=500>
+</ui-code>
+#+end_export
+
 When moving in player's direction, we ensure it can only move one tile at a time, using
 =unit_offset= function.
+
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6b/src/main.cpp#L75-L80" width=500 commentWidth=500>
+</ui-code>
+#+end_export
 
 As well as making sure it can't phase through walls and other entities. When it 
 manages to reach the player, it will kick player in the shins. 
 
 Oh how the tables have turned!!
+
+[[https://github.com/Roy-Fokker/roguelike/tree/Part-6b][GitHub Repo]]
 
 * Refactor and reiterate
 At this point, I am going to go through the files we have and refactor some bits.
@@ -77,16 +116,95 @@ based on =Range-V3= library. I suppose we could have just used =Range-V3= from
 vcpkg, to be closer to what standard will have. =¯\_(ツ)_/¯=
 
 One advantage of using this library, and in-general the range-concept, is that it 
-helps us remove =continue= statements in most places. Additionally it reduces our 
-code depth. Code-depth being how many *={brackets}=* in we are when look at the 
-code structure. Shallower the depth, easier it is to read, for me. Bracket Colorizer
-extension of VSCode also helps with this.
+helps us remove =if <condition> continue/return= statements in most places. 
+Additionally it reduces our code depth. Code-depth being how many *={brackets}=* 
+in we are when look at the code structure. Shallower the depth, easier it is to 
+read, for me. Bracket Colorizer extension of VSCode also helps with this.
 
 There are still, several aspects of the code as it is currently that aren't ideal.
 But as they say 'perfect is enemy of good', so I am going to leave them be, until
 they become a hassle. /=┬─┬ノ( º _ ºノ)=/
 
+[[https://github.com/Roy-Fokker/roguelike/tree/Part-5c][GitHub Repo]]
+
 * Art of defense and attack
+To add the ability to actually attack and reduce the health of various creatures
+on in the game, we need to add some new structures. =vitals= structure in 
+~game_entity.hpp~ will help us keep track of a given creature's attack power,
+defense strength, available hitpoints and maximum hitpoints. For the moment we 
+are not using maximum hitpoints. That will become useful when we add items to 
+augment entity's abilities. 
+
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6c/src/main.cpp#L75-L80" width=500 commentWidth=500>
+</ui-code>
+#+end_export
+
+Hitpoints variable is marked as being mutable, so we can modify it, while 
+rest of the members are const. I think, this will be changed in future.
+Not sure I like this way of marking mutable elements of a structure.
+
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6c/src/main.cpp#L75-L80" width=500 commentWidth=500>
+</ui-code>
+#+end_export
+
+=game_entity= now has a =vitals= member, along with =string= member.
+=string= will be used to save the name of entity, this can be player's name
+or randomly generated creature name.
+
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6c/src/main.cpp#L75-L80" width=500 commentWidth=500>
+</ui-code>
+#+end_export
+
+Next we have to change the =generate_enemies= function, such that it will populate
+=vitals= and =string= members of =game_entity= type. The values used for populating 
+=vitals= are randomly generated, so each creature is a bit unique. In future we
+might choose to add some type specific modifiers, e.g. Ogres are generally stronger 
+or Goblins have better defense etc. For =string= name variable, i am using the
+=fmtlib='s =""_format= literal. This is also something that will be part of next 
+iteration of C++ standard. We also have to change ~main.cpp~ so that player entity 
+has appropriate information populated. 
+
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6c/src/main.cpp#L75-L80" width=500 commentWidth=500>
+</ui-code>
+#+end_export
+
+=game_entity::face= method also gets updated, so we now check if this entity 
+is still alive. If they are not alive, the color is changed to red. Similarly,
+=get_entity_at= function also checks if =game_entity= is alive. If it is not 
+then we count it as not being present at that location.
+
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6c/src/main.cpp#L75-L80" width=500 commentWidth=500>
+</ui-code>
+#+end_export
+
+~game_actions.cpp~ there is now a new function =do_attack=, which takes in
+two =game_entity= objects, an attacker and defender. Player and AI move_attack
+function now simply call this one do_attack function. We also ensure that 
+AI doesn't do any calculations for any entities that are dead.
+
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6c/src/main.cpp#L75-L80" width=500 commentWidth=500>
+</ui-code>
+#+end_export
+
+=do_attack= function, reduces the hitpoints of the defender entity, by 
+some value based on attacker's power and defender's defense value. Then 
+prints appropriate message.
+
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6c/src/main.cpp#L75-L80" width=500 commentWidth=500>
+</ui-code>
+#+end_export
+
+Now running the game, we can see that creatures lose health when being
+attacked. The rules governing how damage is taken is consistent, with only
+variable being the starting vitality of creature in question. You can play
+around with numbers and see how game becomes easier or harder for the player.
 
 
 * Links
