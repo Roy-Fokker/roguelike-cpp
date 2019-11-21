@@ -48,14 +48,14 @@ namespace
 		auto dmg = std::max(attacker.stats.power - defender.stats.defense, 0);
 		def_hp = std::max(def_hp - dmg, 0);
 
-		fmt::print("=> [{0}] kicked [{1}] in the shins.\n", attacker.name, defender.name);
+		fmt::print("=> [{0}] kicked [{1}] in the shins, ", attacker.name, defender.name);
 		if (dmg > 0)
 		{
-			fmt::print("   [{0}] did {1} points of damage.\n", attacker.name, dmg);
+			fmt::print("doing {0} points of damage.\n", dmg);
 		}
 		else 
 		{
-			fmt::print("   [{0}] missed.\n", attacker.name);
+			fmt::print("but did no damage.\n");
 		}
 		
 		if (def_hp > 0)
