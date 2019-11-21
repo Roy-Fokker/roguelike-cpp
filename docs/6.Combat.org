@@ -25,20 +25,25 @@ player is able to have actions. In order for other creatures in the world to mov
 a similar agency. So we'll first split =do_action= into two functions =do_system_action= 
 and =do_entity_actions=. 
 
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6a/src/game_actions.hpp#L31-L42" width=500 commentWidth=500>
+</ui-code>
+#+end_export
+
 =do_system_action= will take care of things not related to gameplay. Like toggling fullscreen state
 and exiting the game.
 
 #+begin_export html
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6a/src/main.cpp#L75-L80" width=500 commentWidth=500>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6a/src/game_actions.cpp#L12-L32" width=500 commentWidth=500>
 </ui-code>
 #+end_export
 
 =do_entity_action= will take care of things entities can do. Like move, attack, heal, taunt, etc.
-For the moment our entities have no way to do these actions, that will come in next. Right now 
+For the moment our entities have no way to do these actions, that will come in future. Right now 
 we are just setting things up so they can act. 
 
 #+begin_export html
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6a/src/main.cpp#L75-L80" width=500 commentWidth=500>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6a/src/game_actions.cpp#L34-L85" width=500 commentWidth=500>
 </ui-code>
 #+end_export
 
@@ -46,13 +51,18 @@ In ~main.cpp~, we change how we pass along =handle_input=, and make an explict c
 =do_system_action=. Then we call =take_turns=. 
 
 #+begin_export html
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6a/src/main.cpp#L75-L80" width=500 commentWidth=500>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6a/src/main.cpp#L54-L63" width=500 commentWidth=500>
 </ui-code>
 #+end_export
 
 =take_turns= will loop through all the entities, and call =do_entity_action= for each.
 And for player, it will also pass along the input translated data. If the player doesn't
 do anything, then the turn hasn't ended, so none of the entities will take their turn.
+
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6a/src/game_actions.cpp#L87-L117" width=500 commentWidth=500>
+</ui-code>
+#+end_export
 
 [[https://github.com/Roy-Fokker/roguelike/tree/Part-6a][GitHub Repo]]
 
@@ -62,11 +72,11 @@ action. But they don't have any actions to take, so nothing interesting happens.
 To change that we will add some "AI" logic. Not really, but it sounds nice.
 
 In =take_turns=, for all entities we'll force the default action to be =move=. Then
-in =do_entity_action=, if the entity a player, then we call =player_move_attack=, else
+in =do_entity_action=, if the entity is a player, then we call =player_move_attack=, else
 we call =ai_move_attack=.
 
 #+begin_export html
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6b/src/main.cpp#L75-L80" width=500 commentWidth=500>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6b/src/game_actions.cpp#L181-L191" width=500 commentWidth=500>
 </ui-code>
 #+end_export
 
@@ -74,29 +84,28 @@ we call =ai_move_attack=.
 we had before into it's own function. Nothing to else to change there.
 
 #+begin_export html
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6b/src/main.cpp#L75-L80" width=500 commentWidth=500>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6b/src/game_actions.cpp#L74-L104" width=500 commentWidth=500>
 </ui-code>
 #+end_export
 
 =ai_move_attack= is very similar to =player_move_attack=, with few changes. First we call
 =fov::recompute= for this entity. So that we know what it can see. If it can see the player
-then it will try to move in player's direction, else it does nothing. 
+then it will try to move in player's direction, else it does nothing. As well as making 
+sure it can't phase through walls and other entities. When it manages to reach the player, 
+it will kick player in the shins. 
 
 #+begin_export html
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6b/src/main.cpp#L75-L80" width=500 commentWidth=500>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6b/src/game_actions.cpp#L44-L72" width=500 commentWidth=500>
 </ui-code>
 #+end_export
 
 When moving in player's direction, we ensure it can only move one tile at a time, using
-=unit_offset= function.
+=unit_offset= function. Movement is restricted to cardinal directions. No diagonal moving.
 
 #+begin_export html
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6b/src/main.cpp#L75-L80" width=500 commentWidth=500>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6b/src/game_actions.cpp#L16-L42" width=500 commentWidth=500>
 </ui-code>
 #+end_export
-
-As well as making sure it can't phase through walls and other entities. When it 
-manages to reach the player, it will kick player in the shins. 
 
 Oh how the tables have turned!!
 
@@ -109,6 +118,12 @@ This basically means using =iter::enumerate=, =iter::filter=, etc. This
 greatly simplifies the code, making it easier to understand what each section does.
 Additionally, I am using the =|= (pipe) operator, to call =iter::= functions. 
 
+For example, in ~game_map.cpp~, =connect_rooms= function gets changed into
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6c/src/game_map.cpp#L189-L199" width=500 commentWidth=500>
+</ui-code>
+#+end_export
+
 This refactor has effectively touched almost every .cpp file we have so far. Since 
 all except ~input_handler~ have some loops. The next iteration of C++ (C++20) is 
 supposed to get a ranges library that is conceptually similar, C++20 version is 
@@ -117,6 +132,18 @@ vcpkg, to be closer to what standard will have. =¯\_(ツ)_/¯=
 
 One advantage of using this library, and in-general the range-concept, is that it 
 helps us remove =if <condition> continue/return= statements in most places. 
+
+For example, in ~console.cpp~, both =draw= methods can be changed to 
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6c/src/console.cpp#L87-L95" width=500 commentWidth=500>
+</ui-code>
+#+end_export
+
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6c/src/console.cpp#L110-L118" width=500 commentWidth=500>
+</ui-code>
+#+end_export
+
 Additionally it reduces our code depth. Code-depth being how many *={brackets}=* 
 in we are when look at the code structure. Shallower the depth, easier it is to 
 read, for me. Bracket Colorizer extension of VSCode also helps with this.
@@ -125,7 +152,7 @@ There are still, several aspects of the code as it is currently that aren't idea
 But as they say 'perfect is enemy of good', so I am going to leave them be, until
 they become a hassle. /=┬─┬ノ( º _ ºノ)=/
 
-[[https://github.com/Roy-Fokker/roguelike/tree/Part-5c][GitHub Repo]]
+[[https://github.com/Roy-Fokker/roguelike/tree/Part-6c][GitHub Repo]]
 
 * Art of defense and attack
 To add the ability to actually attack and reduce the health of various creatures
@@ -135,26 +162,21 @@ defense strength, available hitpoints and maximum hitpoints. For the moment we
 are not using maximum hitpoints. That will become useful when we add items to 
 augment entity's abilities. 
 
-#+begin_export html
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6c/src/main.cpp#L75-L80" width=500 commentWidth=500>
-</ui-code>
-#+end_export
-
-Hitpoints variable is marked as being mutable, so we can modify it, while 
-rest of the members are const. I think, this will be changed in future.
-Not sure I like this way of marking mutable elements of a structure.
-
-#+begin_export html
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6c/src/main.cpp#L75-L80" width=500 commentWidth=500>
-</ui-code>
-#+end_export
-
 =game_entity= now has a =vitals= member, along with =string= member.
 =string= will be used to save the name of entity, this can be player's name
 or randomly generated creature name.
 
 #+begin_export html
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6c/src/main.cpp#L75-L80" width=500 commentWidth=500>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6d/src/game_entity.hpp#L41-L58" width=500 commentWidth=500>
+</ui-code>
+#+end_export
+
+Hitpoints member of =vitals= structure is marked as being mutable, so we can modify it, 
+while rest of the members are const. I think, this will be changed in future.
+Not sure I like this way of marking mutable elements of a structure.
+
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6d/src/game_entity.hpp#L31-L39" width=500 commentWidth=500>
 </ui-code>
 #+end_export
 
@@ -164,11 +186,18 @@ Next we have to change the =generate_enemies= function, such that it will popula
 might choose to add some type specific modifiers, e.g. Ogres are generally stronger 
 or Goblins have better defense etc. For =string= name variable, i am using the
 =fmtlib='s =""_format= literal. This is also something that will be part of next 
-iteration of C++ standard. We also have to change ~main.cpp~ so that player entity 
+iteration of C++ standard.
+
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6d/src/game_entity.cpp#L128-L140" width=500 commentWidth=500>
+</ui-code>
+#+end_export
+
+We also have to change ~main.cpp~ so that player entity 
 has appropriate information populated. 
 
 #+begin_export html
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6c/src/main.cpp#L75-L80" width=500 commentWidth=500>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6d/src/main.cpp#L41-L47" width=500 commentWidth=500>
 </ui-code>
 #+end_export
 
@@ -178,7 +207,7 @@ is still alive. If they are not alive, the color is changed to red. Similarly,
 then we count it as not being present at that location.
 
 #+begin_export html
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6c/src/main.cpp#L75-L80" width=500 commentWidth=500>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6d/src/game_entity.cpp#L60-L71" width=500 commentWidth=500>
 </ui-code>
 #+end_export
 
@@ -187,17 +216,23 @@ two =game_entity= objects, an attacker and defender. Player and AI move_attack
 function now simply call this one do_attack function. We also ensure that 
 AI doesn't do any calculations for any entities that are dead.
 
-#+begin_export html
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6c/src/main.cpp#L75-L80" width=500 commentWidth=500>
-</ui-code>
-#+end_export
-
 =do_attack= function, reduces the hitpoints of the defender entity, by 
 some value based on attacker's power and defender's defense value. Then 
 prints appropriate message.
 
 #+begin_export html
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6c/src/main.cpp#L75-L80" width=500 commentWidth=500>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6d/src/game_actions.cpp#L44-L69" width=500 commentWidth=500>
+</ui-code>
+#+end_export
+
+=do_attack= gets called by both =player_move_attack=
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6d/src/game_actions.cpp#L136-L140" width=500 commentWidth=500>
+</ui-code>
+#+end_export
+and =ai_move_attack=.
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6d/src/game_actions.cpp#L98-L102" width=500 commentWidth=500>
 </ui-code>
 #+end_export
 
@@ -208,7 +243,7 @@ around with numbers and see how game becomes easier or harder for the player.
 
 
 * Links
-╣ [[https://github.com/Roy-Fokker/roguelike/tree/Part-5c][GitHub Repo]] ╠═══\\
+╣ [[https://github.com/Roy-Fokker/roguelike/tree/Part-6d][GitHub Repo]] ╠═══\\
 ╣ [[file:index.org][Home]] ╠═══\\
 ╣ Prev: [[file:5.Placing_enemies.org][Placing enemies]] ╠═══\\
 ╣ Next: [[file:7.User_interface.org][User interface]] ╠═══

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2019-11-19 Tue 20:24 -->
+<!-- 2019-11-20 Wed 21:20 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Roguelike Game in C++17</title>
@@ -69,12 +69,12 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org436c695">Goals</a></li>
-<li><a href="#org3efb40f">Creatures take turns</a></li>
-<li><a href="#orgb75d9ed">Creature learns to walk</a></li>
-<li><a href="#org611f05e">Refactor and reiterate</a></li>
-<li><a href="#org11d49b5">Art of defense and attack</a></li>
-<li><a href="#org1d99405">Links</a></li>
+<li><a href="#orgf5b36b6">Goals</a></li>
+<li><a href="#orgdb5145b">Creatures take turns</a></li>
+<li><a href="#orgecdca18">Creature learns to walk</a></li>
+<li><a href="#org83fda0d">Refactor and reiterate</a></li>
+<li><a href="#org5f6b157">Art of defense and attack</a></li>
+<li><a href="#org266101c">Links</a></li>
 </ul>
 </div>
 </nav>
@@ -86,9 +86,9 @@ Given the number of things we need to do, lot of the code in this section might 
 very hacky, that will have to be reworked later.
 </p>
 
-<div id="outline-container-org436c695" class="outline-2">
-<h2 id="org436c695">Goals</h2>
-<div class="outline-text-2" id="text-org436c695">
+<div id="outline-container-orgf5b36b6" class="outline-2">
+<h2 id="orgf5b36b6">Goals</h2>
+<div class="outline-text-2" id="text-orgf5b36b6">
 <p>
 Things to accomplish for this section.
 </p>
@@ -101,9 +101,9 @@ Things to accomplish for this section.
 </div>
 </div>
 
-<div id="outline-container-org3efb40f" class="outline-2">
-<h2 id="org3efb40f">Creatures take turns</h2>
-<div class="outline-text-2" id="text-org3efb40f">
+<div id="outline-container-orgdb5145b" class="outline-2">
+<h2 id="orgdb5145b">Creatures take turns</h2>
+<div class="outline-text-2" id="text-orgdb5145b">
 <p>
 First thing we are going to do is rename <code>entity_type</code> to <code>species</code>. In VSCode you can press <code>F2</code> 
 on <code>entity_type</code>, type in <code>species</code> into dialog box, and accept changes in the side bar. It will
@@ -117,21 +117,24 @@ a similar agency. So we'll first split <code>do_action</code> into two functions
 and <code>do_entity_actions</code>. 
 </p>
 
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6a/src/game_actions.hpp#L31-L42" width=500 commentWidth=500>
+</ui-code>
+
 <p>
 <code>do_system_action</code> will take care of things not related to gameplay. Like toggling fullscreen state
 and exiting the game.
 </p>
 
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6a/src/main.cpp#L75-L80" width=500 commentWidth=500>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6a/src/game_actions.cpp#L12-L32" width=500 commentWidth=500>
 </ui-code>
 
 <p>
 <code>do_entity_action</code> will take care of things entities can do. Like move, attack, heal, taunt, etc.
-For the moment our entities have no way to do these actions, that will come in next. Right now 
+For the moment our entities have no way to do these actions, that will come in future. Right now 
 we are just setting things up so they can act. 
 </p>
 
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6a/src/main.cpp#L75-L80" width=500 commentWidth=500>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6a/src/game_actions.cpp#L34-L85" width=500 commentWidth=500>
 </ui-code>
 
 <p>
@@ -139,7 +142,7 @@ In <code>main.cpp</code>, we change how we pass along <code>handle_input</code>,
 <code>do_system_action</code>. Then we call <code>take_turns</code>. 
 </p>
 
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6a/src/main.cpp#L75-L80" width=500 commentWidth=500>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6a/src/main.cpp#L54-L63" width=500 commentWidth=500>
 </ui-code>
 
 <p>
@@ -148,15 +151,18 @@ And for player, it will also pass along the input translated data. If the player
 do anything, then the turn hasn't ended, so none of the entities will take their turn.
 </p>
 
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6a/src/game_actions.cpp#L87-L117" width=500 commentWidth=500>
+</ui-code>
+
 <p>
 <a href="https://github.com/Roy-Fokker/roguelike/tree/Part-6a">GitHub Repo</a>
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgb75d9ed" class="outline-2">
-<h2 id="orgb75d9ed">Creature learns to walk</h2>
-<div class="outline-text-2" id="text-orgb75d9ed">
+<div id="outline-container-orgecdca18" class="outline-2">
+<h2 id="orgecdca18">Creature learns to walk</h2>
+<div class="outline-text-2" id="text-orgecdca18">
 <p>
 Now immediately after player takes some action, all the entities on the map will take
 action. But they don't have any actions to take, so nothing interesting happens.
@@ -165,11 +171,11 @@ To change that we will add some "AI" logic. Not really, but it sounds nice.
 
 <p>
 In <code>take_turns</code>, for all entities we'll force the default action to be <code>move</code>. Then
-in <code>do_entity_action</code>, if the entity a player, then we call <code>player_move_attack</code>, else
+in <code>do_entity_action</code>, if the entity is a player, then we call <code>player_move_attack</code>, else
 we call <code>ai_move_attack</code>.
 </p>
 
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6b/src/main.cpp#L75-L80" width=500 commentWidth=500>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6b/src/game_actions.cpp#L181-L191" width=500 commentWidth=500>
 </ui-code>
 
 <p>
@@ -177,30 +183,27 @@ we call <code>ai_move_attack</code>.
 we had before into it's own function. Nothing to else to change there.
 </p>
 
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6b/src/main.cpp#L75-L80" width=500 commentWidth=500>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6b/src/game_actions.cpp#L74-L104" width=500 commentWidth=500>
 </ui-code>
 
 <p>
 <code>ai_move_attack</code> is very similar to <code>player_move_attack</code>, with few changes. First we call
 <code>fov::recompute</code> for this entity. So that we know what it can see. If it can see the player
-then it will try to move in player's direction, else it does nothing. 
+then it will try to move in player's direction, else it does nothing. As well as making 
+sure it can't phase through walls and other entities. When it manages to reach the player, 
+it will kick player in the shins. 
 </p>
 
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6b/src/main.cpp#L75-L80" width=500 commentWidth=500>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6b/src/game_actions.cpp#L44-L72" width=500 commentWidth=500>
 </ui-code>
 
 <p>
 When moving in player's direction, we ensure it can only move one tile at a time, using
-<code>unit_offset</code> function.
+<code>unit_offset</code> function. Movement is restricted to cardinal directions. No diagonal moving.
 </p>
 
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6b/src/main.cpp#L75-L80" width=500 commentWidth=500>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6b/src/game_actions.cpp#L16-L42" width=500 commentWidth=500>
 </ui-code>
-
-<p>
-As well as making sure it can't phase through walls and other entities. When it 
-manages to reach the player, it will kick player in the shins. 
-</p>
 
 <p>
 Oh how the tables have turned!!
@@ -212,9 +215,9 @@ Oh how the tables have turned!!
 </div>
 </div>
 
-<div id="outline-container-org611f05e" class="outline-2">
-<h2 id="org611f05e">Refactor and reiterate</h2>
-<div class="outline-text-2" id="text-org611f05e">
+<div id="outline-container-org83fda0d" class="outline-2">
+<h2 id="org83fda0d">Refactor and reiterate</h2>
+<div class="outline-text-2" id="text-org83fda0d">
 <p>
 At this point, I am going to go through the files we have and refactor some bits.
 For one thing, I am going to update most of the loops to use <code>CppIterTools</code> library.
@@ -222,6 +225,12 @@ This basically means using <code>iter::enumerate</code>, <code>iter::filter</cod
 greatly simplifies the code, making it easier to understand what each section does.
 Additionally, I am using the <code>|</code> (pipe) operator, to call <code>iter::</code> functions. 
 </p>
+
+<p>
+For example, in <code>game_map.cpp</code>, <code>connect_rooms</code> function gets changed into
+</p>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6c/src/game_map.cpp#L189-L199" width=500 commentWidth=500>
+</ui-code>
 
 <p>
 This refactor has effectively touched almost every .cpp file we have so far. Since 
@@ -234,6 +243,18 @@ vcpkg, to be closer to what standard will have. <code>¯\_(ツ)_/¯</code>
 <p>
 One advantage of using this library, and in-general the range-concept, is that it 
 helps us remove <code>if &lt;condition&gt; continue/return</code> statements in most places. 
+</p>
+
+<p>
+For example, in <code>console.cpp</code>, both <code>draw</code> methods can be changed to 
+</p>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6c/src/console.cpp#L87-L95" width=500 commentWidth=500>
+</ui-code>
+
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6c/src/console.cpp#L110-L118" width=500 commentWidth=500>
+</ui-code>
+
+<p>
 Additionally it reduces our code depth. Code-depth being how many <b><code>{brackets}</code></b> 
 in we are when look at the code structure. Shallower the depth, easier it is to 
 read, for me. Bracket Colorizer extension of VSCode also helps with this.
@@ -246,14 +267,14 @@ they become a hassle. <i><code>┬─┬ノ( º _ ºノ)</code></i>
 </p>
 
 <p>
-<a href="https://github.com/Roy-Fokker/roguelike/tree/Part-5c">GitHub Repo</a>
+<a href="https://github.com/Roy-Fokker/roguelike/tree/Part-6c">GitHub Repo</a>
 </p>
 </div>
 </div>
 
-<div id="outline-container-org11d49b5" class="outline-2">
-<h2 id="org11d49b5">Art of defense and attack</h2>
-<div class="outline-text-2" id="text-org11d49b5">
+<div id="outline-container-org5f6b157" class="outline-2">
+<h2 id="org5f6b157">Art of defense and attack</h2>
+<div class="outline-text-2" id="text-org5f6b157">
 <p>
 To add the ability to actually attack and reduce the health of various creatures
 on in the game, we need to add some new structures. <code>vitals</code> structure in 
@@ -263,25 +284,22 @@ are not using maximum hitpoints. That will become useful when we add items to
 augment entity's abilities. 
 </p>
 
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6c/src/main.cpp#L75-L80" width=500 commentWidth=500>
-</ui-code>
-
-<p>
-Hitpoints variable is marked as being mutable, so we can modify it, while 
-rest of the members are const. I think, this will be changed in future.
-Not sure I like this way of marking mutable elements of a structure.
-</p>
-
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6c/src/main.cpp#L75-L80" width=500 commentWidth=500>
-</ui-code>
-
 <p>
 <code>game_entity</code> now has a <code>vitals</code> member, along with <code>string</code> member.
 <code>string</code> will be used to save the name of entity, this can be player's name
 or randomly generated creature name.
 </p>
 
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6c/src/main.cpp#L75-L80" width=500 commentWidth=500>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6d/src/game_entity.hpp#L41-L58" width=500 commentWidth=500>
+</ui-code>
+
+<p>
+Hitpoints member of <code>vitals</code> structure is marked as being mutable, so we can modify it, 
+while rest of the members are const. I think, this will be changed in future.
+Not sure I like this way of marking mutable elements of a structure.
+</p>
+
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6d/src/game_entity.hpp#L31-L39" width=500 commentWidth=500>
 </ui-code>
 
 <p>
@@ -291,11 +309,18 @@ Next we have to change the <code>generate_enemies</code> function, such that it 
 might choose to add some type specific modifiers, e.g. Ogres are generally stronger 
 or Goblins have better defense etc. For <code>string</code> name variable, i am using the
 <code>fmtlib</code>'s <code>""_format</code> literal. This is also something that will be part of next 
-iteration of C++ standard. We also have to change <code>main.cpp</code> so that player entity 
+iteration of C++ standard.
+</p>
+
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6d/src/game_entity.cpp#L128-L140" width=500 commentWidth=500>
+</ui-code>
+
+<p>
+We also have to change <code>main.cpp</code> so that player entity 
 has appropriate information populated. 
 </p>
 
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6c/src/main.cpp#L75-L80" width=500 commentWidth=500>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6d/src/main.cpp#L41-L47" width=500 commentWidth=500>
 </ui-code>
 
 <p>
@@ -305,7 +330,7 @@ is still alive. If they are not alive, the color is changed to red. Similarly,
 then we count it as not being present at that location.
 </p>
 
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6c/src/main.cpp#L75-L80" width=500 commentWidth=500>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6d/src/game_entity.cpp#L60-L71" width=500 commentWidth=500>
 </ui-code>
 
 <p>
@@ -315,16 +340,24 @@ function now simply call this one do_attack function. We also ensure that
 AI doesn't do any calculations for any entities that are dead.
 </p>
 
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6c/src/main.cpp#L75-L80" width=500 commentWidth=500>
-</ui-code>
-
 <p>
 <code>do_attack</code> function, reduces the hitpoints of the defender entity, by 
 some value based on attacker's power and defender's defense value. Then 
 prints appropriate message.
 </p>
 
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6c/src/main.cpp#L75-L80" width=500 commentWidth=500>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6d/src/game_actions.cpp#L44-L69" width=500 commentWidth=500>
+</ui-code>
+
+<p>
+<code>do_attack</code> gets called by both <code>player_move_attack</code>
+</p>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6d/src/game_actions.cpp#L136-L140" width=500 commentWidth=500>
+</ui-code>
+<p>
+and <code>ai_move_attack</code>.
+</p>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-6d/src/game_actions.cpp#L98-L102" width=500 commentWidth=500>
 </ui-code>
 
 <p>
@@ -337,11 +370,11 @@ around with numbers and see how game becomes easier or harder for the player.
 </div>
 
 
-<div id="outline-container-org1d99405" class="outline-2">
-<h2 id="org1d99405">Links</h2>
-<div class="outline-text-2" id="text-org1d99405">
+<div id="outline-container-org266101c" class="outline-2">
+<h2 id="org266101c">Links</h2>
+<div class="outline-text-2" id="text-org266101c">
 <p>
-╣ <a href="https://github.com/Roy-Fokker/roguelike/tree/Part-5c">GitHub Repo</a> ╠═══<br>
+╣ <a href="https://github.com/Roy-Fokker/roguelike/tree/Part-6d">GitHub Repo</a> ╠═══<br>
 ╣ <a href="index.html">Home</a> ╠═══<br>
 ╣ Prev: <a href="5.Placing_enemies.html">Placing enemies</a> ╠═══<br>
 ╣ Next: <a href="7.User_interface.html">User interface</a> ╠═══
@@ -351,7 +384,7 @@ around with numbers and see how game becomes easier or harder for the player.
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Neel Raiyani [Roy Fokker]</p>
-<p class="date">Created: 2019-11-19 Tue 20:24</p>
+<p class="date">Created: 2019-11-20 Wed 21:20</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
