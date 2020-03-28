@@ -3,3 +3,8 @@
 #+OPTIONS: H:2 num:nil
 
 
+* Links
+╣ [[https://github.com/Roy-Fokker/roguelike/tree/Part-6d][GitHub Repo]] ╠═══\\
+╣ [[file:index.org][Home]] ╠═══\\
+╣ Prev: [[file:6.Combat.org][Combat]] ╠═══\\
+╣ Next: [[file:8.Inventory.org][Items and inventory]] ╠═══

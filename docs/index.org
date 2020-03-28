@@ -48,6 +48,7 @@ a functioning implementation and then refactor it to make the code more scalable
 5. [[file:5.Placing_enemies.org][Placing enemies]].
 6. [[file:6.Combat.org][Combat]]!
 7. [[file:7.User_interface.org][User interface]].
+8. [[file:8.Inventory.org][Items and inventory]].
 
 * References
 - [[http://www.rogueliketutorials.com/tutorials/tcod/][Roguelike Tutorials]]
