@@ -23,19 +23,14 @@ target_sources(rogue
         input_handler.cpp
         input_handler.hpp)
 
-# Tell the build system we have to use C++17 Standard
-target_compile_features(rogue
-    PRIVATE
-        cxx_std_17)
-
 # Add the include directory for external dependencies to compiler 
 # include path for rogue executable.
 target_include_directories(rogue 
     PRIVATE 
-        ${LIBTCOD_INCLUDE}
-        ${EASYITERATOR_INCLUDE})
+        ${LIBTCOD_INCLUDE})
 
-# Add the LIBTCOD library to linker lib path for rogue executable.
+# Add project_configuration for MSVC settings,
+# lib fmt and LIBTCOD to rogue executable.
 target_link_libraries(rogue 
     PRIVATE 
         project_configuration

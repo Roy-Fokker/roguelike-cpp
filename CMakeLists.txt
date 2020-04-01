@@ -14,8 +14,15 @@ project(rogue
         LANGUAGES CXX 
         VERSION 0.1.0)
 
-# Project configuration for MSVC
+# Project configuration
 add_library(project_configuration INTERFACE)
+# Tell the build system we have to use C++17 Standard
+target_compile_features(project_configuration
+    INTERFACE
+        cxx_std_17
+)
+
+# Load MSVC settings and set project_configuration for it.
 include(cmake/msvc_settings.cmake)
 set_msvc_project_configuration(project_configuration)
 
