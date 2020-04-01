@@ -1,0 +1,27 @@
+BasedOnStyle: Mozilla
+AlignAfterOpenBracket: Align
+AlignConsecutiveAssignments: 'true'
+AlignConsecutiveDeclarations: 'true'
+AlignOperands: 'true'
+AlignTrailingComments: 'true'
+AllowAllArgumentsOnNextLine: 'false'
+AllowAllConstructorInitializersOnNextLine: 'false'
+AllowAllParametersOfDeclarationOnNextLine: 'false'
+AlwaysBreakAfterDefinitionReturnType: None
+AlwaysBreakAfterReturnType: None
+BinPackArguments: 'false'
+BinPackParameters: 'false'
+BreakBeforeBinaryOperators: All
+BreakBeforeBraces: Allman
+ColumnLimit: 0
+IndentCaseLabels: 'true'
+IndentWidth: '4'
+NamespaceIndentation: All
+PointerAlignment: Right
+SortIncludes: false
+SortUsingDeclarations: false
+SpaceAfterCStyleCast: false
+Standard: Cpp11
+TabWidth: '4'
+UseTab: ForIndentation
+
