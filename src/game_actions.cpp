@@ -5,7 +5,7 @@
 #include "game_map.hpp"
 #include "input_handler.hpp"
 
-#include <reversed.hpp>
+#include <cppitertools/reversed.hpp>
 #include <fmt/core.h>
 #include <cassert>
 #include <cmath>

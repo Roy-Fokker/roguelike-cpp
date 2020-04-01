@@ -4,7 +4,7 @@
 #include "game_entity.hpp"
 #include "game_map.hpp"
 
-#include "filter.hpp"
+#include <cppitertools/filter.hpp>
 
 #include <libtcod.hpp>
 #include <cassert>

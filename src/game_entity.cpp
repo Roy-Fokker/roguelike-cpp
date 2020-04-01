@@ -3,7 +3,7 @@
 #include "game_entity.hpp"
 #include "game_map.hpp"
 
-#include <enumerate.hpp>
+#include <cppitertools/enumerate.hpp>
 #include <fmt/format.h>
 
 #include <random>

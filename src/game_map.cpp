@@ -1,10 +1,10 @@
 #include "game_map.hpp"
 
 #include <libtcod.hpp>
-#include <enumerate.hpp>
-#include <range.hpp>
-#include <filter.hpp>
-#include <sliding_window.hpp>
+#include <cppitertools/enumerate.hpp>
+#include <cppitertools/range.hpp>
+#include <cppitertools/filter.hpp>
+#include <cppitertools/sliding_window.hpp>
 
 #include <random>
 #include <algorithm>
