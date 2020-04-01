@@ -7,16 +7,17 @@
 cmake_minimum_required(VERSION 3.15.0)
 
 # Ensure that VCPKG toolchain is loaded by CMake. 
-# Allowing us to use the packages installed by vcpkg.
-if(DEFINED ENV{VCPKG_ROOT} AND NOT DEFINED CMAKE_TOOLCHAIN_FILE)
-  set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
-      CACHE STRING "")
-endif()
+include(cmake/vcpkg.cmake)
 
 # Project Name (rogue), Language(C++) and current version(0.1.0).
 project(rogue
         LANGUAGES CXX 
         VERSION 0.1.0)
+
+# Project configuration for MSVC
+add_library(project_configuration INTERFACE)
+include(cmake/msvc_settings.cmake)
+set_msvc_project_configuration(project_configuration)
 
 # Must have ISO Standard C++, no vendor extensions.
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
