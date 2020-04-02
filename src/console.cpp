@@ -53,13 +53,13 @@ void console_root::toggle_fullscreen()
 	TCODConsole::setFullscreen(not TCODConsole::isFullscreen());
 }
 
-void console_root::blit(console_layer &layer, layer_pos position)
+void console_root::blit(console_layer &layer)
 {
 	TCODConsole::blit(layer.layer.get(), 
 	                  0, 0,
 	                  layer.size.width, layer.size.height, 
 	                  TCODConsole::root, 
-	                  position.x, position.y);
+	                  layer.position.x, layer.position.y);
 }
 
 void console_root::present()
@@ -67,8 +67,8 @@ void console_root::present()
 	TCODConsole::flush();
 }
 
-console_layer::console_layer(layer_size size_) :
-	size{ size_ }
+console_layer::console_layer(layer_size size_, layer_pos position_) :
+	size{ size_ }, position{ position_ }
 {
 	assert(root_initialized); // STOP, didn't initialize console_root
 

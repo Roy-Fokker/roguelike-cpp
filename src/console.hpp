@@ -43,7 +43,7 @@ public:
 	void toggle_fullscreen(); 
 
 	// Apply the game_console layer to Root Console
-	void blit(console_layer &layer, layer_pos position = {});
+	void blit(console_layer &layer);
 
 	// Flush console to display to screen/window.
 	void present();
@@ -60,7 +60,7 @@ class console_layer
 {
 public:
 	console_layer() = delete;
-	console_layer(layer_size size);
+	console_layer(layer_size size, layer_pos position_ = {});
 	~console_layer();
 
 	void clear();
@@ -74,6 +74,7 @@ public:
 private:
 	std::unique_ptr<TCODConsole> layer { nullptr };
 	layer_size size;
+	layer_pos position;
 
 	friend console_root;
 };

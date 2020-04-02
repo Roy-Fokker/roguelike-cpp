@@ -8,7 +8,6 @@
 
 #include <libtcod.hpp>  // Provided by CMake from external\libtcod-1.14.0-x86_64-msvc\include
 #include <string>       // for std::string_view, ""sv
-
 #include <cassert>      // for assert()
 
 using namespace std::literals; // ensure we can use ""sv
@@ -25,13 +24,21 @@ int main()
 	                         { window_width, window_height },
 	                         font_path);
 	
+	// Height of UI layer
+	constexpr auto ui_height = 15;
+	// Location were map layer ends and ui layer starts.
+	constexpr auto map_ui_split_at = window_height - ui_height;
+
 	// Console game layer, all game rendering will be done on layers
-	auto game_layer = console_layer({ window_width, window_height });
+	// This layer is for map and entities.
+	auto map_layer = console_layer({ window_width, map_ui_split_at });
+	// This layer is for UI elements
+	auto ui_layer = console_layer({ window_width, ui_height }, { 0, map_ui_split_at });
 
 	bool exit_game = false;	        // should we exit the game?
 
 	// Get our map layout from generator
-	auto map = generate_map({window_width, window_height});
+	auto map = generate_map({window_width, map_ui_split_at});
 	// Use the map to generate a Field of View
 	auto fov = fov_map(map);
 
@@ -64,11 +71,14 @@ int main()
 		           map,
 		           fov);
 
-		game_layer.clear();      // Clear the contents of the layer
-		game_layer.draw(map, fov);    // Draw the map to game_console layer
-		game_layer.draw(entities, fov); // Draw all the entities 
+		map_layer.clear();              // Clear the contents of the layer
+		map_layer.draw(map, fov);       // Draw the rooms and corridors to map layer
+		map_layer.draw(entities, fov);  // Draw all the entities to map layer
 
-		root.blit(game_layer);  // Apply the game_console layer to Root Console
+		ui_layer.clear();
+
+		root.blit(map_layer);   // Apply the map layer to Root Console
+		root.blit(ui_layer);    // Apply the gui layer to Root Console
 		root.present();         // Flush the root console to display to screen
 	}
 
