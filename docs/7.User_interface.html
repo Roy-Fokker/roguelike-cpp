@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2020-04-01 Wed 20:37 -->
+<!-- 2020-04-02 Thu 12:01 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Roguelike Game in C++17</title>
@@ -69,9 +69,10 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org8d0d2fb">Goals</a></li>
-<li><a href="#org2c00622">Refactoring again.</a></li>
-<li><a href="#org90c9ae3">Links</a></li>
+<li><a href="#org86c6c94">Goals</a></li>
+<li><a href="#org5617ade">Refactoring again.</a></li>
+<li><a href="#orgecc868b">Panels and Status bar</a></li>
+<li><a href="#orgd64477a">Links</a></li>
 </ul>
 </div>
 </nav>
@@ -80,9 +81,9 @@ So far all the Textual information hasn't been getting to the player from
 within the game. We write it out to console, which is silly. 
 </p>
 
-<div id="outline-container-org8d0d2fb" class="outline-2">
-<h2 id="org8d0d2fb">Goals</h2>
-<div class="outline-text-2" id="text-org8d0d2fb">
+<div id="outline-container-org86c6c94" class="outline-2">
+<h2 id="org86c6c94">Goals</h2>
+<div class="outline-text-2" id="text-org86c6c94">
 <p>
 Things to accomplish for this section.
 </p>
@@ -94,9 +95,9 @@ Things to accomplish for this section.
 </div>
 </div>
 
-<div id="outline-container-org2c00622" class="outline-2">
-<h2 id="org2c00622">Refactoring again.</h2>
-<div class="outline-text-2" id="text-org2c00622">
+<div id="outline-container-org5617ade" class="outline-2">
+<h2 id="org5617ade">Refactoring again.</h2>
+<div class="outline-text-2" id="text-org5617ade">
 <p>
 Before we start, I want to refactor some items in out project.
 First items to refactor is how CMake is configured. To follow some of the recommendation
@@ -121,7 +122,7 @@ file.
 Which we will call from <code>CMakeLists.txt</code> at project root as such, it must be called
 before we call <code>project</code> command:
 </p>
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7a/CMakeLists.txt#L9-L16" width=500 commentWidth=500>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7a/CMakeLists.txt#L9-L16" width=800 commentWidth=50>
 </ui-code>
 
 <p>
@@ -131,7 +132,7 @@ activated if compiler is MSVC. It will setup some defaults for MSVC as well as p
 options for per-project configuration, to enable C++17 or C++20 features 
 in MSVC, default is to use C++17.
 </p>
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7a/cmake/msvc_settings.cmake" width=500 commentWidth=500>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7a/cmake/msvc_settings.cmake" width=800 commentWidth=50>
 </ui-code>
 
 <p>
@@ -139,7 +140,7 @@ And it can be used as such, in root <code>CMakeLists.txt</code> we create a new 
 interface. Then call the <code>set_msvc_project_configuration</code> function 
 from <code>cmake/msvc_settings.cmake</code>, to set the configuration we want with MSVC.
 </p>
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7a/CMakeLists.txt#L12-L28" width=500 commentWidth=500>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7a/CMakeLists.txt#L12-L28" width=800 commentWidth=50>
 </ui-code>
 
 <p>
@@ -147,7 +148,69 @@ Next we have to change <code>src/CMakeLists.txt</code>, to remove all the compil
 specific stuff, as well as tell CMake to use settings from Library interface 
 from root <code>CMakeLists.txt</code>.
 </p>
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7a/src/CMakeLists.txt#L26-L41" width=500 commentWidth=500>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7a/src/CMakeLists.txt#L26-L41" width=800 commentWidth=50>
+</ui-code>
+
+<p>
+With this done, it makes it easy for us in future to make new projects with similar settings.
+Anything to ease the pain of project managment in C++.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgecc868b" class="outline-2">
+<h2 id="orgecc868b">Panels and Status bar</h2>
+<div class="outline-text-2" id="text-orgecc868b">
+<p>
+In order to show the ui, we will create a new <code>console_layer</code> and do all our ui rendering to that. We'd already setup 
+ability to do this several commits ago. However, to make it more clearer to understand, we'll make few changes to how
+<code>console_layer</code> works.
+</p>
+
+<p>
+First of which is to have it store layer position, previously we passed this <code>position</code> in as part of the <code>blit</code> function.
+Well, we intended to do that, but never utilized it. So we'll remove it from <code>blit</code> function.
+</p>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7b/src/console.hpp#L45-L46" width=500 commentWidth=500>
+</ui-code>
+
+<p>
+And add it to the constructor of <code>console_layer</code>
+</p>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7b/src/console.hpp#L63" width=500 commentWidth=500>
+</ui-code>
+
+<p>
+Update the <code>console.cpp</code> file, as such  
+<code>blit</code> function
+</p>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7b/src/console.cpp#L56-L63" width=500 commentWidth=500>
+</ui-code>
+
+<p>
+and the <code>console_layer</code> constructor 
+</p>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7b/src/console.cpp#L70-L71" width=500 commentWidth=500>
+</ui-code>
+
+<p>
+Next we need to modify <code>main.cpp</code> to accomodate the UI aspects. We'll specify new 
+variable to hold UI height and Map&lt;-&gt;UI split location.
+</p>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7b/src/main.hpp#L27-L30" width=500 commentWidth=500>
+</ui-code>
+
+<p>
+Create two <code>console_layer</code> objects for map and UI respectively, using above variables. And
+update the call to <code>generate_map</code> function so it uses proper height.
+</p>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7b/src/main.hpp#L32-L41" width=500 commentWidth=500>
+</ui-code>
+
+<p>
+Add the scafolding for UI drawing in the main loop.
+</p>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7b/src/main.hpp#L78-L82" width=500 commentWidth=500>
 </ui-code>
 </div>
 </div>
@@ -155,9 +218,9 @@ from root <code>CMakeLists.txt</code>.
 
 
 
-<div id="outline-container-org90c9ae3" class="outline-2">
-<h2 id="org90c9ae3">Links</h2>
-<div class="outline-text-2" id="text-org90c9ae3">
+<div id="outline-container-orgd64477a" class="outline-2">
+<h2 id="orgd64477a">Links</h2>
+<div class="outline-text-2" id="text-orgd64477a">
 <p>
 ╣ <a href="https://github.com/Roy-Fokker/roguelike/tree/Part-6d">GitHub Repo</a> ╠═══<br>
 ╣ <a href="index.html">Home</a> ╠═══<br>
@@ -169,7 +232,7 @@ from root <code>CMakeLists.txt</code>.
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Neel Raiyani [Roy Fokker]</p>
-<p class="date">Created: 2020-04-01 Wed 20:37</p>
+<p class="date">Created: 2020-04-02 Thu 12:01</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

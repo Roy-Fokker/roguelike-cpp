@@ -71,14 +71,14 @@ int main()
 		           map,
 		           fov);
 
-		map_layer.clear();              // Clear the contents of the layer
+		map_layer.clear();              // Clear the contents of the Map layer
 		map_layer.draw(map, fov);       // Draw the rooms and corridors to map layer
 		map_layer.draw(entities, fov);  // Draw all the entities to map layer
 
-		ui_layer.clear();
+		ui_layer.clear();        // Clear the contents of the UI Layer
 
 		root.blit(map_layer);   // Apply the map layer to Root Console
-		root.blit(ui_layer);    // Apply the gui layer to Root Console
+		root.blit(ui_layer);    // Apply the UI layer to Root Console
 		root.present();         // Flush the root console to display to screen
 	}
 

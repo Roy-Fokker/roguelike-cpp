@@ -31,7 +31,7 @@ file.
 Which we will call from ~CMakeLists.txt~ at project root as such, it must be called
 before we call =project= command:
 #+begin_export html
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7a/CMakeLists.txt#L9-L16" width=500 commentWidth=500>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7a/CMakeLists.txt#L9-L16" width=800 commentWidth=50>
 </ui-code>
 #+end_export
 
@@ -41,7 +41,7 @@ activated if compiler is MSVC. It will setup some defaults for MSVC as well as p
 options for per-project configuration, to enable C++17 or C++20 features 
 in MSVC, default is to use C++17.
 #+begin_export html
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7a/cmake/msvc_settings.cmake" width=500 commentWidth=500>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7a/cmake/msvc_settings.cmake" width=800 commentWidth=50>
 </ui-code>
 #+end_export
 
@@ -49,7 +49,7 @@ And it can be used as such, in root ~CMakeLists.txt~ we create a new library
 interface. Then call the =set_msvc_project_configuration= function 
 from ~cmake/msvc_settings.cmake~, to set the configuration we want with MSVC.
 #+begin_export html
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7a/CMakeLists.txt#L12-L28" width=500 commentWidth=500>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7a/CMakeLists.txt#L12-L28" width=800 commentWidth=50>
 </ui-code>
 #+end_export
 
@@ -57,13 +57,66 @@ Next we have to change ~src/CMakeLists.txt~, to remove all the compiler
 specific stuff, as well as tell CMake to use settings from Library interface 
 from root ~CMakeLists.txt~.
 #+begin_export html
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7a/src/CMakeLists.txt#L26-L41" width=500 commentWidth=500>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7a/src/CMakeLists.txt#L26-L41" width=800 commentWidth=50>
+</ui-code>
+#+end_export
+
+With this done, it makes it easy for us in future to make new projects with similar settings.
+Anything to ease the pain of project managment in C++.
+
+* Panels and Status bar
+In order to show the ui, we will create a new =console_layer= and do all our ui rendering to that. We'd already setup 
+ability to do this several commits ago. However, to make it more clearer to understand, we'll make few changes to how
+=console_layer= works.
+
+First of which is to have it store layer position, previously we passed this =position= in as part of the =blit= function.
+Well, we intended to do that, but never utilized it. So we'll remove it from =blit= function.
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7b/src/console.hpp#L45-L46" width=500 commentWidth=500>
+</ui-code>
+#+end_export
+
+And add it to the constructor of =console_layer=
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7b/src/console.hpp#L63" width=500 commentWidth=500>
+</ui-code>
+#+end_export
+
+Update the ~console.cpp~ file, as such  
+=blit= function
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7b/src/console.cpp#L56-L63" width=500 commentWidth=500>
+</ui-code>
+#+end_export
+
+and the =console_layer= constructor 
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7b/src/console.cpp#L70-L71" width=500 commentWidth=500>
+</ui-code>
+#+end_export
+
+Next we need to modify ~main.cpp~ to accomodate the UI aspects. We'll specify new 
+variable to hold UI height and Map<->UI split location.
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7b/src/main.hpp#L27-L30" width=500 commentWidth=500>
+</ui-code>
+#+end_export
+
+Create two =console_layer= objects for map and UI respectively, using above variables. And
+update the call to =generate_map= function so it uses proper height.
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7b/src/main.hpp#L32-L41" width=500 commentWidth=500>
+</ui-code>
+#+end_export
+
+Add the scafolding for UI drawing in the main loop.
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7b/src/main.hpp#L78-L82" width=500 commentWidth=500>
 </ui-code>
 #+end_export
 
 
-With this done, it makes it easy for us in future to make new projects with similar settings.
-Anything to ease the pain of project managment in C++.
+
 
 * Links
 ╣ [[https://github.com/Roy-Fokker/roguelike/tree/Part-6d][GitHub Repo]] ╠═══\\
