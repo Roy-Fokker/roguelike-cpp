@@ -2,6 +2,68 @@
 #+SUBTITLE: User Interface.
 #+OPTIONS: H:2 num:nil
 
+So far all the Textual information hasn't been getting to the player from
+within the game. We write it out to console, which is silly. 
+
+* Goals
+Things to accomplish for this section.
+- Status Bar, to show Player's Health
+- Message Log, to show Actions by and around the player
+- Looking at Enemy's Status.
+
+* Refactoring again.
+Before we start, I want to refactor some items in out project.
+First items to refactor is how CMake is configured. To follow some of the recommendation
+on how CMake is supposed to be used, by ~*learned peoples*~.
+
+I would like to decouple some things from how CMake Project itself. As these
+settings I use with every project. To this end, there is now a new folder 
+~cmake~ within which exist following two files, ~vcpkg.cmake~ 
+and ~msvc_settings.cmake~.
+
+~vcpkg.cmake~, which will contain CMake script to load the =vcpkg= toolchain
+file. 
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7a/cmake/vcpkg.cmake" width=500 commentWidth=500>
+</ui-code>
+#+end_export
+
+Which we will call from ~CMakeLists.txt~ at project root as such, it must be called
+before we call =project= command:
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7a/CMakeLists.txt#L9-L16" width=500 commentWidth=500>
+</ui-code>
+#+end_export
+
+Next, the plan is to pull as the MSVC specific settings out of ~CMakeLists.txt~.
+To do this we will use ~msvc_settings.cmake~. The settings will only be 
+activated if compiler is MSVC. It will setup some defaults for MSVC as well as provide some 
+options for per-project configuration, to enable C++17 or C++20 features 
+in MSVC, default is to use C++17.
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7a/cmake/msvc_settings.cmake" width=500 commentWidth=500>
+</ui-code>
+#+end_export
+
+And it can be used as such, in root ~CMakeLists.txt~ we create a new library
+interface. Then call the =set_msvc_project_configuration= function 
+from ~cmake/msvc_settings.cmake~, to set the configuration we want with MSVC.
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7a/CMakeLists.txt#L12-L28" width=500 commentWidth=500>
+</ui-code>
+#+end_export
+
+Next we have to change ~src/CMakeLists.txt~, to remove all the compiler
+specific stuff, as well as tell CMake to use settings from Library interface 
+from root ~CMakeLists.txt~.
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7a/src/CMakeLists.txt#L26-L41" width=500 commentWidth=500>
+</ui-code>
+#+end_export
+
+
+With this done, it makes it easy for us in future to make new projects with similar settings.
+Anything to ease the pain of project managment in C++.
 
 * Links
 ╣ [[https://github.com/Roy-Fokker/roguelike/tree/Part-6d][GitHub Repo]] ╠═══\\

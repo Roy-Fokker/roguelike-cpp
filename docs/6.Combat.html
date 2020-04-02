@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2019-11-20 Wed 21:20 -->
+<!-- 2020-04-01 Wed 20:46 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Roguelike Game in C++17</title>
@@ -18,7 +18,7 @@
 @licstart  The following is the entire license notice for the
 JavaScript code in this tag.
 
-Copyright (C) 2012-2019 Free Software Foundation, Inc.
+Copyright (C) 2012-2020 Free Software Foundation, Inc.
 
 The JavaScript code in this tag is free software: you can
 redistribute it and/or modify it under the terms of the GNU
@@ -64,17 +64,17 @@ for the JavaScript code in this tag.
 <div id="content">
 <header>
 <h1 class="title">Roguelike Game in C++17</h1>
-<p class="subtitle">Placing enemies.</p>
+<p class="subtitle">Combat.</p>
 </header><nav id="table-of-contents">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orgf5b36b6">Goals</a></li>
-<li><a href="#orgdb5145b">Creatures take turns</a></li>
-<li><a href="#orgecdca18">Creature learns to walk</a></li>
-<li><a href="#org83fda0d">Refactor and reiterate</a></li>
-<li><a href="#org5f6b157">Art of defense and attack</a></li>
-<li><a href="#org266101c">Links</a></li>
+<li><a href="#org6f7c2ff">Goals</a></li>
+<li><a href="#orgd221087">Creatures take turns</a></li>
+<li><a href="#orga5d043b">Creature learns to walk</a></li>
+<li><a href="#orgfdb8b97">Refactor and reiterate</a></li>
+<li><a href="#orga0205c2">Art of defense and attack</a></li>
+<li><a href="#org7b073ed">Links</a></li>
 </ul>
 </div>
 </nav>
@@ -86,9 +86,9 @@ Given the number of things we need to do, lot of the code in this section might 
 very hacky, that will have to be reworked later.
 </p>
 
-<div id="outline-container-orgf5b36b6" class="outline-2">
-<h2 id="orgf5b36b6">Goals</h2>
-<div class="outline-text-2" id="text-orgf5b36b6">
+<div id="outline-container-org6f7c2ff" class="outline-2">
+<h2 id="org6f7c2ff">Goals</h2>
+<div class="outline-text-2" id="text-org6f7c2ff">
 <p>
 Things to accomplish for this section.
 </p>
@@ -101,9 +101,9 @@ Things to accomplish for this section.
 </div>
 </div>
 
-<div id="outline-container-orgdb5145b" class="outline-2">
-<h2 id="orgdb5145b">Creatures take turns</h2>
-<div class="outline-text-2" id="text-orgdb5145b">
+<div id="outline-container-orgd221087" class="outline-2">
+<h2 id="orgd221087">Creatures take turns</h2>
+<div class="outline-text-2" id="text-orgd221087">
 <p>
 First thing we are going to do is rename <code>entity_type</code> to <code>species</code>. In VSCode you can press <code>F2</code> 
 on <code>entity_type</code>, type in <code>species</code> into dialog box, and accept changes in the side bar. It will
@@ -160,9 +160,9 @@ do anything, then the turn hasn't ended, so none of the entities will take their
 </div>
 </div>
 
-<div id="outline-container-orgecdca18" class="outline-2">
-<h2 id="orgecdca18">Creature learns to walk</h2>
-<div class="outline-text-2" id="text-orgecdca18">
+<div id="outline-container-orga5d043b" class="outline-2">
+<h2 id="orga5d043b">Creature learns to walk</h2>
+<div class="outline-text-2" id="text-orga5d043b">
 <p>
 Now immediately after player takes some action, all the entities on the map will take
 action. But they don't have any actions to take, so nothing interesting happens.
@@ -215,9 +215,9 @@ Oh how the tables have turned!!
 </div>
 </div>
 
-<div id="outline-container-org83fda0d" class="outline-2">
-<h2 id="org83fda0d">Refactor and reiterate</h2>
-<div class="outline-text-2" id="text-org83fda0d">
+<div id="outline-container-orgfdb8b97" class="outline-2">
+<h2 id="orgfdb8b97">Refactor and reiterate</h2>
+<div class="outline-text-2" id="text-orgfdb8b97">
 <p>
 At this point, I am going to go through the files we have and refactor some bits.
 For one thing, I am going to update most of the loops to use <code>CppIterTools</code> library.
@@ -272,9 +272,9 @@ they become a hassle. <i><code>┬─┬ノ( º _ ºノ)</code></i>
 </div>
 </div>
 
-<div id="outline-container-org5f6b157" class="outline-2">
-<h2 id="org5f6b157">Art of defense and attack</h2>
-<div class="outline-text-2" id="text-org5f6b157">
+<div id="outline-container-orga0205c2" class="outline-2">
+<h2 id="orga0205c2">Art of defense and attack</h2>
+<div class="outline-text-2" id="text-orga0205c2">
 <p>
 To add the ability to actually attack and reduce the health of various creatures
 on in the game, we need to add some new structures. <code>vitals</code> structure in 
@@ -370,9 +370,9 @@ around with numbers and see how game becomes easier or harder for the player.
 </div>
 
 
-<div id="outline-container-org266101c" class="outline-2">
-<h2 id="org266101c">Links</h2>
-<div class="outline-text-2" id="text-org266101c">
+<div id="outline-container-org7b073ed" class="outline-2">
+<h2 id="org7b073ed">Links</h2>
+<div class="outline-text-2" id="text-org7b073ed">
 <p>
 ╣ <a href="https://github.com/Roy-Fokker/roguelike/tree/Part-6d">GitHub Repo</a> ╠═══<br>
 ╣ <a href="index.html">Home</a> ╠═══<br>
@@ -384,7 +384,7 @@ around with numbers and see how game becomes easier or harder for the player.
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Neel Raiyani [Roy Fokker]</p>
-<p class="date">Created: 2019-11-20 Wed 21:20</p>
+<p class="date">Created: 2020-04-01 Wed 20:46</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

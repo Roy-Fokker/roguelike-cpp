@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2019-11-20 Wed 21:25 -->
+<!-- 2020-04-01 Wed 20:37 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Roguelike Game in C++17</title>
@@ -18,7 +18,7 @@
 @licstart  The following is the entire license notice for the
 JavaScript code in this tag.
 
-Copyright (C) 2012-2019 Free Software Foundation, Inc.
+Copyright (C) 2012-2020 Free Software Foundation, Inc.
 
 The JavaScript code in this tag is free software: you can
 redistribute it and/or modify it under the terms of the GNU
@@ -69,15 +69,95 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org05b6ce8">Links</a></li>
+<li><a href="#org8d0d2fb">Goals</a></li>
+<li><a href="#org2c00622">Refactoring again.</a></li>
+<li><a href="#org90c9ae3">Links</a></li>
 </ul>
 </div>
 </nav>
+<p>
+So far all the Textual information hasn't been getting to the player from
+within the game. We write it out to console, which is silly. 
+</p>
+
+<div id="outline-container-org8d0d2fb" class="outline-2">
+<h2 id="org8d0d2fb">Goals</h2>
+<div class="outline-text-2" id="text-org8d0d2fb">
+<p>
+Things to accomplish for this section.
+</p>
+<ul class="org-ul">
+<li>Status Bar, to show Player's Health</li>
+<li>Message Log, to show Actions by and around the player</li>
+<li>Looking at Enemy's Status.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org2c00622" class="outline-2">
+<h2 id="org2c00622">Refactoring again.</h2>
+<div class="outline-text-2" id="text-org2c00622">
+<p>
+Before we start, I want to refactor some items in out project.
+First items to refactor is how CMake is configured. To follow some of the recommendation
+on how CMake is supposed to be used, by <code>*learned peoples*</code>.
+</p>
+
+<p>
+I would like to decouple some things from how CMake Project itself. As these
+settings I use with every project. To this end, there is now a new folder 
+<code>cmake</code> within which exist following two files, <code>vcpkg.cmake</code> 
+and <code>msvc_settings.cmake</code>.
+</p>
+
+<p>
+<code>vcpkg.cmake</code>, which will contain CMake script to load the <code>vcpkg</code> toolchain
+file. 
+</p>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7a/cmake/vcpkg.cmake" width=500 commentWidth=500>
+</ui-code>
+
+<p>
+Which we will call from <code>CMakeLists.txt</code> at project root as such, it must be called
+before we call <code>project</code> command:
+</p>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7a/CMakeLists.txt#L9-L16" width=500 commentWidth=500>
+</ui-code>
+
+<p>
+Next, the plan is to pull as the MSVC specific settings out of <code>CMakeLists.txt</code>.
+To do this we will use <code>msvc_settings.cmake</code>. The settings will only be 
+activated if compiler is MSVC. It will setup some defaults for MSVC as well as provide some 
+options for per-project configuration, to enable C++17 or C++20 features 
+in MSVC, default is to use C++17.
+</p>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7a/cmake/msvc_settings.cmake" width=500 commentWidth=500>
+</ui-code>
+
+<p>
+And it can be used as such, in root <code>CMakeLists.txt</code> we create a new library
+interface. Then call the <code>set_msvc_project_configuration</code> function 
+from <code>cmake/msvc_settings.cmake</code>, to set the configuration we want with MSVC.
+</p>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7a/CMakeLists.txt#L12-L28" width=500 commentWidth=500>
+</ui-code>
+
+<p>
+Next we have to change <code>src/CMakeLists.txt</code>, to remove all the compiler
+specific stuff, as well as tell CMake to use settings from Library interface 
+from root <code>CMakeLists.txt</code>.
+</p>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7a/src/CMakeLists.txt#L26-L41" width=500 commentWidth=500>
+</ui-code>
+</div>
+</div>
 
 
-<div id="outline-container-org05b6ce8" class="outline-2">
-<h2 id="org05b6ce8">Links</h2>
-<div class="outline-text-2" id="text-org05b6ce8">
+
+
+<div id="outline-container-org90c9ae3" class="outline-2">
+<h2 id="org90c9ae3">Links</h2>
+<div class="outline-text-2" id="text-org90c9ae3">
 <p>
 ╣ <a href="https://github.com/Roy-Fokker/roguelike/tree/Part-6d">GitHub Repo</a> ╠═══<br>
 ╣ <a href="index.html">Home</a> ╠═══<br>
@@ -89,7 +169,7 @@ for the JavaScript code in this tag.
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Neel Raiyani [Roy Fokker]</p>
-<p class="date">Created: 2019-11-20 Wed 21:25</p>
+<p class="date">Created: 2020-04-01 Wed 20:37</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

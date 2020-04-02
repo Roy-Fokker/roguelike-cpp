@@ -1,5 +1,5 @@
 #+SETUPFILE: theme.org
-#+SUBTITLE: Placing enemies.
+#+SUBTITLE: Combat.
 #+OPTIONS: H:2 num:nil
 
 Time to make player suffer some consequences for their actions. The creatures in
