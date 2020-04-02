@@ -21,7 +21,9 @@ target_sources(rogue
         game_map.cpp
         game_map.hpp
         input_handler.cpp
-        input_handler.hpp)
+        input_handler.hpp
+        game_ui.cpp
+        game_ui.hpp)
 
 # Add the include directory for external dependencies to compiler 
 # include path for rogue executable.
