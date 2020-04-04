@@ -73,13 +73,13 @@ ability to do this several commits ago. However, to make it more clearer to unde
 First of which is to have it store layer position, previously we passed this =position= in as part of the =blit= function.
 Well, we intended to do that, but never utilized it. So we'll remove it from =blit= function.
 #+begin_export html
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7b/src/console.hpp#L45-L46" width=500 commentWidth=500>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7b/src/console.hpp#L55-L56" width=500 commentWidth=500>
 </ui-code>
 #+end_export
 
 And add it to the constructor of =console_layer=
 #+begin_export html
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7b/src/console.hpp#L63" width=500 commentWidth=500>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7b/src/console.hpp#L71" width=500 commentWidth=500>
 </ui-code>
 #+end_export
 
@@ -99,20 +99,20 @@ and the =console_layer= constructor
 Next we need to modify ~main.cpp~ to accomodate the UI aspects. We'll specify new 
 variable to hold UI height and Map<->UI split location.
 #+begin_export html
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7b/src/main.hpp#L27-L30" width=500 commentWidth=500>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7b/src/main.cpp#L27-L30" width=500 commentWidth=500>
 </ui-code>
 #+end_export
 
 Create two =console_layer= objects for map and UI respectively, using above variables. And
 update the call to =generate_map= function so it uses proper height.
 #+begin_export html
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7b/src/main.hpp#L32-L41" width=500 commentWidth=500>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7b/src/main.cpp#L32-L41" width=500 commentWidth=500>
 </ui-code>
 #+end_export
 
 Add the scafolding for UI drawing in the main loop.
 #+begin_export html
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7b/src/main.hpp#L78-L82" width=500 commentWidth=500>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7b/src/main.cpp#L78-L82" width=500 commentWidth=500>
 </ui-code>
 #+end_export
 
