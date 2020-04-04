@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2020-04-04 Sat 16:56 -->
+<!-- 2020-04-04 Sat 17:01 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Roguelike Game in C++17</title>
@@ -69,10 +69,10 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orga7e51b3">Goals</a></li>
-<li><a href="#org94f087a">Refactor</a></li>
-<li><a href="#org3a3330b">Panels and Status bar</a></li>
-<li><a href="#org7eb547c">Links</a></li>
+<li><a href="#orge25b7e4">Goals</a></li>
+<li><a href="#org574ec08">Refactor</a></li>
+<li><a href="#org23072b8">Panels and Status bar</a></li>
+<li><a href="#org88488cf">Links</a></li>
 </ul>
 </div>
 </nav>
@@ -81,9 +81,9 @@ So far all the Textual information hasn't been getting to the player from
 within the game. We write it out to console, which is silly. 
 </p>
 
-<div id="outline-container-orga7e51b3" class="outline-2">
-<h2 id="orga7e51b3">Goals</h2>
-<div class="outline-text-2" id="text-orga7e51b3">
+<div id="outline-container-orge25b7e4" class="outline-2">
+<h2 id="orge25b7e4">Goals</h2>
+<div class="outline-text-2" id="text-orge25b7e4">
 <p>
 Things to accomplish for this section.
 </p>
@@ -95,13 +95,13 @@ Things to accomplish for this section.
 </div>
 </div>
 
-<div id="outline-container-org94f087a" class="outline-2">
-<h2 id="org94f087a">Refactor</h2>
-<div class="outline-text-2" id="text-org94f087a">
+<div id="outline-container-org574ec08" class="outline-2">
+<h2 id="org574ec08">Refactor</h2>
+<div class="outline-text-2" id="text-org574ec08">
 </div>
-<div id="outline-container-org9637c85" class="outline-3">
-<h3 id="org9637c85">C++ Project configuration.</h3>
-<div class="outline-text-3" id="text-org9637c85">
+<div id="outline-container-org31cce6b" class="outline-3">
+<h3 id="org31cce6b">C++ Project configuration.</h3>
+<div class="outline-text-3" id="text-org31cce6b">
 <p>
 Before we start, I want to refactor some items in out project.
 First items to refactor is how CMake is configured. To follow some of the recommendation
@@ -159,12 +159,16 @@ from root <code>CMakeLists.txt</code>.
 With this done, it makes it easy for us in future to make new projects with similar settings.
 Anything to ease the pain of project managment in C++.
 </p>
+
+<p>
+<a href="https://github.com/Roy-Fokker/roguelike/tree/Part-7a">GitHub Repo</a>
+</p>
 </div>
 </div>
 
-<div id="outline-container-orgdc38b0c" class="outline-3">
-<h3 id="orgdc38b0c">Console drawing cleanup</h3>
-<div class="outline-text-3" id="text-orgdc38b0c">
+<div id="outline-container-org6f112e0" class="outline-3">
+<h3 id="org6f112e0">Console drawing cleanup</h3>
+<div class="outline-text-3" id="text-org6f112e0">
 <p>
 In order to show the ui, we will create a new <code>console_layer</code> and do all our ui rendering to that. We'd already setup 
 ability to do this several commits ago. However, to make it more clearer to understand, we'll make few changes to how
@@ -275,22 +279,24 @@ tiles list, it will give us a <code>cell</code>.
 </p>
 <ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7b/src/game_entity.cpp#L157-L182" width=500 commentWidth=500>
 </ui-code>
-</div>
-</div>
-</div>
 
-<div id="outline-container-org3a3330b" class="outline-2">
-<h2 id="org3a3330b">Panels and Status bar</h2>
-</div>
-
-
-
-
-<div id="outline-container-org7eb547c" class="outline-2">
-<h2 id="org7eb547c">Links</h2>
-<div class="outline-text-2" id="text-org7eb547c">
 <p>
-╣ <a href="https://github.com/Roy-Fokker/roguelike/tree/Part-6d">GitHub Repo</a> ╠═══<br>
+<a href="https://github.com/Roy-Fokker/roguelike/tree/Part-7b">GitHub Repo</a>
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org23072b8" class="outline-2">
+<h2 id="org23072b8">Panels and Status bar</h2>
+</div>
+
+
+<div id="outline-container-org88488cf" class="outline-2">
+<h2 id="org88488cf">Links</h2>
+<div class="outline-text-2" id="text-org88488cf">
+<p>
+╣ <a href="https://github.com/Roy-Fokker/roguelike/tree/Part-7">GitHub Repo</a> ╠═══<br>
 ╣ <a href="index.html">Home</a> ╠═══<br>
 ╣ Prev: <a href="6.Combat.html">Combat</a> ╠═══<br>
 ╣ Next: <a href="8.Inventory.html">Items and inventory</a> ╠═══
@@ -300,7 +306,7 @@ tiles list, it will give us a <code>cell</code>.
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Neel Raiyani [Roy Fokker]</p>
-<p class="date">Created: 2020-04-04 Sat 16:56</p>
+<p class="date">Created: 2020-04-04 Sat 17:01</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

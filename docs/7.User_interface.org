@@ -65,6 +65,8 @@ from root ~CMakeLists.txt~.
 With this done, it makes it easy for us in future to make new projects with similar settings.
 Anything to ease the pain of project managment in C++.
 
+[[https://github.com/Roy-Fokker/roguelike/tree/Part-7a][GitHub Repo]]
+
 ** Console drawing cleanup
 In order to show the ui, we will create a new =console_layer= and do all our ui rendering to that. We'd already setup 
 ability to do this several commits ago. However, to make it more clearer to understand, we'll make few changes to how
@@ -173,13 +175,13 @@ tiles list, it will give us a =cell=.
 </ui-code>
 #+end_export
 
+[[https://github.com/Roy-Fokker/roguelike/tree/Part-7b][GitHub Repo]]
+
 * Panels and Status bar
 
 
-
-
 * Links
-╣ [[https://github.com/Roy-Fokker/roguelike/tree/Part-6d][GitHub Repo]] ╠═══\\
+╣ [[https://github.com/Roy-Fokker/roguelike/tree/Part-7][GitHub Repo]] ╠═══\\
 ╣ [[file:index.org][Home]] ╠═══\\
 ╣ Prev: [[file:6.Combat.org][Combat]] ╠═══\\
 ╣ Next: [[file:8.Inventory.org][Items and inventory]] ╠═══
