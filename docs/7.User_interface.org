@@ -11,7 +11,8 @@ Things to accomplish for this section.
 - Message Log, to show Actions by and around the player
 - Looking at Enemy's Status.
 
-* Refactoring again.
+* Refactor
+** C++ Project configuration.
 Before we start, I want to refactor some items in out project.
 First items to refactor is how CMake is configured. To follow some of the recommendation
 on how CMake is supposed to be used, by ~*learned peoples*~.
@@ -24,7 +25,7 @@ and ~msvc_settings.cmake~.
 ~vcpkg.cmake~, which will contain CMake script to load the =vcpkg= toolchain
 file. 
 #+begin_export html
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7a/cmake/vcpkg.cmake" width=500 commentWidth=500>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7a/cmake/vcpkg.cmake" width=800 commentWidth=50>
 </ui-code>
 #+end_export
 
@@ -64,7 +65,7 @@ from root ~CMakeLists.txt~.
 With this done, it makes it easy for us in future to make new projects with similar settings.
 Anything to ease the pain of project managment in C++.
 
-* Panels and Status bar
+** Console drawing cleanup
 In order to show the ui, we will create a new =console_layer= and do all our ui rendering to that. We'd already setup 
 ability to do this several commits ago. However, to make it more clearer to understand, we'll make few changes to how
 =console_layer= works.
@@ -114,6 +115,65 @@ Add the scafolding for UI drawing in the main loop.
 <ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7b/src/main.hpp#L78-L82" width=500 commentWidth=500>
 </ui-code>
 #+end_export
+
+Next we are going to clean up how we call layer drawing functions, such that they don't need to know 
+about =game_map=, =fov_map=, or =game_entity=. To do this we will add new =cell= type. In order to be 
+able to hold color information we are also going to forward declare =TCODColor=.
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7b/src/console.hpp#L28-L36" width=500 commentWidth=500>
+</ui-code>
+#+end_export
+
+We will remove the two overloaded =draw= methods from =console_layer= class, and replace them with 
+=draw= method that takes in a vector of =cell=.
+
+~console.hpp~
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7b/src/console.hpp#L76-L77" width=500 commentWidth=500>
+</ui-code>
+#+end_export
+
+~console.cpp~
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7b/src/console.cpp#L85-L102" width=500 commentWidth=500>
+</ui-code>
+#+end_export
+
+In ~main.cpp~ we'll update the calls so =map_layer.draw= is passed a vector via =prepare_to_draw= function.
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7b/src/main.cpp#L75-L76" width=500 commentWidth=500>
+</ui-code>
+#+end_export
+
+Then we'll add the =prepare_to_draw= function in both ~game_map.[cpp|hpp]~ and ~game_entity.[cpp|hpp]~ file sets.
+These functions will basically contain the logic that we had in ~console.cpp~.
+~game_map.hpp~
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7b/src/game_map.hpp#L98-L100" width=500 commentWidth=500>
+</ui-code>
+#+end_export
+
+To transform from =tile= to =cell= we are using =cppitertools='s =imap= functionality. For each element in 
+tiles list, it will give us a =cell=.
+~game_map.cpp~
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7b/src/game_map.cpp#L342-L368" width=500 commentWidth=500>
+</ui-code>
+#+end_export
+
+~game_entity.hpp~
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7b/src/game_entity.hpp#L76-L78" width=500 commentWidth=500>
+</ui-code>
+#+end_export
+
+~game_entity.cpp~
+#+begin_export html
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7b/src/game_entity.cpp#L157-L182" width=500 commentWidth=500>
+</ui-code>
+#+end_export
+
+* Panels and Status bar
 
 
 

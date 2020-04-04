@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2020-04-02 Thu 12:01 -->
+<!-- 2020-04-04 Sat 16:44 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Roguelike Game in C++17</title>
@@ -69,10 +69,10 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org86c6c94">Goals</a></li>
-<li><a href="#org5617ade">Refactoring again.</a></li>
-<li><a href="#orgecc868b">Panels and Status bar</a></li>
-<li><a href="#orgd64477a">Links</a></li>
+<li><a href="#orgda51958">Goals</a></li>
+<li><a href="#org9ea14b6">Refactor</a></li>
+<li><a href="#orge880661">Panels and Status bar</a></li>
+<li><a href="#org06ace69">Links</a></li>
 </ul>
 </div>
 </nav>
@@ -81,9 +81,9 @@ So far all the Textual information hasn't been getting to the player from
 within the game. We write it out to console, which is silly. 
 </p>
 
-<div id="outline-container-org86c6c94" class="outline-2">
-<h2 id="org86c6c94">Goals</h2>
-<div class="outline-text-2" id="text-org86c6c94">
+<div id="outline-container-orgda51958" class="outline-2">
+<h2 id="orgda51958">Goals</h2>
+<div class="outline-text-2" id="text-orgda51958">
 <p>
 Things to accomplish for this section.
 </p>
@@ -95,9 +95,13 @@ Things to accomplish for this section.
 </div>
 </div>
 
-<div id="outline-container-org5617ade" class="outline-2">
-<h2 id="org5617ade">Refactoring again.</h2>
-<div class="outline-text-2" id="text-org5617ade">
+<div id="outline-container-org9ea14b6" class="outline-2">
+<h2 id="org9ea14b6">Refactor</h2>
+<div class="outline-text-2" id="text-org9ea14b6">
+</div>
+<div id="outline-container-org94cc195" class="outline-3">
+<h3 id="org94cc195">C++ Project configuration.</h3>
+<div class="outline-text-3" id="text-org94cc195">
 <p>
 Before we start, I want to refactor some items in out project.
 First items to refactor is how CMake is configured. To follow some of the recommendation
@@ -115,7 +119,7 @@ and <code>msvc_settings.cmake</code>.
 <code>vcpkg.cmake</code>, which will contain CMake script to load the <code>vcpkg</code> toolchain
 file. 
 </p>
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7a/cmake/vcpkg.cmake" width=500 commentWidth=500>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7a/cmake/vcpkg.cmake" width=800 commentWidth=50>
 </ui-code>
 
 <p>
@@ -158,9 +162,9 @@ Anything to ease the pain of project managment in C++.
 </div>
 </div>
 
-<div id="outline-container-orgecc868b" class="outline-2">
-<h2 id="orgecc868b">Panels and Status bar</h2>
-<div class="outline-text-2" id="text-orgecc868b">
+<div id="outline-container-orgd11414e" class="outline-3">
+<h3 id="orgd11414e">Console drawing cleanup</h3>
+<div class="outline-text-3" id="text-orgd11414e">
 <p>
 In order to show the ui, we will create a new <code>console_layer</code> and do all our ui rendering to that. We'd already setup 
 ability to do this several commits ago. However, to make it more clearer to understand, we'll make few changes to how
@@ -212,15 +216,79 @@ Add the scafolding for UI drawing in the main loop.
 </p>
 <ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7b/src/main.hpp#L78-L82" width=500 commentWidth=500>
 </ui-code>
+
+<p>
+Next we are going to clean up how we call layer drawing functions, such that they don't need to know 
+about <code>game_map</code>, <code>fov_map</code>, or <code>game_entity</code>. To do this we will add new <code>cell</code> type. In order to be 
+able to hold color information we are also going to forward declare <code>TCODColor</code>.
+</p>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7b/src/console.hpp#L28-L36" width=500 commentWidth=500>
+</ui-code>
+
+<p>
+We will remove the two overloaded <code>draw</code> methods from <code>console_layer</code> class, and replace them with 
+<code>draw</code> method that takes in a vector of <code>cell</code>.
+</p>
+
+<p>
+<code>console.hpp</code>
+</p>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7b/src/console.hpp#L76-L77" width=500 commentWidth=500>
+</ui-code>
+
+<p>
+<code>console.cpp</code>
+</p>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7b/src/console.cpp#L85-L102" width=500 commentWidth=500>
+</ui-code>
+
+<p>
+In <code>main.cpp</code> we'll update the calls so <code>map_layer.draw</code> is passed a vector via <code>prepare_to_draw</code> function.
+</p>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7b/src/main.cpp#L75-L76" width=500 commentWidth=500>
+</ui-code>
+
+<p>
+Then we'll add the <code>prepare_to_draw</code> function in both <code>game_map.[cpp|hpp]</code> and <code>game_entity.[cpp|hpp]</code> file sets.
+These functions will basically contain the logic that we had in <code>console.cpp</code>.
+<code>game_map.hpp</code>
+</p>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7b/src/game_map.hpp#L98-L100" width=500 commentWidth=500>
+</ui-code>
+
+<p>
+To transform from <code>tile</code> to <code>cell</code> we are using <code>cppitertools</code>'s <code>imap</code> functionality. For each element in 
+tiles list, it will give us a <code>cell</code>.
+<code>game_map.cpp</code>
+</p>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7b/src/game_map.cpp#L342-L368" width=500 commentWidth=500>
+</ui-code>
+
+<p>
+<code>game_entity.hpp</code>
+</p>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7b/src/game_entity.hpp#L76-L78" width=500 commentWidth=500>
+</ui-code>
+
+<p>
+<code>game_entity.cpp</code>
+</p>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7b/src/game_entity.cpp#L157-L182" width=500 commentWidth=500>
+</ui-code>
 </div>
 </div>
+</div>
+
+<div id="outline-container-orge880661" class="outline-2">
+<h2 id="orge880661">Panels and Status bar</h2>
+</div>
 
 
 
 
-<div id="outline-container-orgd64477a" class="outline-2">
-<h2 id="orgd64477a">Links</h2>
-<div class="outline-text-2" id="text-orgd64477a">
+<div id="outline-container-org06ace69" class="outline-2">
+<h2 id="org06ace69">Links</h2>
+<div class="outline-text-2" id="text-org06ace69">
 <p>
 ╣ <a href="https://github.com/Roy-Fokker/roguelike/tree/Part-6d">GitHub Repo</a> ╠═══<br>
 ╣ <a href="index.html">Home</a> ╠═══<br>
@@ -232,7 +300,7 @@ Add the scafolding for UI drawing in the main loop.
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Neel Raiyani [Roy Fokker]</p>
-<p class="date">Created: 2020-04-02 Thu 12:01</p>
+<p class="date">Created: 2020-04-04 Sat 16:44</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
