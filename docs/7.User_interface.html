@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2020-04-04 Sat 16:51 -->
+<!-- 2020-04-04 Sat 16:56 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Roguelike Game in C++17</title>
@@ -69,10 +69,10 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orga29b771">Goals</a></li>
-<li><a href="#org8e81ad2">Refactor</a></li>
-<li><a href="#orgc123050">Panels and Status bar</a></li>
-<li><a href="#orgd619065">Links</a></li>
+<li><a href="#orga7e51b3">Goals</a></li>
+<li><a href="#org94f087a">Refactor</a></li>
+<li><a href="#org3a3330b">Panels and Status bar</a></li>
+<li><a href="#org7eb547c">Links</a></li>
 </ul>
 </div>
 </nav>
@@ -81,9 +81,9 @@ So far all the Textual information hasn't been getting to the player from
 within the game. We write it out to console, which is silly. 
 </p>
 
-<div id="outline-container-orga29b771" class="outline-2">
-<h2 id="orga29b771">Goals</h2>
-<div class="outline-text-2" id="text-orga29b771">
+<div id="outline-container-orga7e51b3" class="outline-2">
+<h2 id="orga7e51b3">Goals</h2>
+<div class="outline-text-2" id="text-orga7e51b3">
 <p>
 Things to accomplish for this section.
 </p>
@@ -95,13 +95,13 @@ Things to accomplish for this section.
 </div>
 </div>
 
-<div id="outline-container-org8e81ad2" class="outline-2">
-<h2 id="org8e81ad2">Refactor</h2>
-<div class="outline-text-2" id="text-org8e81ad2">
+<div id="outline-container-org94f087a" class="outline-2">
+<h2 id="org94f087a">Refactor</h2>
+<div class="outline-text-2" id="text-org94f087a">
 </div>
-<div id="outline-container-org839fcca" class="outline-3">
-<h3 id="org839fcca">C++ Project configuration.</h3>
-<div class="outline-text-3" id="text-org839fcca">
+<div id="outline-container-org9637c85" class="outline-3">
+<h3 id="org9637c85">C++ Project configuration.</h3>
+<div class="outline-text-3" id="text-org9637c85">
 <p>
 Before we start, I want to refactor some items in out project.
 First items to refactor is how CMake is configured. To follow some of the recommendation
@@ -162,9 +162,9 @@ Anything to ease the pain of project managment in C++.
 </div>
 </div>
 
-<div id="outline-container-org430beb0" class="outline-3">
-<h3 id="org430beb0">Console drawing cleanup</h3>
-<div class="outline-text-3" id="text-org430beb0">
+<div id="outline-container-orgdc38b0c" class="outline-3">
+<h3 id="orgdc38b0c">Console drawing cleanup</h3>
+<div class="outline-text-3" id="text-orgdc38b0c">
 <p>
 In order to show the ui, we will create a new <code>console_layer</code> and do all our ui rendering to that. We'd already setup 
 ability to do this several commits ago. However, to make it more clearer to understand, we'll make few changes to how
@@ -181,7 +181,7 @@ Well, we intended to do that, but never utilized it. So we'll remove it from <co
 <p>
 And add it to the constructor of <code>console_layer</code>
 </p>
-<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7b/src/console.hpp#L71" width=500 commentWidth=500>
+<ui-code url="https://raw.githubusercontent.com/Roy-Fokker/roguelike/Part-7b/src/console.hpp#L71-L72" width=500 commentWidth=500>
 </ui-code>
 
 <p>
@@ -279,16 +279,16 @@ tiles list, it will give us a <code>cell</code>.
 </div>
 </div>
 
-<div id="outline-container-orgc123050" class="outline-2">
-<h2 id="orgc123050">Panels and Status bar</h2>
+<div id="outline-container-org3a3330b" class="outline-2">
+<h2 id="org3a3330b">Panels and Status bar</h2>
 </div>
 
 
 
 
-<div id="outline-container-orgd619065" class="outline-2">
-<h2 id="orgd619065">Links</h2>
-<div class="outline-text-2" id="text-orgd619065">
+<div id="outline-container-org7eb547c" class="outline-2">
+<h2 id="org7eb547c">Links</h2>
+<div class="outline-text-2" id="text-org7eb547c">
 <p>
 ╣ <a href="https://github.com/Roy-Fokker/roguelike/tree/Part-6d">GitHub Repo</a> ╠═══<br>
 ╣ <a href="index.html">Home</a> ╠═══<br>
@@ -300,7 +300,7 @@ tiles list, it will give us a <code>cell</code>.
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Neel Raiyani [Roy Fokker]</p>
-<p class="date">Created: 2020-04-04 Sat 16:51</p>
+<p class="date">Created: 2020-04-04 Sat 16:56</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
