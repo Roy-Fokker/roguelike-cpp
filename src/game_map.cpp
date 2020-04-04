@@ -1,10 +1,12 @@
 #include "game_map.hpp"
+#include "console.hpp"
 
 #include <libtcod.hpp>
 #include <cppitertools/enumerate.hpp>
 #include <cppitertools/range.hpp>
 #include <cppitertools/filter.hpp>
 #include <cppitertools/sliding_window.hpp>
+#include <cppitertools/imap.hpp>
 
 #include <random>
 #include <algorithm>
@@ -335,4 +337,32 @@ void fov_map::recompute(const position &p)
 auto fov_map::is_visible(const position &p) const -> bool
 {
 	return fov->isInFov(p.x, p.y);
+}
+
+auto prepare_to_draw(const game_map &map, const fov_map &fov) -> std::vector<cell>
+{
+	// Check if tile was explored.
+	auto was_explored = [&](const tile &t)
+	{
+		return t.was_explored;
+	};
+
+	// Lambda that converts our wall tile type to cell type
+	auto tile_to_cell = [&](const tile &t) -> cell
+	{
+		return {
+			t.p.x, t.p.y,
+			'\0',
+			std::make_unique<TCODColor>(),
+			std::make_unique<TCODColor>(t.color(fov.is_visible(t.p)))
+		};
+	};
+
+	// Get the range iterators
+	auto walls = map.tiles             // From all the tiles
+	           | iter::filter(was_explored)  // Find explored tiles
+	           | iter::imap(tile_to_cell);   // Transform it into cell.
+
+	// Generate a vector of cells to draw from range iterators.
+	return std::vector(walls.begin(), walls.end());
 }

@@ -7,6 +7,8 @@
 class TCODColor;
 class TCODMap;
 
+struct cell; // Forward declare so we don't need to include console.hpp
+
 struct fov_map; // Need to forward declare for game_map to use
 
 enum class tile_type
@@ -92,3 +94,7 @@ private:
 // Make a random game_map with room and corridors
 // maximum extent of which is specified by size arg.
 auto generate_map(const dimension size) -> game_map;
+
+// Take map and fov provided, and convert them into 
+// console-cells so that console layer can draw them out.
+auto prepare_to_draw(const game_map &map, const fov_map &fov) -> std::vector<cell>;

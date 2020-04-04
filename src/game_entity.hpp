@@ -8,6 +8,9 @@
 #include <utility>
 #include <string>
 
+struct cell;    // Forward declare to avoid including console.hpp.
+struct fov_map; // Forward declare to avoud including game_map.hpp.
+
 // Simple Position structure to hold x and y values.
 // It will represent positions of various objects in game world.
 struct position
@@ -69,3 +72,7 @@ auto generate_enemies(const std::vector<room> &rooms) -> std::vector<game_entity
 // check the entities list to see if any of them are in 
 // position provided, if so return it's iterator idx.
 auto get_entity_at(const position &p, const game_entities_list &entities) -> game_entities_list::const_iterator;
+
+// Take entities list and fov provided, and convert them into 
+// console-cells so that console layer can draw them out.
+auto prepare_to_draw(const game_entities_list &entities, const fov_map &fov) -> std::vector<cell>;

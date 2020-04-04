@@ -71,9 +71,9 @@ int main()
 		           map,
 		           fov);
 
-		map_layer.clear();              // Clear the contents of the Map layer
-		map_layer.draw(map, fov);       // Draw the rooms and corridors to map layer
-		map_layer.draw(entities, fov);  // Draw all the entities to map layer
+		map_layer.clear();                               // Clear the contents of the Map layer
+		map_layer.draw(prepare_to_draw(map, fov));       // Draw the rooms and corridors to map layer
+		map_layer.draw(prepare_to_draw(entities, fov));  // Draw all the entities to map layer
 
 		ui_layer.clear();        // Clear the contents of the UI Layer
 

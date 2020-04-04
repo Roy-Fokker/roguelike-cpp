@@ -2,9 +2,9 @@
 
 #include "console.hpp"
 #include "game_entity.hpp"
-#include "game_map.hpp"
 
 #include <cppitertools/filter.hpp>
+#include <cppitertools/imap.hpp>
 
 #include <libtcod.hpp>
 #include <cassert>
@@ -82,43 +82,27 @@ void console_layer::clear()
 	layer->clear();
 }
 
-void console_layer::draw(const std::vector<game_entity> &entities, const fov_map &fov)
+void console_layer::draw(const std::vector<cell> &cells)
 {
-	// Check if player can see them
-	auto is_visible = [&](const game_entity &e)
+	// For ever cell
+	for (auto &c : cells)
 	{
-		return fov.is_visible(e.pos);
-	};
+		// Check if it's has face char, assume it's entity if it has one.
+		if (c.face != '\0')
+		{
+			layer->setDefaultForeground(*c.fore_color);
+			layer->putChar(c.x, c.y,
+			               c.face,
+			               TCOD_BKGND_NONE);
+		}
+		else  // other wise it's probably a wall.
+		{
+			layer->setCharBackground(c.x, c.y, *c.back_color);
+		}
 
-	// For each visible entity in list
-	for (auto &entity : entities | iter::filter(is_visible))
-	{
-		// Get entity's "face"
-		auto [chr, col] = entity.face();
-		// Draw them
-		layer->setDefaultForeground(col);
-		layer->putChar(entity.pos.x, entity.pos.y,
-		               chr,
-		               TCOD_BKGND_NONE);
-	}
-}
-
-// Quick and Dirty draw map function.
-// Takes a game_map to draw on console_layer
-void console_layer::draw(const game_map &map, const fov_map &fov)
-{
-	// Check if tile was explored.
-	auto was_explored = [&](const tile &t)
-	{
-		return t.was_explored;
-	};
-
-	// For each explored tile
-	for (auto &t : map.tiles | iter::filter(was_explored))
-	{
-		// Get the color we should use for this tile
-		auto color = t.color(fov.is_visible(t.p));
 		// Draw it
-		layer->setCharBackground(t.p.x, t.p.y, color);
+		// layer->putCharEx(c.x, c.y, 
+		//                  c.face, 
+		//                  *c.fore_color, *c.back_color);
 	}
 }

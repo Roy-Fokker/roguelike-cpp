@@ -1,9 +1,12 @@
 /*    SPDX-License-Identifier: MIT    */
 
 #include "game_entity.hpp"
+#include "console.hpp"
 #include "game_map.hpp"
 
 #include <cppitertools/enumerate.hpp>
+#include <cppitertools/filter.hpp>
+#include <cppitertools/imap.hpp>
 #include <fmt/format.h>
 
 #include <random>
@@ -149,4 +152,31 @@ auto get_entity_at(const position &p, const game_entities_list &entities) -> gam
 		return (e.stats.hitpoints_remaining > 0) 
 		   and (p.x == e.pos.x) and (p.y == e.pos.y);
 	});
+}
+
+auto prepare_to_draw(const game_entities_list &entities, const fov_map &fov) -> std::vector<cell>
+{
+	// Check if player can see them
+	auto is_visible = [&](const game_entity &e)
+	{
+		return fov.is_visible(e.pos);
+	};
+
+	// Lambda to convert from entity to cell
+	auto convert_to_cell = [&](const game_entity &entity) -> cell
+	{
+		auto [chr, fore_color] = entity.face();
+		return {
+			entity.pos.x, entity.pos.y,
+			chr,
+			std::make_unique<TCODColor>(fore_color),
+			std::make_unique<TCODColor>()
+		};
+	};
+
+	auto drawable_entities = entities 
+	                       | iter::filter(is_visible)
+	                       | iter::imap(convert_to_cell);
+
+	return std::vector(drawable_entities.begin(), drawable_entities.end());
 }

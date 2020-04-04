@@ -8,6 +8,7 @@
 #include <memory>
 
 class TCODConsole; // Forward declare TCODConsole, so we aren't including the header here.
+class TCODColor;   // Forward declare TCODColor, for same reason as above.
 
 // Size of the console window and layer
 struct console_size
@@ -22,6 +23,15 @@ struct layer_pos
 {
 	int32_t x,
 	        y;
+};
+
+// Each point on the console can be drawn to. 
+struct cell
+{
+	int x, y;                              // Cell location
+	char face;                             // Character on this cell
+	std::unique_ptr<TCODColor> fore_color, // Bit of hack to hold on to 
+	                           back_color; // color information.
 };
 
 class console_layer;
@@ -53,8 +63,6 @@ private:
 };
 
 struct game_entity;
-struct game_map;
-struct fov_map;
 
 class console_layer
 {
@@ -65,11 +73,8 @@ public:
 
 	void clear();
 
-	// Draw provided entities to this layer.
-	void draw(const std::vector<game_entity> &entities, const fov_map &fov);
-
-	// Draw provided map to this layer.
-	void draw(const game_map &map, const fov_map &fov);
+	// Draw all the cell provided to this layer.
+	void draw(const std::vector<cell> &cells);
 
 private:
 	std::unique_ptr<TCODConsole> layer { nullptr };
