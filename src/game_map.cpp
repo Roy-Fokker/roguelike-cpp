@@ -353,8 +353,10 @@ auto prepare_to_draw(const game_map &map, const fov_map &fov) -> std::vector<cel
 		return {
 			t.p.x, t.p.y,
 			'\0',
-			std::make_unique<TCODColor>(),
-			std::make_unique<TCODColor>(t.color(fov.is_visible(t.p)))
+			{ 
+				TCODColor::black,
+				t.color(fov.is_visible(t.p))
+			}
 		};
 	};
 

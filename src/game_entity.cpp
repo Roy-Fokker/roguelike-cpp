@@ -169,8 +169,10 @@ auto prepare_to_draw(const game_entities_list &entities, const fov_map &fov) -> 
 		return {
 			entity.pos.x, entity.pos.y,
 			chr,
-			std::make_unique<TCODColor>(fore_color),
-			std::make_unique<TCODColor>()
+			{
+				fore_color,
+				TCODColor::black
+			}
 		};
 	};
 

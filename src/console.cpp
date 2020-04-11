@@ -88,21 +88,28 @@ void console_layer::draw(const std::vector<cell> &cells)
 	for (auto &c : cells)
 	{
 		// Check if it's has face char, assume it's entity if it has one.
-		if (c.face != '\0')
+		auto fore = c.color[0],
+		 	back = c.color[1];
+
+		if (back == TCODColor::black)
 		{
-			layer->setDefaultForeground(*c.fore_color);
+			layer->setDefaultForeground(fore);
 			layer->putChar(c.x, c.y,
 			               c.face,
 			               TCOD_BKGND_NONE);
 		}
+		else if (fore == TCODColor::black)
+		{
+			layer->setCharBackground(c.x, c.y,
+			                         back,
+			                         TCOD_BKGND_SET);
+		}
 		else  // other wise it's probably a wall.
 		{
-			layer->setCharBackground(c.x, c.y, *c.back_color);
+			layer->putCharEx(c.x, c.y, 
+			                 c.face, 
+			                 fore,
+			                 back);
 		}
-
-		// Draw it
-		// layer->putCharEx(c.x, c.y, 
-		//                  c.face, 
-		//                  *c.fore_color, *c.back_color);
 	}
 }

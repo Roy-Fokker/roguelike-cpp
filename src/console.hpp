@@ -6,9 +6,11 @@
 #include <string_view>
 #include <filesystem>
 #include <memory>
+#include <vector>
 
 class TCODConsole; // Forward declare TCODConsole, so we aren't including the header here.
 class TCODColor;   // Forward declare TCODColor, for same reason as above.
+
 
 // Size of the console window and layer
 struct console_size
@@ -28,10 +30,9 @@ struct layer_pos
 // Each point on the console can be drawn to. 
 struct cell
 {
-	int x, y;                              // Cell location
-	char face;                             // Character on this cell
-	std::unique_ptr<TCODColor> fore_color, // Bit of hack to hold on to 
-	                           back_color; // color information.
+	int x, y;                               // Cell location
+	char face;                              // Character on this cell
+	std::vector<TCODColor> color;           // Color information, fore and back
 };
 
 class console_layer;
