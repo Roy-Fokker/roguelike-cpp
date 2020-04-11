@@ -7,6 +7,7 @@
 #include <cppitertools/enumerate.hpp>
 #include <cppitertools/filter.hpp>
 #include <cppitertools/imap.hpp>
+#include <cppitertools/sorted.hpp>
 #include <fmt/format.h>
 
 #include <random>
@@ -52,6 +53,7 @@ auto to_string(species type) -> std::string_view
 	}
 
 	assert(false); // how'd you get here
+	return {};
 }
 
 void game_entity::move_by(const position &offset)
@@ -162,6 +164,13 @@ auto prepare_to_draw(const game_entities_list &entities, const fov_map &fov) -> 
 		return fov.is_visible(e.pos);
 	};
 
+	// Comparator to sort our entities from lowest to heighest hitpoints.
+	// This will ensure Alive entities are rendered after dead, thus becoming visible
+	auto dead_or_alive = [&](const game_entity &a, const game_entity &b) -> bool
+	{
+		return a.stats.hitpoints_remaining < b.stats.hitpoints_remaining;
+	};
+
 	// Lambda to convert from entity to cell
 	auto convert_to_cell = [&](const game_entity &entity) -> cell
 	{
@@ -178,6 +187,7 @@ auto prepare_to_draw(const game_entities_list &entities, const fov_map &fov) -> 
 
 	auto drawable_entities = entities 
 	                       | iter::filter(is_visible)
+	                       | iter::sorted(dead_or_alive)
 	                       | iter::imap(convert_to_cell);
 
 	return std::vector(drawable_entities.begin(), drawable_entities.end());
