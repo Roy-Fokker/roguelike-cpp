@@ -3,8 +3,9 @@
 #include "console.hpp"       // for our console_root and console_layer classes
 #include "game_entity.hpp"   // for our game_entity class
 #include "game_actions.hpp"  // for our game_actions enum and actions<->entity function
-#include "game_map.hpp"      // for out game_map class and tile structure
+#include "game_map.hpp"      // for our game_map class and tile structure
 #include "input_handler.hpp" // for handle_input function
+#include "game_ui.hpp"       // for user interface 
 
 #include <libtcod.hpp>  // Provided by CMake from external\libtcod-1.14.0-x86_64-msvc\include
 #include <string>       // for std::string_view, ""sv
@@ -57,6 +58,8 @@ int main()
 	fov.recompute(player.pos);            // Compute the starting Field of View
 	map.update_explored(player.pos, fov); // Update initial exploration state
 
+	auto ui = game_ui();     // Create our UI.
+
 	// Loop while window exists and exit_game is not true
 	while (not (root.is_window_closed() or exit_game))
 	{
@@ -66,16 +69,19 @@ int main()
 		                 root,
 		                 exit_game);
 
-		take_turns(action_data, 
-		           entities,
-		           map,
-		           fov);
+		auto result_log = take_turns(action_data, 
+		                             entities,
+		                             map,
+		                             fov);
+
+		ui.update(result_log);
 
 		map_layer.clear();                               // Clear the contents of the Map layer
 		map_layer.draw(prepare_to_draw(map, fov));       // Draw the rooms and corridors to map layer
 		map_layer.draw(prepare_to_draw(entities, fov));  // Draw all the entities to map layer
 
-		ui_layer.clear();        // Clear the contents of the UI Layer
+		ui_layer.clear();                    // Clear the contents of the UI Layer
+		ui_layer.draw(prepare_to_draw(ui));  // Draw the User Interface
 
 		root.blit(map_layer);   // Apply the map layer to Root Console
 		root.blit(ui_layer);    // Apply the UI layer to Root Console
