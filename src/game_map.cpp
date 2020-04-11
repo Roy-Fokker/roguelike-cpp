@@ -2,6 +2,7 @@
 #include "console.hpp"
 
 #include <libtcod.hpp>
+
 #include <cppitertools/enumerate.hpp>
 #include <cppitertools/range.hpp>
 #include <cppitertools/filter.hpp>
@@ -232,6 +233,7 @@ auto tile::color(bool is_lit) const -> TCODColor
 			break;
 	}
 	assert(false); // how'd you end up here.
+	return {};
 }
 
 auto room::center() const -> position

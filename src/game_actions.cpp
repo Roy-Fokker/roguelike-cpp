@@ -156,6 +156,7 @@ void do_system_action(const action_data_pair &action_data,
                       console_root &root,
                       bool &exit_game)
 {
+	// Make sure we aren't accidentally trying to handle entity action.
 	if (action_data.first.index() != 1)
 		return;
 

@@ -4,6 +4,8 @@
 #include "console.hpp"
 #include "game_map.hpp"
 
+#include <libtcod.hpp>
+
 #include <cppitertools/enumerate.hpp>
 #include <cppitertools/filter.hpp>
 #include <cppitertools/imap.hpp>
