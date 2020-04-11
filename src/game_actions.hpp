@@ -4,6 +4,8 @@
 #include <any>          // for std::any and std::any_cast<>
 #include <vector>       // for std::vector
 #include <variant>      // for std::variant
+#include <optional>     // for std::optional
+#include <string_view>
 
 // Actions entity can do within context of the game
 enum class actions
@@ -30,6 +32,13 @@ struct game_map;     // in game_map[.cpp|.hpp]
 struct fov_map;      // in game_map[.cpp|.hpp]
 class console_root;  // in console[.cpp|.hpp]
 
+struct action_log
+{
+    std::optional<const std::string_view> a, b; // Optional names, by reference.
+    actions action_performed;          // action performed by entity.
+    int data;                          // any additional data.
+};
+
 // Do system actions related tasks
 void do_system_action(const action_data_pair &action,
                        console_root &root,
@@ -37,7 +46,8 @@ void do_system_action(const action_data_pair &action,
 
 // Loops through all the entities, and 
 // give them their turn to act
-void take_turns(const action_data_pair &action_data, 
+auto take_turns(const action_data_pair &action_data, 
                 std::vector<game_entity> &all_entities,
                 game_map &map,
-                fov_map &fov);
+                fov_map &fov)
+    -> std::vector<action_log>;

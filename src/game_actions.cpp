@@ -6,6 +6,8 @@
 #include "input_handler.hpp"
 
 #include <cppitertools/reversed.hpp>
+#include <cppitertools/imap.hpp>
+
 #include <fmt/core.h>
 #include <cassert>
 #include <cmath>
@@ -41,7 +43,7 @@ namespace
 		return {dx, dy};
 	}
 
-	void do_attack(const game_entity &attacker, const game_entity &defender)
+	auto do_attack(const game_entity &attacker, const game_entity &defender) -> action_log
 	{
 		auto &def_hp = defender.stats.hitpoints_remaining;
 
@@ -66,15 +68,18 @@ namespace
 		{
 			fmt::print("   [{0}] has died.\n", defender.name);
 		}
+
+		return { attacker.name, defender.name, actions::attack, dmg };
 	}
 
-	void ai_move_attack(game_entity &entity,
+	auto ai_move_attack(game_entity &entity,
 	                    const std::vector<game_entity> &all_entities,
 	                    game_map &map, fov_map &fov)
+		-> action_log
 	{
 		if (entity.stats.hitpoints_remaining <= 0)
 		{
-			return;
+			return {};
 		}
 
 		fov.recompute(entity.pos);
@@ -82,7 +87,7 @@ namespace
 
 		if (not fov.is_visible(player_pos))
 		{
-			return;
+			return {};
 		}
 
 		auto offset = unit_offset(entity.pos, player_pos);
@@ -94,24 +99,27 @@ namespace
 			and ent_itr == std::end(all_entities))
 		{
 			entity.move_by(offset);
+			return {};
 		}
 		else if (ent_itr != std::end(all_entities) 
 				 and ent_itr->type == species::player)
 		{
-			do_attack(entity, *ent_itr);
+			return do_attack(entity, *ent_itr);
 		}
-		
+		assert(false);
+		return {};
 	}
 
-	void player_move_attack(const position &offset,
+	auto player_move_attack(const position &offset,
 	                        game_entity &player,
 	                        const std::vector<game_entity> &all_entities,
 	                        game_map &map, fov_map &fov)
+		-> action_log
 	{
 		if (player.stats.hitpoints_remaining <= 0)
 		{
 			fmt::print("=> You are dead and cannot move.\n");
-			return;
+			return {};
 		}
 
 		// Position entity want to be at.
@@ -138,6 +146,9 @@ namespace
 		{
 			do_attack(player, *ent_itr);
 		}
+
+		assert(false);
+		return {};
 	}
 }
 
@@ -165,14 +176,16 @@ void do_system_action(const action_data_pair &action_data,
 
 // Take the action_data pair and do appropriate tasks
 // on objects provided
-void do_entity_action(const action_data_pair &action_data, 
+auto do_entity_action(const action_data_pair &action_data, 
                       game_entity &entity,
                       const std::vector<game_entity> &all_entities,
                       game_map &map,
                       fov_map &fov)
+	-> action_log
 {
+	// Make sure we are accidentally trying to handle system action.
 	if (action_data.first.index() != 0)
-		return;
+		return {};
 	
 	auto act = std::get<0>(action_data.first);
 	switch (act)
@@ -184,11 +197,11 @@ void do_entity_action(const action_data_pair &action_data,
 			if (entity.type == species::player)
 			{
 				auto offset = std::any_cast<position>(action_data.second);
-				player_move_attack(offset, entity, all_entities, map, fov);
+				return player_move_attack(offset, entity, all_entities, map, fov);
 			} 
 			else
 			{
-				ai_move_attack(entity, all_entities, map, fov);
+				return ai_move_attack(entity, all_entities, map, fov);
 			}
 
 			break;
@@ -197,42 +210,72 @@ void do_entity_action(const action_data_pair &action_data,
 			// We forgot to handle some action. DEBUG!
 			assert(false);
 	}
+
+	assert(false);
+	return {};
 }
 
-void take_turns(const action_data_pair &player_action_data,
+auto take_turns(const action_data_pair &player_action_data,
                 std::vector<game_entity> &all_entities,
                 game_map &map,
                 fov_map &fov)
+	-> std::vector<action_log>
 {
 	// don't do anything if it's system_action
 	if (player_action_data.first.index() != 0)
 	{
-		return;
+		return {};
 	}
 	
 	// if the player doesn't act, then turn doesn't advance.
 	if(std::get<0>(player_action_data.first) == actions::do_nothing)
 	{
-		return;
+		return {};
 	}
 
-	// Loop though all the entities, player 1st
-	for(auto &e : all_entities | iter::reversed)
+	// for each entity perform action
+	auto action_result = [&](game_entity &e) -> action_log
 	{
-		action_data_pair action_data{actions::move, {}};
-		if (e.type == species::player)
-		{
-			action_data = player_action_data;
-		}
+		// Player decides their own action. But other entities
+		// simply move.
+		auto action_data = (e.type == species::player) 
+		                 ? player_action_data
+		                 : action_data_pair { actions::move, {} };
 		
-		do_entity_action(action_data, 
-		                 e,
-		                 all_entities,
-		                 map,
-		                 fov);
-	}
+		return do_entity_action(action_data,
+		                        e,
+		                        all_entities,
+		                        map,
+		                        fov);
+	};
+
+	// Using range iterators get pair of result start and end
+	auto log_iter = all_entities 
+	              | iter::reversed
+	              | iter::imap(action_result);
+
+	// create our output log 
+	auto result_log = std::vector(log_iter.begin(), log_iter.end());
+
+	// // Loop though all the entities, player 1st
+	// for(auto &e : all_entities | iter::reversed)
+	// {
+	// 	action_data_pair action_data{actions::move, {}};
+	// 	if (e.type == species::player)
+	// 	{
+	// 		action_data = player_action_data;
+	// 	}
+		
+	// 	do_entity_action(action_data, 
+	// 	                 e,
+	// 	                 all_entities,
+	// 	                 map,
+	// 	                 fov);
+	// }
 
 	// We know player is last so we need to ensure fov is computed 
 	// for player
 	fov.recompute(all_entities.back().pos);
+
+	return result_log;
 }
